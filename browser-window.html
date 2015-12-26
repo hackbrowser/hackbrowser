@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>SWS Tester</title>
+
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.18.1/build/cssreset/cssreset-min.css">
+	<link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="css/hackbrowser.css">
+
+	<script src="js/browser-window/MenuBar.js"></script>
+	<script src="js/browser-window/BrowserTabs.js"></script>
+	<script src="js/browser-window/TabView.js"></script>
+	<script src="js/browser-window/HackBrowserWindow.js"></script>
+	<script src="js/browser-window/init.js"></script>
+</head>
+<body>
+	<nav id="navtabs" class="unselectable">
+		<div class="tab" draggable="true" ondragstart="console.log('dragstart')">
+			<span class="title">Testing Solution</span>
+			<div class="close"><i class="icon ion-close"></i></div>
+		</div><!-- // .tab -->
+
+		<div class="tab active" draggable="true" ondragstart="console.log('dragstart')">
+			<span class="title">SWS 10.88.186.68</span>
+			<div class="close"><i class="icon ion-close"></i></div>
+		</div><!-- // .tab -->
+
+		<div class="tab" draggable="true" ondragstart="console.log('dragstart')">
+			<span class="title">ECMAScript</span>
+			<div class="close"><i class="icon ion-close"></i></div>
+		</div><!-- // .tab -->
+
+		<div id="add-tab">
+			<div class="icon-wrapper">
+				<i class="icon ion-plus"></i>
+			</div><!-- // .icon-wrapper -->
+		</div><!-- // #add-tab -->
+	</nav><!-- // nav#navbar -->
+
+	<section id="menubar" class="unselectable">
+		<div id="menu-left" class="controls left">
+			<div id="button-back" class="icon-button disabled">
+				<i class="icon ion-ios-arrow-back"></i>
+			</div><!-- // #button-back -->
+
+			<div id="button-forward" class="icon-button">
+				<i class="icon ion-ios-arrow-forward"></i>
+			</div><!-- // #button-forward -->
+
+			<div id="button-refresh" class="icon-button">
+				<i class="icon ion-android-refresh"></i>
+			</div><!-- // #button-refresh -->
+		</div><!-- // controls.left -->
+
+		<div id="address-bar-wrapper">
+			<input type="text" id="address-bar" />
+		</div><!-- // #address-bar-wrapper -->
+
+		<div id="menu-right" class="controls right">
+			<div id="button-menu" class="icon-button"><i class="icon ion-navicon-round"></i></div>
+		</div><!-- // .controls.right -->
+	</section><!-- // #menubar -->
+
+	<!--
+		Wrapper for WebView elements
+	-->
+	<section id="tabview-wrapper">
+		<div class="tabview">
+			<webview src="http://10.88.193.118/confluence/"></webview>
+		</div><!-- // .tabview -->
+
+		<div class="tabview">
+			<webview src="http://10.88.186.68/sws/index.sws"></webview>
+		</div><!-- // .tabview -->
+	</section><!-- // section#webview-wrapper -->
+</body>
+</html>
