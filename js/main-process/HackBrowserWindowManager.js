@@ -2,48 +2,61 @@
 
 const electron = require("electron"); 
 const BrowserWindow = electron.BrowserWindow; 
-const JSONPersistentStorage = require(__app.basepath + "/js/common/JSONPersistentStorage"); 
+const PersistentStorage = require(__app.basepath + "/js/common/PersistentStorage");
 
 function HackBrowserWindowManager() {
-	this.windowList = []; 
+	this.windowList = {};
 	this.createdWindowCount = 0; 
 }
 
-HackBrowserWindowManager.prototype.init = function() {
-
-}; 
-
 HackBrowserWindowManager.prototype.openNewWindow = function(width, height, url) {
-	// create the browser window
-	var newWindow = new BrowserWindow({ width: 800, height: 600 }); 
+	var _this = this;
 
-	// and load the index.html of the app
-	newWindow.loadUrl('file://' + __app.basepath + '/browser-window.html'); 
+	// get last browser size
+	PersistentStorage.getItem("browserWindowSize", function(err, browserSize) {
+		if (err) {
+			browserSize = {
+				width: 800,
+				height: 600
+			};
+		}
 
-	// Open the DevTools
-	newWindow.webContents.openDevTools(); 
+		// create the browser window
+		var newWindow = new BrowserWindow(browserSize);
 
-	this.windowList.push(newWindow); 
+		// and load the index.html of the app
+		newWindow.loadUrl('file://' + __app.basepath + '/browser-window.html');
 
-	// increase window count
-	this.createdWindowCount++; 
+		// Open the DevTools
+		newWindow.webContents.openDevTools();
+
+		_this.windowList[newWindow.id] = newWindow;
+		_this.attachEventHandlers(newWindow);
+
+		// increase window count
+		_this.createdWindowCount++;
+	});
 };
 
 HackBrowserWindowManager.prototype.attachEventHandlers = function(browserWindow) {
+	var windowId = browserWindow.id;
+
 	browserWindow.on('close', function() {
-		var size = browserWindow.getSize(); 
+		var size = browserWindow.getSize();
+		var sizeObject = {
+			"width": size[0],
+			"height": size[1]
+		};
 
-		
-
-		// TODO: Remove this test code
 		try {
-			JSONPersistentStorage.setItem("browserSize", newWindow.getSize()); 
-		} catch (ex) {
+			PersistentStorage.setItem("browserWindowSize", sizeObject);
+		} catch (e) {
 
 		}
 	}); 
 
 	browserWindow.on('closed', function() {
+		delete windowList[windowId];
 		browserWindow = null; 
 	}); 
 }; 

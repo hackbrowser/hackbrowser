@@ -3,6 +3,7 @@
 const fs = require("fs");
 const dialog = require("dialog");
 const dataPath = GLOBAL.__app.basepath + "/.data/";
+
 /*
 	A very thin wrapper around file IO to store/retrieve JSON for persistence
 */
@@ -18,23 +19,24 @@ PersistentStorage.getItem = function(key, callback) {
 		// if file with given key name exists, read file
 		if (exists === true) {
 			fs.readFile(dataPath + key + ".json", function(err, data) {
-				if (err) throw "Error reading data";
+				if (err) callback(err, null);
 
 				try {
 					// parse string to JSON object
 					data = JSON.parse(data);
-					callback(data);
+
+					callback(null, data);
 				} catch (e) {
 					throw "Error parsing data";
 				}
 			});
 		} else {
-			throw "File not found";
+			callback({"message": "File doesn't exist"}, null);
 		}
 	});
 }; 
 
-PersistentStorage.setItem = function(key, value, callback) {
+PersistentStorage.setItem = function(key, value) {
 	/*
 	dialog.showMessageBox({
 		type: "info",
@@ -54,7 +56,9 @@ PersistentStorage.setItem = function(key, value, callback) {
 		value = JSON.stringify(value); 
 
 		// Save to file
-		fs.writeFile(dataPath + key + ".json", value, callback);
+		fs.writeFile(dataPath + key + ".json", value, function(err) {
+			if (err) throw "Error saving file";
+		});
 	} else {
 		throw "Value must be of an object type"; 
 	}
