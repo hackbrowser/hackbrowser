@@ -1,19 +1,20 @@
 'use strict'; 
 
-function MenuBar(eventEmitter, wrapperEl) {
+function MenuBar(hackBrowserWindow, eventEmitter, wrapperEl) {
 	// set window context and wrapper
+	this.hackBrowserWindow = hackBrowserWindow;
 	this.browserEventEmitter = eventEmitter;
 	this.wrapperEl = wrapperEl || document; 
 
 	this.init(); 
 }
 
-MenuBar.prototype.init = function(wrapperEl) {
+MenuBar.prototype.init = function(hackBrowserWindow, wrapperEl) {
 	console.log(this.wrapperEl); 
 
 	this.backBtnEl = document.getElementById("button-back"); 
 	this.forwardBtnEl = document.getElementById("button-forward"); 
-	this.refreshBtnEl = document.getElementById("button-refresh"); 
+	this.reloadBtnEl = document.getElementById("button-reload");
 	this.addressBarEl = document.getElementById("address-bar"); 
 	this.menuBtnEl = document.getElementById("button-menu"); 
 
@@ -24,7 +25,7 @@ MenuBar.prototype.init = function(wrapperEl) {
 MenuBar.prototype.attachEventHandlers = function() {
 	this.backBtnEl.addEventListener("click", this.onBackBtnClick); 			// "Back" button
 	this.forwardBtnEl.addEventListener("click", this.onForwardBtnClick); 	// "Forward" button
-	this.refreshBtnEl.addEventListener("click", this.onRefreshBtnClick); 	// "Refresh" button
+	this.reloadBtnEl.addEventListener("click", this.onReloadBtnClick); 	// "Refresh" button
 	this.menuBtnEl.addEventListener("click", this.onMenuBtnClick);			// "Menu" button
 
 	this.addressBarEl.addEventListener("click", function(e) {
@@ -48,19 +49,25 @@ MenuBar.prototype.adjustAddressBarWidth = function() {
 
 // Event handlers
 MenuBar.prototype.onBackBtnClick = function(e) {
-	console.log("Clicked back"); 
+	console.log("Clicked back");
 
-	e.preventDefault(); 
+	this.hackBrowserWindow.goBack();
+
+	e.preventDefault();
 }; 
 
 MenuBar.prototype.onForwardBtnClick = function(e) {
-	console.log("Clicked forward"); 
+	console.log("Clicked forward");
+
+	this.hackBrowserWindow.goForward();
 
 	e.preventDefault(); 
 }; 
 
-MenuBar.prototype.onRefreshBtnClick = function(e) {
-	console.log("Clicked refresh"); 
+MenuBar.prototype.onReloadBtnClick = function(e) {
+	console.log("Clicked reload");
+
+	this.hackBrowserWindow.reload();
 
 	e.preventDefault(); 
 }; 

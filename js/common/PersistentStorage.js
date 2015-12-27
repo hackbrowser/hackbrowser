@@ -37,6 +37,8 @@ PersistentStorage.getItem = function(key, callback) {
 }; 
 
 PersistentStorage.setItem = function(key, value) {
+	// TODO: add check for valid file name format
+
 	/*
 	dialog.showMessageBox({
 		type: "info",

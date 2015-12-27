@@ -1,22 +1,20 @@
 'use strict'; 
 
-function BrowserTabs(eventEmitter, wrapperEl) {
-	var _that = this; 
-
+function BrowserTabs(hackBrowserWindow, eventEmitter, tabsWrapperEl) {
 	// set window context and wrapper
 	this.browserEventEmitter = eventEmitter;
-	this.wrapperEl = wrapperEl || document; 
+	this.wrapperEl = tabsWrapperEl;
 
 	this.init(); 
-} 
+}
 
 BrowserTabs.prototype.init = function() {
-	this.tabInnerTemplate = '<span class="title">{{title}}</span><div class="close"><i class="icon ion-close"></i></div>'; 
+	this.tabInnerTemplate = '<span class="title">{{title}}</span><div class="close"><i class="icon ion-close"></i></div>';
 
-	this.addTabBtnEl = this.wrapperEl.querySelector("#add-tab"); 
+	this.addTabBtnEl = this.wrapperEl.querySelector("#add-tab");
 
-	this.attachEventHandlers(); 
-}; 
+	this.attachEventHandlers();
+};
 
 BrowserTabs.prototype.attachEventHandlers = function() {
 	this.addTabBtnEl.addEventListener("click", this.onAddTabBtnClick.bind(this)); 
@@ -26,7 +24,7 @@ BrowserTabs.prototype.attachEventHandlers = function() {
 
 BrowserTabs.prototype.onAddTabBtnClick = function(e) {
 	this.browserEventEmitter.emit("add-tab", {
-		"url": "http://10.88.186.68"
+		"url": "http://www.github.com"
 	});
 
 	e.preventDefault(); 
@@ -43,7 +41,10 @@ BrowserTabs.prototype.addNewTab = function(url) {
 	var tabViewId = null; 
 
 	// create a container for new tab
-	var newTabEl = document.createElement("div"); 
+	var newTabEl = document.createElement("div");
+
+	// create a new TabView object associated with the tab
+	// a TabView object is a wrapper for <webview>
 
 	newTabEl.classList.add("tab"); 
 

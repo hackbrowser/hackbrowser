@@ -1,7 +1,16 @@
 (function() {
-	'use strict'; 
+	'use strict';
 
-	document.addEventListener("DOMContentLoaded", function() {
-		var hackBrowserWindow = new HackBrowserWindow(); 
-	});
+	// bootstrap
+	var init = function() {
+		var hackBrowserWindow = new HackBrowserWindow();
+	};
+
+	if (document.readyState === "complete" || document.readyState === "loaded") {
+		init();
+	} else {
+		document.addEventListener("DOMContentLoaded", function() {
+			init();
+		});
+	}
 })(); 

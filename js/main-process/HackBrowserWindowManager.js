@@ -4,6 +4,11 @@ const electron = require("electron");
 const BrowserWindow = electron.BrowserWindow; 
 const PersistentStorage = require(__app.basepath + "/js/common/PersistentStorage");
 
+/**
+ * HackBrowserWindowManager handles opening and closing of browser windows
+ *
+ * @constructor
+ */
 function HackBrowserWindowManager() {
 	this.windowList = {};
 	this.createdWindowCount = 0; 
@@ -24,10 +29,10 @@ HackBrowserWindowManager.prototype.openNewWindow = function(width, height, url) 
 		// create the browser window
 		var newWindow = new BrowserWindow(browserSize);
 
-		// and load the index.html of the app
+		// load the HTML file for browser window
 		newWindow.loadUrl('file://' + __app.basepath + '/browser-window.html');
 
-		// Open the DevTools
+		// Open the DevTools (debugging)
 		newWindow.webContents.openDevTools();
 
 		_this.windowList[newWindow.id] = newWindow;
