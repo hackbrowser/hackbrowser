@@ -4,7 +4,7 @@ function BrowserTabs(eventEmitter, wrapperEl) {
 	var _that = this; 
 
 	// set window context and wrapper
-	this.eventEmitter = eventEmitter; 
+	this.browserEventEmitter = eventEmitter;
 	this.wrapperEl = wrapperEl || document; 
 
 	this.init(); 
@@ -21,11 +21,11 @@ BrowserTabs.prototype.init = function() {
 BrowserTabs.prototype.attachEventHandlers = function() {
 	this.addTabBtnEl.addEventListener("click", this.onAddTabBtnClick.bind(this)); 
 
-	this.eventEmitter.on("add-tab", this.onAddTab.bind(this)); 
+	this.browserEventEmitter.on("add-tab", this.onAddTab.bind(this));
 }; 
 
 BrowserTabs.prototype.onAddTabBtnClick = function(e) {
-	this.eventEmitter.emit("add-tab", {
+	this.browserEventEmitter.emit("add-tab", {
 		"url": "http://10.88.186.68"
 	});
 

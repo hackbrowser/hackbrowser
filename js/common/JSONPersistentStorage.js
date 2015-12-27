@@ -1,23 +1,50 @@
 'use strict'; 
 
-const fs = require("fs"); 
-
+const fs = require("fs");
+const dialog = require("dialog");
+const dataPath = GLOBAL.__app.basepath + "/.data/";
 /*
 	A very thin wrapper around file IO to store/retrieve JSON for persistence
 */
-function PersistentStorage() {
-	this.dataPath = __app.basePath + "/.data/"; 
-}; 
+var PersistentStorage = {};
 
 PersistentStorage.getItem = function(key, callback) {
+	// TODO: add check for valid file name format
 
-}; 
+	var fileToRead = dataPath + key + ".json";
 
-PersistentStorage.getItemSync = function(key) {
+	// check if JSON file exists
+	fs.exists(fileToRead, function(exists) {
+		// if file with given key name exists, read file
+		if (exists === true) {
+			fs.readFile(dataPath + key + ".json", function(err, data) {
+				if (err) throw "Error reading data";
 
+				try {
+					// parse string to JSON object
+					data = JSON.parse(data);
+					callback(data);
+				} catch (e) {
+					throw "Error parsing data";
+				}
+			});
+		} else {
+			throw "File not found";
+		}
+	});
 }; 
 
 PersistentStorage.setItem = function(key, value, callback) {
+	/*
+	dialog.showMessageBox({
+		type: "info",
+		buttons: ["ok"],
+		title: key,
+		message: JSON.stringify(value),
+		detail: dataPath
+	});
+	*/
+
 	if (typeof value === "object" && !Array.isArray(value)) {
 		if (this.isCyclic(value)) {
 			throw "Object to store cannot be cyclic"; 
@@ -27,15 +54,11 @@ PersistentStorage.setItem = function(key, value, callback) {
 		value = JSON.stringify(value); 
 
 		// Save to file
-		fs.writeFile(this.dataPath + key + ".json", value, callback); 
+		fs.writeFile(dataPath + key + ".json", value, callback);
 	} else {
 		throw "Value must be of an object type"; 
 	}
-}; 
-
-PersistentStorage.setItemSync = function(key, value) {
-
-}; 
+};
 
 // check whether the object is cyclic
 // if object is cyclic, TypeError will be thrown while 

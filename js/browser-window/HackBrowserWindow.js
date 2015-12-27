@@ -12,14 +12,14 @@
 const EventEmitter = require("events").EventEmitter; 
 
 function HackBrowserWindow() {
-	this.eventEmitter = new EventEmitter(); 
+	this.browserEventEmitter = new EventEmitter();
 
 	this.init(); 
 }
 
 HackBrowserWindow.prototype.init = function() {
-	this.menuBar = new MenuBar(this.eventEmitter, document.getElementById("menubar")); 
-	this.browserTabs = new BrowserTabs(this.eventEmitter, document.getElementById("navtabs")); 
+	this.menuBar = new MenuBar(this.browserEventEmitter, document.getElementById("menubar"));
+	this.browserTabs = new BrowserTabs(this.browserEventEmitter, document.getElementById("navtabs"));
 }; 
 
 HackBrowserWindow.prototype.attachEventHandlers = function() {

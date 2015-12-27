@@ -2,7 +2,7 @@
 
 function MenuBar(eventEmitter, wrapperEl) {
 	// set window context and wrapper
-	this.eventEmitter = eventEmitter; 
+	this.browserEventEmitter = eventEmitter;
 	this.wrapperEl = wrapperEl || document; 
 
 	this.init(); 
