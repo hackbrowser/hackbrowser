@@ -7,8 +7,7 @@ GLOBAL.__app = {
 }; 
 
 const electron = require('electron'); 
-const app = electron.app; 
-const BrowserWindow = electron.BrowserWindow; 
+const app = electron.app;
 const HackBrowserWindowManager = require('./js/main-process/HackBrowserWindowManager'); 
 
 app.on('window-all-closed', function() {
