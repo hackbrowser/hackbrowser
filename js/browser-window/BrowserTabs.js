@@ -2,6 +2,7 @@
 
 function BrowserTabs(hackBrowserWindow, eventEmitter, tabsWrapperEl) {
 	// set window context and wrapper
+	this.hackBrowserWindow = hackBrowserWindow;
 	this.browserEventEmitter = eventEmitter;
 	this.wrapperEl = tabsWrapperEl;
 
@@ -43,10 +44,13 @@ BrowserTabs.prototype.addNewTab = function(url) {
 	// create a container for new tab
 	var newTabEl = document.createElement("div");
 
+	var newTabView = new TabView(this.hackBrowserWindow, "http://www.yahoo.com");
+	newTabEl.setAttribute("data-webview-id", newTabView.getId());
+
 	// create a new TabView object associated with the tab
 	// a TabView object is a wrapper for <webview>
 
-	newTabEl.classList.add("tab"); 
+	newTabEl.classList.add("tab");
 
 	// replace title with url (until title is set)
 	newTabEl.innerHTML = this.tabInnerTemplate.replace("{{title}}", url); 

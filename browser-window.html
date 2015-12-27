@@ -18,21 +18,6 @@
 </head>
 <body>
 	<nav id="navtabs" class="unselectable">
-		<div class="tab" draggable="true" ondragstart="console.log('dragstart')">
-			<span class="title">BitBucket</span>
-			<div class="close"><i class="icon ion-close"></i></div>
-		</div><!-- // .tab -->
-
-		<div class="tab active" draggable="true" ondragstart="console.log('dragstart')">
-			<span class="title">GitHub</span>
-			<div class="close"><i class="icon ion-close"></i></div>
-		</div><!-- // .tab -->
-
-		<div class="tab" draggable="true" ondragstart="console.log('dragstart')">
-			<span class="title">HackBrowser</span>
-			<div class="close"><i class="icon ion-close"></i></div>
-		</div><!-- // .tab -->
-
 		<div id="add-tab">
 			<div class="icon-wrapper">
 				<i class="icon ion-plus"></i>
@@ -67,14 +52,7 @@
 	<!--
 		Wrapper for WebView elements
 	-->
-	<section id="tabview-wrapper">
-		<div class="tabview">
-			<webview src="http://bitbucket.org"></webview>
-		</div><!-- // .tabview -->
-
-		<div class="tabview">
-			<webview src="http://github.com"></webview>
-		</div><!-- // .tabview -->
+	<section id="webview-wrapper">
 	</section><!-- // section#webview-wrapper -->
 </body>
 </html>

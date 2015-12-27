@@ -1,16 +1,31 @@
 'use strict'; 
 
-function TabView(hackBrowserWindow) {
+function TabView(hackBrowserWindow, url) {
 	this.hackBrowserWindow = hackBrowserWindow;
 
 	this.webViewTitle = "New Tab";
 	this.webViewId = "wv-" + this.hackBrowserWindow.getCreatedTabViewCount();
+	this.webViewWrapperEl = document.getElementById("webview-wrapper");
+
+	this.init(url);
 }
 
-TabView.prototype.init = function() {
+TabView.prototype.init = function(url) {
 	this.webViewEl = document.createElement("webview");
 
 	this.webViewEl.setAttribute("id", this.webViewId);
+	this.webViewEl.setAttribute("plugins", "");
+	this.webViewEl.setAttribute("disablewebsecurity", "");
+
+	this.webViewWrapperEl.appendChild(this.webViewEl);
+
+	if (url) {
+		this.navigateTo(url);
+	} else {
+		this.navigateTo("http://www.naver.com");
+	}
+
+	this.attachEventHandlers();
 };
 
 TabView.prototype.attachEventHandlers = function() {
