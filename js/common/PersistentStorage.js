@@ -1,12 +1,12 @@
-'use strict'; 
+'use strict';
 
 const fs = require("fs");
 const dialog = require("dialog");
-const dataPath = GLOBAL.__app.basepath + "/.data/";
+const dataPath = GLOBAL.__app.basePath + "/.data/";
 
 /*
-	A very thin wrapper around file IO to store/retrieve JSON for persistence
-*/
+ A very thin wrapper around file IO to store/retrieve JSON for persistence
+ */
 var PersistentStorage = {};
 
 PersistentStorage.getItem = function(key, callback) {
@@ -27,42 +27,44 @@ PersistentStorage.getItem = function(key, callback) {
 
 					callback(null, data);
 				} catch (e) {
-					throw "Error parsing data";
+					callback({"message": "Invalid data format"}, null);
 				}
 			});
 		} else {
 			callback({"message": "File doesn't exist"}, null);
 		}
 	});
-}; 
+};
 
 PersistentStorage.setItem = function(key, value) {
 	// TODO: add check for valid file name format
 
 	/*
-	dialog.showMessageBox({
-		type: "info",
-		buttons: ["ok"],
-		title: key,
-		message: JSON.stringify(value),
-		detail: dataPath
-	});
-	*/
+	 dialog.showMessageBox({
+	 type: "info",
+	 buttons: ["ok"],
+	 title: key,
+	 message: JSON.stringify(value),
+	 detail: GLOBAL.__app.dataPath
+	 });
+	 */
+
+	var _this = this;
+	var fileToWrite = GLOBAL.__app.dataPath + key + ".json";
 
 	if (typeof value === "object" && !Array.isArray(value)) {
-		if (this.isCyclic(value)) {
-			throw "Object to store cannot be cyclic"; 
+		if (_this.isCyclic(value)) {
+			throw "Object to store cannot be cyclic";
 		}
 
 		// if safe to stringify, go ahead and stringify data
-		value = JSON.stringify(value); 
+		value = JSON.stringify(value);
 
 		// Save to file
-		fs.writeFile(dataPath + key + ".json", value, function(err) {
-			if (err) throw "Error saving file";
+		fs.writeFile(fileToWrite, value, function(err) {
 		});
 	} else {
-		throw "Value must be of an object type"; 
+		throw "Value must be of an object type";
 	}
 };
 
@@ -93,6 +95,6 @@ PersistentStorage.isCyclic = function(obj) {
 	}
 
 	return detect(obj);
-}; 
+};
 
 module.exports = PersistentStorage; 

@@ -1,8 +1,8 @@
-'use strict'; 
+'use strict';
 
-const electron = require("electron"); 
-const BrowserWindow = electron.BrowserWindow; 
-const PersistentStorage = require(__app.basepath + "/js/common/PersistentStorage");
+const electron = require("electron");
+const BrowserWindow = electron.BrowserWindow;
+const PersistentStorage = require(__app.basePath + "/js/common/PersistentStorage");
 
 /**
  * HackBrowserWindowManager handles opening and closing of browser windows
@@ -11,7 +11,7 @@ const PersistentStorage = require(__app.basepath + "/js/common/PersistentStorage
  */
 function HackBrowserWindowManager() {
 	this.windowList = {};
-	this.createdWindowCount = 0; 
+	this.createdWindowCount = 0;
 }
 
 HackBrowserWindowManager.prototype.openNewWindow = function(width, height, url) {
@@ -30,7 +30,7 @@ HackBrowserWindowManager.prototype.openNewWindow = function(width, height, url) 
 		var newWindow = new BrowserWindow(browserSize);
 
 		// load the HTML file for browser window
-		newWindow.loadUrl('file://' + __app.basepath + '/browser-window.html');
+		newWindow.loadUrl('file://' + __app.basePath + '/browser-window.html');
 
 		// Open the DevTools (debugging)
 		newWindow.webContents.openDevTools();
@@ -53,21 +53,17 @@ HackBrowserWindowManager.prototype.attachEventHandlers = function(browserWindow)
 			"height": size[1]
 		};
 
-		try {
-			PersistentStorage.setItem("browserWindowSize", sizeObject);
-		} catch (e) {
-
-		}
-	}); 
+		PersistentStorage.setItem("browserWindowSize", sizeObject);
+	});
 
 	browserWindow.on('closed', function() {
 		delete windowList[windowId];
-		browserWindow = null; 
-	}); 
-}; 
+		browserWindow = null;
+	});
+};
 
 HackBrowserWindowManager.prototype.onWindowClose = function() {
 
-}; 
+};
 
 module.exports = HackBrowserWindowManager; 

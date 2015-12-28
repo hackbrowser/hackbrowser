@@ -1,59 +1,120 @@
-'use strict'; 
-
-/*
-	EventEmitter is used here for publish-subscribe pattern 
-	between browser window components
-
-	as an example, to open a new browser tab, 
-	"new-tab" event will be emitted. 
-
-	BrowserTabs will add a new tab upon receiving the event
-*/
-const EventEmitter = require("events").EventEmitter; 
+'use strict';
 
 function HackBrowserWindow() {
-	this.browserEventEmitter = new EventEmitter();
-	this.currentTabView = null;
-	this.createdTabViewCount = 0;
-
-	this.init(); 
-}
-
-HackBrowserWindow.prototype.init = function() {
 	var _this = this;
 
-	this.menuBar = new MenuBar(_this, this.browserEventEmitter, document.getElementById("menubar"));
-	this.browserTabs = new BrowserTabs(_this, this.browserEventEmitter, document.getElementById("navtabs"));
-};
+	/* ====================================
+	 private member variables
+	 ====================================== */
+	var activeTabView;
+	var createdTabViewCount;
+	var tabList;
 
-HackBrowserWindow.prototype.navigateTo = function(url) {
-	this.currentTabView.navigateTo(url);
-};
+	var menuBar;
+	var addTabBtnEl;
 
-HackBrowserWindow.prototype.updateWindowTitle = function(title) {
-	document.title = title;
-};
 
-HackBrowserWindow.prototype.getCurrentTabView = function() {
-	return this.currentTabView;
-};
+	/* ====================================
+	 private methods
+	 ====================================== */
+	var init = function() {
+		// create a new MenuBar object associated with current browser window
+		menuBar = new MenuBar(_this);
+		createdTabViewCount = 0;
+		tabList = {};
+		addTabBtnEl = document.getElementById("add-tab");
 
-HackBrowserWindow.prototype.getCreatedTabViewCount = function() {
-	return this.createdTabViewCount;
-};
+		_this.addNewTab("http://www.hackbrowser.com", true);
 
-HackBrowserWindow.prototype.goBack = function() {
-	if (this.currentTabView.getWebViewEl().canGoBack() === true) {
-		this.currentTabView.getWebViewEl().goBack();
-	}
-};
+		attachEventHandlers();
+	};
 
-HackBrowserWindow.prototype.reload = function() {
-	this.currentTabView.getWebViewEl().reload();
-};
+	var attachEventHandlers = function() {
+		addTabBtnEl.addEventListener("click", function(e) {
+			_this.addNewTab("http://www.github.com", true);
 
-HackBrowserWindow.prototype.goForward = function() {
-	if (this.currentTabView.getWebViewEl().canGoForward() === true) {
-		this.currentTabView.getWebViewEl().goForward();
-	}
-};
+			e.preventDefault();
+		});
+	};
+
+	/* ====================================
+	 public methods
+	 ====================================== */
+	_this.navigateTo = function(url) {
+		activeTabView.navigateTo(url);
+	};
+
+	_this.updateWindowTitle = function(title) {
+		document.title = title;
+	};
+
+	_this.addNewTab = function(url, activate) {
+		var newTabView = new TabView(_this, url);
+		var newTabViewId = newTabView.getId();
+
+		tabList[newTabViewId] = newTabView;
+
+		if (activate === true) {
+			_this.activateTabById(newTabViewId);
+		}
+	};
+
+	_this.activateTabById = function(tabViewId) {
+		if (activeTabView && (activeTabView.getId() === tabViewId)) {
+			console.log("already active tab");
+			return;
+		}
+
+		if(tabList.hasOwnProperty(tabViewId) === true) {
+			if (activeTabView) {
+				activeTabView.deactivate();
+			}
+
+			activeTabView = tabList[tabViewId];
+
+			var activatedWebViewEl = activeTabView.getWebViewEl();
+
+			// activate new tab view
+			activeTabView.activate();
+
+			// update back/forward button status
+			menuBar.updateBtnStatus(activatedWebViewEl);
+
+			// update page url
+			menuBar.updateUrl(activatedWebViewEl.getURL());
+
+			// update page title
+			_this.updateWindowTitle(activatedWebViewEl.getTitle());
+		}
+	};
+
+	_this.getActiveTabView = function() {
+		return activeTabView;
+	};
+
+	_this.increaseCreatedTabViewCount = function() {
+		createdTabViewCount++;
+	};
+
+	_this.getCreatedTabViewCount = function() {
+		return createdTabViewCount;
+	};
+
+	_this.goBack = function() {
+		if (activeTabView.getWebViewEl().canGoBack() === true) {
+			activeTabView.getWebViewEl().goBack();
+		}
+	};
+
+	_this.reload = function() {
+		activeTabView.getWebViewEl().reload();
+	};
+
+	_this.goForward = function() {
+		if (activeTabView.getWebViewEl().canGoForward() === true) {
+			activeTabView.getWebViewEl().goForward();
+		}
+	};
+
+	init();
+}
