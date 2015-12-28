@@ -4,7 +4,7 @@ function MenuBar(hackBrowserWindow) {
 	var _this = this;
 
 	/* ====================================
-	 private member variables
+		private member variables
 	 ====================================== */
 	var backBtnEl;
 	var forwardBtnEl;
@@ -16,7 +16,7 @@ function MenuBar(hackBrowserWindow) {
 
 
 	/* ====================================
-	 private methods
+		private methods
 	 ====================================== */
 	var init = function() {
 		backBtnEl = document.getElementById("button-back");
@@ -122,7 +122,7 @@ function MenuBar(hackBrowserWindow) {
 
 
 	/* ====================================
-	 public methods
+		public methods
 	 ====================================== */
 	_this.updateBtnStatus = function(webViewEl) {
 		if (webViewEl.canGoBack() === true) {

@@ -1,10 +1,15 @@
 'use strict';
 
+/**
+ * HackBrowserWindow controls all
+ *
+ * @constructor
+ */
 function HackBrowserWindow() {
 	var _this = this;
 
 	/* ====================================
-	 private member variables
+		private member variables
 	 ====================================== */
 	var activeTabView;
 	var createdTabViewCount;
@@ -15,7 +20,7 @@ function HackBrowserWindow() {
 
 
 	/* ====================================
-	 private methods
+		private methods
 	 ====================================== */
 	var init = function() {
 		// create a new MenuBar object associated with current browser window
@@ -38,7 +43,7 @@ function HackBrowserWindow() {
 	};
 
 	/* ====================================
-	 public methods
+		public methods
 	 ====================================== */
 	_this.navigateTo = function(url) {
 		activeTabView.navigateTo(url);

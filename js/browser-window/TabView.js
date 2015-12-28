@@ -13,7 +13,7 @@ function TabView(hackBrowserWindow, url) {
 	var _this = this;
 
 	/* ====================================
-	 private member variables
+		private member variables
 	 ====================================== */
 	var webViewEl;
 	var webViewTitle;
@@ -27,7 +27,7 @@ function TabView(hackBrowserWindow, url) {
 
 
 	/* ====================================
-	 private methods
+		private methods
 	 ====================================== */
 	var init = function(url) {
 		webViewEl = document.createElement("webview");
@@ -94,7 +94,7 @@ function TabView(hackBrowserWindow, url) {
 
 
 	/* ====================================
-	 public methods
+		public methods
 	 ====================================== */
 	_this.navigateTo = function(url) {
 		webViewEl.setAttribute("src", url);
