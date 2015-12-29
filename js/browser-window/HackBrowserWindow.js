@@ -32,14 +32,14 @@ function HackBrowserWindow() {
 		tabList = {};
 		addTabBtnEl = document.getElementById("add-tab");
 
-		_this.addNewTab("http://10.88.193.118/confluence/", true);
+		_this.addNewTab("http://www.hackbrowser.com", true);
 
 		attachEventHandlers();
 	};
 
 	var attachEventHandlers = function() {
 		addTabBtnEl.addEventListener("click", function(e) {
-			_this.addNewTab("http://www.github.com", true);
+			_this.addNewTab(null, true);
 
 			e.preventDefault();
 		});

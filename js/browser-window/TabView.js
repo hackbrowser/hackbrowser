@@ -26,6 +26,7 @@ function TabView(hackBrowserWindow, url) {
 	var tabCloseBtnEl;
 	var tabInnerTemplate;
 	var isDOMReady;
+	var isBlankPage;
 
 
 	/* ====================================
@@ -41,6 +42,7 @@ function TabView(hackBrowserWindow, url) {
 		webViewTitle = "New Tab";
 		webViewURL = url;
 		isDOMReady = false;
+		isBlankPage = false;
 		tabViewId = "wv-" + hackBrowserWindow.getCreatedTabViewCount();
 		browserTabsWrapperEl = document.getElementById("navtabs");
 		addNewTabBtnEl = document.getElementById("add-tab");
@@ -55,19 +57,16 @@ function TabView(hackBrowserWindow, url) {
 		webViewEl.setAttribute("plugins", "");
 		webViewEl.setAttribute("disablewebsecurity", "");
 
-		// if url is set, navigate to url
-		// TODO: load opener page in case url isn't set
-		if (!url) {
-
+		if (url === null) {
+			enterBlankPageMode();
+		} else {
+			_this.navigateTo(url);
 		}
-
-		_this.navigateTo(url);
 
 		// append the webview element to screen (#webview-wrapper)
 		webViewWrapperEl.appendChild(webViewEl);
 
 		createTab();
-
 		attachEventHandlers();
 	};
 
@@ -88,6 +87,11 @@ function TabView(hackBrowserWindow, url) {
 		tabCloseBtnEl = tabEl.querySelector(".close");
 
 		browserTabsWrapperEl.insertBefore(tabEl, addNewTabBtnEl);
+	};
+
+	var enterBlankPageMode = function() {
+		isBlankPage = true;
+		_this.navigateTo("./blank-page.html");
 	};
 
 	var attachEventHandlers = function() {
@@ -121,8 +125,14 @@ function TabView(hackBrowserWindow, url) {
 		webViewEl.addEventListener("load-commit", function(e) {
 			if (hackBrowserWindow.getActiveTabView() === _this) {
 				if (e.isMainFrame === true) {
-					hackBrowserWindow.updateWindowTitle(url);
-					hackBrowserWindow.getMenuBar().updateUrl(url);
+					hackBrowserWindow.updateWindowTitle(webViewURL);
+
+
+					if (isBlankPage === true) {
+					} else {
+						hackBrowserWindow.getMenuBar().updateUrl(webViewURL);
+					}
+
 				};
 			}
 		});
