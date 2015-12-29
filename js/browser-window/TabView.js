@@ -13,25 +13,34 @@ function TabView(hackBrowserWindow, url) {
 	var _this = this;
 
 	/* ====================================
-		private member variables
+	 private member variables
 	 ====================================== */
 	var webViewEl;
 	var webViewTitle;
+	var webViewURL;
+	var webViewWrapperEl;
 	var tabViewId;
 	var browserTabsWrapperEl;
 	var addNewTabBtnEl;
-	var webViewWrapperEl;
 	var tabEl;
-
+	var tabCloseBtnEl;
 	var tabInnerTemplate;
+	var isDOMReady;
 
 
 	/* ====================================
-		private methods
+	 private methods
 	 ====================================== */
+	/**
+	 * create a new <webview> element and linked browser tab
+	 *
+	 * @param url
+	 */
 	var init = function(url) {
 		webViewEl = document.createElement("webview");
 		webViewTitle = "New Tab";
+		webViewURL = url;
+		isDOMReady = false;
 		tabViewId = "wv-" + hackBrowserWindow.getCreatedTabViewCount();
 		browserTabsWrapperEl = document.getElementById("navtabs");
 		addNewTabBtnEl = document.getElementById("add-tab");
@@ -47,19 +56,24 @@ function TabView(hackBrowserWindow, url) {
 		webViewEl.setAttribute("disablewebsecurity", "");
 
 		// if url is set, navigate to url
-		// TODO: load "blank" page in case url isn't set
+		// TODO: load opener page in case url isn't set
 		if (!url) {
 
 		}
+
 		_this.navigateTo(url);
 
 		// append the webview element to screen (#webview-wrapper)
 		webViewWrapperEl.appendChild(webViewEl);
 
 		createTab();
+
 		attachEventHandlers();
 	};
 
+	/**
+	 * Create and add a new tab to browser window's tabs
+	 */
 	var createTab = function() {
 		// create a container for new tab
 		tabEl = document.createElement("div");
@@ -70,31 +84,61 @@ function TabView(hackBrowserWindow, url) {
 		// replace title with url (until title is set)
 		tabEl.innerHTML = tabInnerTemplate.replace("{{title}}", url);
 
-		// attach event handlers for new tab
-		attachTabEventHandlers(tabEl);
+		// save reference to close button
+		tabCloseBtnEl = tabEl.querySelector(".close");
 
 		browserTabsWrapperEl.insertBefore(tabEl, addNewTabBtnEl);
 	};
 
 	var attachEventHandlers = function() {
+		tabEl.addEventListener("click", function(e) {
+			hackBrowserWindow.activateTabById(tabViewId);
+		});
+
+		tabCloseBtnEl.addEventListener("click", function(e) {
+			_this.close();
+
+			// stop propagation to prevent activate() being called after tabview being closed
+			e.stopPropagation();
+			e.preventDefault();
+		}, false);
+
+		webViewEl.addEventListener("dom-ready", function() {
+			isDOMReady = true;
+		});
+
 		webViewEl.addEventListener("page-title-updated", function(data) {
 			webViewTitle = data.title;
+
+			// update tab title
+			_this.updateTabTitle(webViewTitle);
 
 			if (hackBrowserWindow.getActiveTabView() === _this) {
 				hackBrowserWindow.updateWindowTitle(webViewTitle);
 			}
 		});
-	};
 
-	var attachTabEventHandlers = function(tabEl) {
-		tabEl.addEventListener("click", function(e) {
-			hackBrowserWindow.activateTabById(tabViewId);
+		webViewEl.addEventListener("load-commit", function(e) {
+			if (hackBrowserWindow.getActiveTabView() === _this) {
+				if (e.isMainFrame === true) {
+					hackBrowserWindow.updateWindowTitle(url);
+					hackBrowserWindow.getMenuBar().updateUrl(url);
+				};
+			}
 		});
-	};
+
+		webViewEl.addEventListener("did-frame-finish-load", function(e) {
+			webViewURL = webViewEl.getURL();
+
+			if (hackBrowserWindow.getActiveTabView() === _this) {
+				hackBrowserWindow.updateWindowControls();
+			}
+		});
+	}
 
 
 	/* ====================================
-		public methods
+	 public methods
 	 ====================================== */
 	_this.navigateTo = function(url) {
 		webViewEl.setAttribute("src", url);
@@ -110,6 +154,32 @@ function TabView(hackBrowserWindow, url) {
 		tabEl.classList.remove("active");
 	};
 
+	_this.isDOMReady = function() {
+		return isDOMReady;
+	};
+
+	_this.close = function() {
+		// find the index of tab being closed
+		var tabIndex = Array.prototype.indexOf.call(browserTabsWrapperEl.querySelectorAll(".tab"), tabEl);
+
+		hackBrowserWindow.closeTabViewById(tabViewId, tabIndex);
+
+		browserTabsWrapperEl.removeChild(tabEl);
+		webViewWrapperEl.removeChild(webViewEl);
+
+		var tabIdToActivate;
+
+		var openTabsElArr = browserTabsWrapperEl.querySelectorAll(".tab");
+
+		if (tabIndex >= openTabsElArr.length) {
+			tabIdToActivate = openTabsElArr[tabIndex - 1].dataset.webviewId;
+		} else {
+			tabIdToActivate = openTabsElArr[tabIndex].dataset.webviewId;
+		}
+
+		hackBrowserWindow.activateTabById(tabIdToActivate);
+	};
+
 	_this.getId = function() {
 		return tabViewId;
 	};
@@ -123,11 +193,11 @@ function TabView(hackBrowserWindow, url) {
 	};
 
 	_this.getURL = function() {
-		return webViewEl.getURL();
+		return webViewURL;
 	};
 
-	_this.updateTabTitle = function() {
-
+	_this.updateTabTitle = function(title) {
+		tabEl.querySelector(".title").innerText = title;
 	};
 
 	init(url);

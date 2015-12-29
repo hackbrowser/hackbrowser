@@ -21,8 +21,8 @@ HackBrowserWindowManager.prototype.openNewWindow = function(width, height, url) 
 	PersistentStorage.getItem("browserWindowSize", function(err, browserSize) {
 		if (err) {
 			browserSize = {
-				width: 800,
-				height: 600
+				width: 1000,
+				height: 800
 			};
 		}
 
@@ -30,7 +30,7 @@ HackBrowserWindowManager.prototype.openNewWindow = function(width, height, url) 
 		var newWindow = new BrowserWindow(browserSize);
 
 		// load the HTML file for browser window
-		newWindow.loadUrl('file://' + __app.basePath + '/browser-window.html');
+		newWindow.loadUrl("file://" + __app.basePath + "/browser-window.html");
 
 		// Open the DevTools (debugging)
 		newWindow.webContents.openDevTools();
@@ -46,24 +46,24 @@ HackBrowserWindowManager.prototype.openNewWindow = function(width, height, url) 
 HackBrowserWindowManager.prototype.attachEventHandlers = function(browserWindow) {
 	var windowId = browserWindow.id;
 
+	// save browser window's width/height when user closes it
 	browserWindow.on('close', function() {
 		var size = browserWindow.getSize();
+
 		var sizeObject = {
 			"width": size[0],
 			"height": size[1]
 		};
 
+		// save to persistent storage
 		PersistentStorage.setItem("browserWindowSize", sizeObject);
 	});
 
+	// remove the window from windowList and remove reference so that GC clear is from memory
 	browserWindow.on('closed', function() {
 		delete windowList[windowId];
 		browserWindow = null;
 	});
-};
-
-HackBrowserWindowManager.prototype.onWindowClose = function() {
-
 };
 
 module.exports = HackBrowserWindowManager; 

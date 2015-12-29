@@ -1,10 +1,17 @@
 'use strict';
 
+/**
+ * MenuBar module includes handling for back button, forward button,
+ * reload button, address bar, and menu button
+ *
+ * @param hackBrowserWindow
+ * @constructor
+ */
 function MenuBar(hackBrowserWindow) {
 	var _this = this;
 
 	/* ====================================
-		private member variables
+	 private member variables
 	 ====================================== */
 	var backBtnEl;
 	var forwardBtnEl;
@@ -16,7 +23,7 @@ function MenuBar(hackBrowserWindow) {
 
 
 	/* ====================================
-		private methods
+	 private methods
 	 ====================================== */
 	var init = function() {
 		backBtnEl = document.getElementById("button-back");
@@ -29,10 +36,13 @@ function MenuBar(hackBrowserWindow) {
 		adjustAddressBarWidth();
 	};
 
+	/**
+	 * attach event handlers for menu bar buttons
+	 */
 	var attachEventHandlers = function() {
 		backBtnEl.addEventListener("click", onBackBtnClick); 			// "Back" button
-		forwardBtnEl.addEventListener("click", onForwardBtnClick); 	// "Forward" button
-		reloadBtnEl.addEventListener("click", onReloadBtnClick); 	// "Refresh" button
+		forwardBtnEl.addEventListener("click", onForwardBtnClick);	 	// "Forward" button
+		reloadBtnEl.addEventListener("click", onReloadBtnClick); 		// "Refresh" button
 		menuBtnEl.addEventListener("click", onMenuBtnClick);			// "Menu" button
 
 		addressBarEl.addEventListener("click", function(e) {
@@ -55,6 +65,10 @@ function MenuBar(hackBrowserWindow) {
 		});
 	};
 
+	/**
+	 * sets address bar's left and right padding based on control buttons
+	 * to ensure that the address bar is always at full width
+	 */
 	var adjustAddressBarWidth = function() {
 		// Calculate left and right controls' widths
 		var leftMenuEl = document.getElementById("menu-left");
@@ -65,7 +79,11 @@ function MenuBar(hackBrowserWindow) {
 		addressBarWrapperEl.style.paddingRight = rightMenuEl.offsetWidth + "px";
 	};
 
-	// Event handlers
+	/**
+	 * event handler for back button
+	 *
+	 * @param e
+	 */
 	var onBackBtnClick = function(e) {
 		console.log("Clicked back");
 
@@ -74,6 +92,11 @@ function MenuBar(hackBrowserWindow) {
 		e.preventDefault();
 	};
 
+	/**
+	 * event handler for forward button
+	 *
+	 * @param e
+	 */
 	var onForwardBtnClick = function(e) {
 		console.log("Clicked forward");
 
@@ -82,6 +105,11 @@ function MenuBar(hackBrowserWindow) {
 		e.preventDefault();
 	};
 
+	/**
+	 * event handler for reload button
+	 *
+	 * @param e
+	 */
 	var onReloadBtnClick = function(e) {
 		console.log("Clicked reload");
 
@@ -90,51 +118,48 @@ function MenuBar(hackBrowserWindow) {
 		e.preventDefault();
 	};
 
+	/**
+	 * event handler for menu button
+	 *
+	 * @param e
+	 */
 	var onMenuBtnClick = function(e) {
 		console.log("Clicked menu button");
 
 		e.preventDefault();
 	};
 
-	var enableBackBtn = function() {
+
+	/* ====================================
+	 public methods
+	 ====================================== */
+	_this.enableBackBtn = function() {
 		backBtnEl.classList.remove(disabledClass);
 	};
 
-	var disableBackBtn = function() {
+	_this.disableBackBtn = function() {
 		backBtnEl.classList.add(disabledClass);
 	};
 
-	var enableForwardBtn = function() {
+	_this.enableForwardBtn = function() {
 		forwardBtnEl.classList.remove(disabledClass);
 	};
 
-	var disableForwardBtn = function() {
+	_this.disableForwardBtn = function() {
 		forwardBtnEl.classList.add(disabledClass);
 	};
 
-	var enableReloadBtn = function() {
-		reloadBtnEl.classList.remove(disabledClass);
-	};
-
-	var disableReloadBtn = function() {
-		reloadBtnEl.classList.add(disabledClass);
-	};
-
-
-	/* ====================================
-		public methods
-	 ====================================== */
 	_this.updateBtnStatus = function(webViewEl) {
 		if (webViewEl.canGoBack() === true) {
-			enableBackBtn();
+			_this.enableBackBtn();
 		} else {
-			disableBackBtn();
+			_this.disableBackBtn();
 		}
 
 		if (webViewEl.canGoForward() === true) {
-			enableForwardBtn();
+			_this.enableForwardBtn();
 		} else {
-			disableForwardBtn();
+			_this.disableForwardBtn();
 		}
 	};
 

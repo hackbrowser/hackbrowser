@@ -39,16 +39,6 @@ PersistentStorage.getItem = function(key, callback) {
 PersistentStorage.setItem = function(key, value) {
 	// TODO: add check for valid file name format
 
-	/*
-	 dialog.showMessageBox({
-	 type: "info",
-	 buttons: ["ok"],
-	 title: key,
-	 message: JSON.stringify(value),
-	 detail: GLOBAL.__app.dataPath
-	 });
-	 */
-
 	var _this = this;
 	var fileToWrite = GLOBAL.__app.dataPath + key + ".json";
 

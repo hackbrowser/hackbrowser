@@ -1,5 +1,7 @@
 'use strict';
 
+const remote = require('electron').remote;
+
 /**
  * HackBrowserWindow controls all
  *
@@ -9,27 +11,28 @@ function HackBrowserWindow() {
 	var _this = this;
 
 	/* ====================================
-		private member variables
+	 private member variables
 	 ====================================== */
 	var activeTabView;
 	var createdTabViewCount;
+	var openTabViewCount;
 	var tabList;
-
 	var menuBar;
 	var addTabBtnEl;
 
 
 	/* ====================================
-		private methods
+	 private methods
 	 ====================================== */
 	var init = function() {
 		// create a new MenuBar object associated with current browser window
 		menuBar = new MenuBar(_this);
 		createdTabViewCount = 0;
+		openTabViewCount = 0;
 		tabList = {};
 		addTabBtnEl = document.getElementById("add-tab");
 
-		_this.addNewTab("http://www.hackbrowser.com", true);
+		_this.addNewTab("http://10.88.193.118/confluence/", true);
 
 		attachEventHandlers();
 	};
@@ -42,8 +45,9 @@ function HackBrowserWindow() {
 		});
 	};
 
+
 	/* ====================================
-		public methods
+	 public methods
 	 ====================================== */
 	_this.navigateTo = function(url) {
 		activeTabView.navigateTo(url);
@@ -62,9 +66,13 @@ function HackBrowserWindow() {
 		if (activate === true) {
 			_this.activateTabById(newTabViewId);
 		}
+
+		openTabViewCount++;
 	};
 
 	_this.activateTabById = function(tabViewId) {
+		console.log("activateTabById(" + tabViewId + ")");
+
 		if (activeTabView && (activeTabView.getId() === tabViewId)) {
 			console.log("already active tab");
 			return;
@@ -77,20 +85,32 @@ function HackBrowserWindow() {
 
 			activeTabView = tabList[tabViewId];
 
-			var activatedWebViewEl = activeTabView.getWebViewEl();
-
 			// activate new tab view
 			activeTabView.activate();
 
-			// update back/forward button status
-			menuBar.updateBtnStatus(activatedWebViewEl);
-
-			// update page url
-			menuBar.updateUrl(activatedWebViewEl.getURL());
-
-			// update page title
-			_this.updateWindowTitle(activatedWebViewEl.getTitle());
+			_this.updateWindowControls();
 		}
+	};
+
+
+	_this.updateWindowControls = function() {
+		// check if active webview is still loading
+		// if webViewEl.canGoBack() or webViewEl.canGoForward() is called in menuBar.updateBtnStatus()
+		// before <webview> element is loaded, an exception will be thrown
+		if (activeTabView.isDOMReady() === true) {
+			// update back/forward button status
+			menuBar.updateBtnStatus(activeTabView.getWebViewEl());
+		} else {
+			menuBar.disableBackBtn();
+			menuBar.disableForwardBtn();
+		}
+
+		_this.updateWindowTitle(activeTabView.getWebViewTitle());
+		menuBar.updateUrl(activeTabView.getURL());
+	};
+
+	_this.getMenuBar = function() {
+		return menuBar;
 	};
 
 	_this.getActiveTabView = function() {
@@ -106,8 +126,14 @@ function HackBrowserWindow() {
 	};
 
 	_this.goBack = function() {
-		if (activeTabView.getWebViewEl().canGoBack() === true) {
+		if ((activeTabView.isDOMReady() === true) && (activeTabView.getWebViewEl().canGoBack() === true)) {
 			activeTabView.getWebViewEl().goBack();
+		}
+	};
+
+	_this.goForward = function() {
+		if ((activeTabView.isDOMReady() === true) && (activeTabView.getWebViewEl().canGoForward() === true)) {
+			activeTabView.getWebViewEl().goForward();
 		}
 	};
 
@@ -115,9 +141,27 @@ function HackBrowserWindow() {
 		activeTabView.getWebViewEl().reload();
 	};
 
-	_this.goForward = function() {
-		if (activeTabView.getWebViewEl().canGoForward() === true) {
-			activeTabView.getWebViewEl().goForward();
+	/**
+	 * remove specific TabView object from tabList object
+	 * for garbage collection
+	 *
+	 * also, determine which TabView should be displayed after closing current TabView
+	 *
+	 * this method should be called when a tab is closed in the browser
+	 *
+	 * @param tabViewId
+	 */
+	_this.closeTabViewById = function(tabViewId, tabIndex) {
+		delete tabList[tabViewId];
+
+		console.log(tabList);
+
+		openTabViewCount--;
+
+		// if no tabs are open, close window
+		if (openTabViewCount === 0) {
+			var currentWindow = remote.getCurrentWindow();
+			currentWindow.close();
 		}
 	};
 
