@@ -32,7 +32,7 @@ function HackBrowserWindow() {
 		tabList = {};
 		addTabBtnEl = document.getElementById("add-tab");
 
-		_this.addNewTab("http://10.88.193.118/confluence/", true);
+		_this.addNewTab("http://www.google.com/", true);
 
 		attachEventHandlers();
 	};
@@ -151,8 +151,6 @@ function HackBrowserWindow() {
 	 */
 	_this.closeTabViewById = function(tabViewId, tabIndex) {
 		delete tabList[tabViewId];
-
-		console.log(tabList);
 
 		openTabViewCount--;
 
