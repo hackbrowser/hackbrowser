@@ -1,4 +1,4 @@
-![HackBrowser](http://www.hackbrowser.com/images/logo-hackbrowser.png)
+![HackBrowser](http://www.hackbrowser.com/images/logo-hackbrowser-github.png)
 
 http://www.hackbrowser.com
 
