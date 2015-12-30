@@ -56,11 +56,20 @@ function MenuBar(hackBrowserWindow) {
 		addressBarEl.addEventListener("keypress", function(e) {
 			// Enter key
 			if (e.charCode === 13) {
-				console.log(e);
+				e.preventDefault();
 
 				var urlValue = addressBarEl.value;
 
-				hackBrowserWindow.navigateTo()
+				if (urlValue.trim() === "") {
+					// do nothing
+					return;
+				}
+
+				// TODO: verify url format and redirect to google search
+				console.log("address bar move: " + urlValue);
+				console.log("url str length: " + urlValue.length)
+
+				hackBrowserWindow.navigateTo(urlValue);
 			}
 		});
 	};
@@ -82,7 +91,7 @@ function MenuBar(hackBrowserWindow) {
 	/**
 	 * event handler for back button
 	 *
-	 * @param e
+	 * @param e {Event} click event
 	 */
 	var onBackBtnClick = function(e) {
 		console.log("Clicked back");
@@ -95,7 +104,7 @@ function MenuBar(hackBrowserWindow) {
 	/**
 	 * event handler for forward button
 	 *
-	 * @param e
+	 * @param e {Event} click event
 	 */
 	var onForwardBtnClick = function(e) {
 		console.log("Clicked forward");
@@ -108,7 +117,7 @@ function MenuBar(hackBrowserWindow) {
 	/**
 	 * event handler for reload button
 	 *
-	 * @param e
+	 * @param e {Event} click event
 	 */
 	var onReloadBtnClick = function(e) {
 		console.log("Clicked reload");
@@ -121,7 +130,7 @@ function MenuBar(hackBrowserWindow) {
 	/**
 	 * event handler for menu button
 	 *
-	 * @param e
+	 * @param e {Event} click event
 	 */
 	var onMenuBtnClick = function(e) {
 		console.log("Clicked menu button");

@@ -81,7 +81,9 @@ function TabView(hackBrowserWindow, url) {
 		tabEl.classList.add("tab");
 
 		// replace title with url (until title is set)
-		tabEl.innerHTML = tabInnerTemplate.replace("{{title}}", url);
+		var tabTitle = (url === null) ? "New Tab" : url;
+
+		tabEl.innerHTML = tabInnerTemplate.replace("{{title}}", tabTitle);
 
 		// save reference to close button
 		tabCloseBtnEl = tabEl.querySelector(".close");
@@ -107,12 +109,69 @@ function TabView(hackBrowserWindow, url) {
 			e.preventDefault();
 		}, false);
 
+
+		/*
+
+		 WebView event listeners
+
+		 */
+		webViewEl.addEventListener("load-commit", function(e) {
+			console.log("[" + tabViewId + "] load-commit");
+			console.log(e);
+
+			if (e.isMainFrame === true) {
+				webViewURL = e.url;
+
+				if (hackBrowserWindow.getActiveTabView() === _this) {
+					hackBrowserWindow.updateWindowTitle(webViewURL);
+				}
+
+				if (hackBrowserWindow.getActiveTabView() === _this) {
+					hackBrowserWindow.updateWindowControls();
+				}
+			}
+		});
+
+		webViewEl.addEventListener("did-finish-load", function() {
+			console.log("[" + tabViewId + "] did-finish-load");
+		});
+
+		webViewEl.addEventListener("did-fail-load", function(e) {
+			console.log("[" + tabViewId + "] did-fail-load");
+			console.log(e);
+		});
+
+		webViewEl.addEventListener("did-frame-finish-load", function(e) {
+			webViewURL = webViewEl.getURL();
+		});
+
+		webViewEl.addEventListener("did-start-loading", function() {
+			console.log("[" + tabViewId + "] did-start-loading");
+		});
+
+		webViewEl.addEventListener("did-stop-loading", function() {
+			console.log("[" + tabViewId + "] did-stop-loading");
+		});
+
+		webViewEl.addEventListener("did-get-response-details", function(e) {
+			console.log("[" + tabViewId + "] did-get-response-details");
+		});
+
+		webViewEl.addEventListener("did-get-redirect-request", function(e) {
+			console.log("[" + tabViewId + "] did-get-redirect-request");
+			console.log(e);
+		});
+
 		webViewEl.addEventListener("dom-ready", function() {
+			console.log("[" + tabViewId + "] dom-ready");
 			isDOMReady = true;
 		});
 
-		webViewEl.addEventListener("page-title-updated", function(data) {
-			webViewTitle = data.title;
+		webViewEl.addEventListener("page-title-updated", function(e) {
+			console.log("[" + tabViewId + "] page-title-updated");
+			console.log(e);
+
+			webViewTitle = e.title;
 
 			// update tab title
 			_this.updateTabTitle(webViewTitle);
@@ -122,27 +181,9 @@ function TabView(hackBrowserWindow, url) {
 			}
 		});
 
-		webViewEl.addEventListener("load-commit", function(e) {
-			if (hackBrowserWindow.getActiveTabView() === _this) {
-				if (e.isMainFrame === true) {
-					hackBrowserWindow.updateWindowTitle(webViewURL);
-
-
-					if (isBlankPage === true) {
-					} else {
-						hackBrowserWindow.getMenuBar().updateUrl(webViewURL);
-					}
-
-				};
-			}
-		});
-
-		webViewEl.addEventListener("did-frame-finish-load", function(e) {
-			webViewURL = webViewEl.getURL();
-
-			if (hackBrowserWindow.getActiveTabView() === _this) {
-				hackBrowserWindow.updateWindowControls();
-			}
+		webViewEl.addEventListener("new-window", function(e) {
+			console.log("[" + tabViewId + "] new-window");
+			console.log(e);
 		});
 	}
 
@@ -151,23 +192,45 @@ function TabView(hackBrowserWindow, url) {
 	 public methods
 	 ====================================== */
 	_this.navigateTo = function(url) {
-		webViewEl.setAttribute("src", url);
+		var URLInfo = URIParser.parse(url);
+
+		console.log(URLInfo);
+
+		if (URLInfo.type === "http") {
+			webViewEl.setAttribute("src", URLInfo.formattedURI);
+		} else {
+
+		}
 	};
 
+	/**
+	 * activate TabView (user clicks on browser tab)
+	 */
 	_this.activate = function() {
 		webViewEl.style.visibility = "visible";
 		tabEl.classList.add("active");
 	};
 
+	/**
+	 * activate TabView (user clicks on another browser tab)
+	 */
 	_this.deactivate = function() {
 		webViewEl.style.visibility = "hidden";
 		tabEl.classList.remove("active");
 	};
 
+	/**
+	 * returns whether "dom-ready" was fired at least once in the <webview> object
+	 *
+	 * @returns {boolean} whether dom-ready was fired at least once in the <webview> object
+	 */
 	_this.isDOMReady = function() {
 		return isDOMReady;
 	};
 
+	/**
+	 * close current TabView
+	 */
 	_this.close = function() {
 		// find the index of tab being closed
 		var tabIndex = Array.prototype.indexOf.call(browserTabsWrapperEl.querySelectorAll(".tab"), tabEl);
@@ -203,7 +266,13 @@ function TabView(hackBrowserWindow, url) {
 	};
 
 	_this.getURL = function() {
-		return webViewURL;
+		console.log("isBlankPage === " + isBlankPage);
+
+		if (isBlankPage === true) {
+			return "";
+		} else {
+			return webViewURL;
+		}
 	};
 
 	_this.updateTabTitle = function(title) {

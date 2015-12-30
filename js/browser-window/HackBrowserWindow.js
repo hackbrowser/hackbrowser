@@ -3,7 +3,7 @@
 const remote = require('electron').remote;
 
 /**
- * HackBrowserWindow controls all
+ * HackBrowserWindow controls all activities related to a browser window
  *
  * @constructor
  */
@@ -32,7 +32,7 @@ function HackBrowserWindow() {
 		tabList = {};
 		addTabBtnEl = document.getElementById("add-tab");
 
-		_this.addNewTab("http://www.hackbrowser.com", true);
+		_this.addNewTab("http://10.88.193.118/confluence/", true);
 
 		attachEventHandlers();
 	};
@@ -144,8 +144,6 @@ function HackBrowserWindow() {
 	/**
 	 * remove specific TabView object from tabList object
 	 * for garbage collection
-	 *
-	 * also, determine which TabView should be displayed after closing current TabView
 	 *
 	 * this method should be called when a tab is closed in the browser
 	 *
