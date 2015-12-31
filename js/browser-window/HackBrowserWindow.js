@@ -58,6 +58,14 @@ function HackBrowserWindow() {
 		document.title = title;
 	};
 
+	/**
+	 * Create a new browser tab
+	 *
+	 * @param url {string} URL to open, if left null, a "blank-page" will be displayed
+	 * @param activate {boolean} whether to activate the new tab immediately (optional, defaults to true)
+	 *
+	 * @returns {string} ID of new tab
+	 */
 	_this.addNewTab = function(url, activate) {
 		var newTabView = new TabView(_this, url);
 		var newTabViewId = newTabView.getId();
@@ -76,6 +84,8 @@ function HackBrowserWindow() {
 
 		// increase open tab count
 		openTabViewCount++;
+
+		return newTabViewId;
 	};
 
 	_this.activateTabById = function(tabViewId) {
@@ -144,24 +154,38 @@ function HackBrowserWindow() {
 
 	/**
 	 * navigate back on active TabView
+	 *
+	 * @returns {boolean} whether navigating backwards was successful
 	 */
 	_this.goBack = function() {
+		var didGoBack = false;
+
 		if ((activeTabView.isDOMReady() === true) && (activeTabView.getWebViewEl().canGoBack() === true)) {
 			activeTabView.getWebViewEl().goBack();
+			didGoBack = true;
 		}
+
+		return didGoBack;
 	};
 
 	/**
 	 * navigate forward on active TabView
+	 *
+	 * @returns {boolean} whether navigating forward was successful
 	 */
 	_this.goForward = function() {
+		var didGoForward = false;
+
 		if ((activeTabView.isDOMReady() === true) && (activeTabView.getWebViewEl().canGoForward() === true)) {
 			activeTabView.getWebViewEl().goForward();
+			didGoForward = true;
 		}
+
+		return didGoForward;
 	};
 
 	/**
-	 * reload page on active TabView
+	 * reload (refresh) page on active TabView
 	 */
 	_this.reload = function() {
 		activeTabView.getWebViewEl().reload();
@@ -175,7 +199,7 @@ function HackBrowserWindow() {
 	 *
 	 * @param tabViewId
 	 */
-	_this.closeTabViewById = function(tabViewId, tabIndex) {
+	_this.closeTabById = function(tabViewId) {
 		delete tabList[tabViewId];
 
 		openTabViewCount--;

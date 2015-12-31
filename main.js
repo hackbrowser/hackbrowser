@@ -36,7 +36,7 @@ app.on("ready", function() {
 					dialog.showMessageBox({
 						type: "info",
 						buttons: ["ok"],
-						title: dataPath,
+						title: GLOBAL.__app.dataPath,
 						message: JSON.stringify(err),
 						detail: JSON.stringify(err)
 					});

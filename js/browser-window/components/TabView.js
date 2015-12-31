@@ -5,7 +5,6 @@
  *
  * @param {HackBrowserWindow} hackBrowserWindow - the browser window
  * @param {string} url - initial url
- * @param {boolean} activate - whether to activate the tab right away or not
  *
  * @constructor
  */
@@ -178,7 +177,7 @@ function TabView(hackBrowserWindow, url) {
 			console.log("[" + tabViewId + "] new-window");
 			console.log(e);
 		});
-	}
+	};
 
 
 	/* ====================================
@@ -251,7 +250,7 @@ function TabView(hackBrowserWindow, url) {
 		// find the index of tab being closed
 		var tabIndex = Array.prototype.indexOf.call(browserTabsWrapperEl.querySelectorAll(".tab"), tabEl);
 
-		hackBrowserWindow.closeTabViewById(tabViewId, tabIndex);
+		hackBrowserWindow.closeTabById(tabViewId, tabIndex);
 
 		browserTabsWrapperEl.removeChild(tabEl);
 		webViewWrapperEl.removeChild(webViewEl);
