@@ -1,7 +1,22 @@
-![HackBrowser](http://www.hackbrowser.com/images/logo-hackbrowser.png)
+## HackBrowser
 
-http://www.hackbrowser.com
+![HackBrowser](http://www.hackbrowser.com/images/github-readme-image.png)
 
-# HackBrowser
+HackBrowser is a cross-platform, hackable browser written in Javascript. HackBrowser is built with Electron (formerly Atom Shell), which enables building cross-platform desktop apps with HTML, CSS, and Javascript. Since every part of the application's code is visible, customizing the browser in any way is possible. 
 
-HackBrowser is built with Electron (formerly Atom Shell), which enables building cross platform desktop apps with HTML, CSS, and Javascript. HackBrowser uses Electron’s <webview> API to simulate tabbed browser. Since every part of code written on top of Electron is editable, it is super easy to customize the browser in any way you want or need.  
+## Programmatic control of browser
+
+All browser-related controls and events are exposed through a central HackBrowserWindow object. 
+
+```javascript
+var hackBrowserWindow = new HackBrowserWindow();
+
+// open a new tab and save the id to newTabId
+hackBrowserWindow.addNewTab("http://www.google.com"); 
+
+// save screensot (synchoronous)
+hackBrowserWindow.takeScreenshotSync(); 
+
+// navigate to another page
+hackBrowserWindow.navigateTo("http://www.github.com"); 
+```
