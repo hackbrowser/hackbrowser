@@ -48,9 +48,10 @@ URIParser.parse = function(uri) {
 		URIInfo.formattedURI = uri;
 	}
 	// check if file is an html-page file for browser
-	else if (uri.startsWith("./html-pages/")) {
+	else if (uri.startsWith("./")) {
 		URIInfo.type = "page";
 		URIInfo.formattedURI = uri;
+		URIInfo.displayURI = "New Tab";
 	}
 	// check if Hack Browser's internal URI
 	else if (uri.startsWith("hack://")) {

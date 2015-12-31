@@ -7,13 +7,14 @@ GLOBAL.__app = {
 	dataPath: __dirname + "/.data/"
 };
 
-const electron = require('electron');
+const electron = require("electron");
 const app = electron.app;
 const fs = require("fs");
+const dialog = require("dialog");
 const HackBrowserWindowManager = require("./js/main-process/HackBrowserWindowManager");
 
 app.on("window-all-closed", function() {
-	if (process.platform != 'darwin') {
+	if (process.platform != "darwin") {
 		app.quit();
 	}
 });

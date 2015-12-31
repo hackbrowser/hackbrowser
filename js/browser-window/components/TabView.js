@@ -185,10 +185,6 @@ function TabView(hackBrowserWindow, url) {
 	 public methods
 	 ====================================== */
 	_this.navigateTo = function(url) {
-
-		webViewEl.setAttribute("src", url);
-		return;
-
 		var URLInfo = URIParser.parse(url);
 
 		console.log(URLInfo);

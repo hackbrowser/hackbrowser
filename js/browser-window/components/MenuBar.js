@@ -65,10 +65,6 @@ function MenuBar(hackBrowserWindow) {
 					return;
 				}
 
-				// TODO: verify url format and redirect to google search
-				console.log("address bar move: " + urlValue);
-				console.log("url str length: " + urlValue.length)
-
 				hackBrowserWindow.navigateTo(urlValue);
 			}
 		});
@@ -170,6 +166,13 @@ function MenuBar(hackBrowserWindow) {
 		} else {
 			_this.disableForwardBtn();
 		}
+	};
+
+	/**
+	 * focus on address bar
+	 */
+	_this.focusOnAddressBar = function() {
+		addressBarEl.focus();
 	};
 
 	_this.updateUrl = function(url) {
