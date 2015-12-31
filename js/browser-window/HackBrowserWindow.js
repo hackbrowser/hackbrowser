@@ -4,6 +4,7 @@ const remote = require('electron').remote;
 
 /**
  * HackBrowserWindow controls all activities related to a browser window
+ * all browser-related public-APIs can be accessed through HackBrowserWindow instance
  *
  * @constructor
  */
@@ -61,12 +62,19 @@ function HackBrowserWindow() {
 		var newTabView = new TabView(_this, url);
 		var newTabViewId = newTabView.getId();
 
+		// the default option for activating tab
+		// if no argument was supplied for "activate" option, turn it on
+		if (activate === undefined) { activate = true; }
+
+		// add TabView to list
 		tabList[newTabViewId] = newTabView;
 
+		// activate tab
 		if (activate === true) {
 			_this.activateTabById(newTabViewId);
 		}
 
+		// increase open tab count
 		openTabViewCount++;
 	};
 
@@ -117,26 +125,44 @@ function HackBrowserWindow() {
 		return activeTabView;
 	};
 
+	/**
+	 * increase total number of created tabs including closed ones
+	 * this method should be exposed publicly in case a new tab is created programmatically
+	 */
 	_this.increaseCreatedTabViewCount = function() {
 		createdTabViewCount++;
 	};
 
+	/**
+	 * return number of total created tabs including closed ones
+	 *
+	 * @returns {int} created tab count
+	 */
 	_this.getCreatedTabViewCount = function() {
 		return createdTabViewCount;
 	};
 
+	/**
+	 * navigate back on active TabView
+	 */
 	_this.goBack = function() {
 		if ((activeTabView.isDOMReady() === true) && (activeTabView.getWebViewEl().canGoBack() === true)) {
 			activeTabView.getWebViewEl().goBack();
 		}
 	};
 
+	/**
+	 * navigate forward on active TabView
+	 */
 	_this.goForward = function() {
 		if ((activeTabView.isDOMReady() === true) && (activeTabView.getWebViewEl().canGoForward() === true)) {
 			activeTabView.getWebViewEl().goForward();
 		}
 	};
 
+	/**
+	 * reload page on active TabView
+	 */
 	_this.reload = function() {
 		activeTabView.getWebViewEl().reload();
 	};

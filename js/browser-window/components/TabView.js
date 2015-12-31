@@ -26,7 +26,6 @@ function TabView(hackBrowserWindow, url) {
 	var tabCloseBtnEl;
 	var tabInnerTemplate;
 	var isDOMReady;
-	var isBlankPage;
 
 
 	/* ====================================
@@ -42,7 +41,6 @@ function TabView(hackBrowserWindow, url) {
 		webViewTitle = "New Tab";
 		webViewURL = url;
 		isDOMReady = false;
-		isBlankPage = false;
 		tabViewId = "wv-" + hackBrowserWindow.getCreatedTabViewCount();
 		browserTabsWrapperEl = document.getElementById("navtabs");
 		addNewTabBtnEl = document.getElementById("add-tab");
@@ -58,7 +56,7 @@ function TabView(hackBrowserWindow, url) {
 		webViewEl.setAttribute("disablewebsecurity", "");
 
 		if (url === null) {
-			enterBlankPageMode();
+			_this.navigateTo("./blank-page.html");
 		} else {
 			_this.navigateTo(url);
 		}
@@ -89,11 +87,6 @@ function TabView(hackBrowserWindow, url) {
 		tabCloseBtnEl = tabEl.querySelector(".close");
 
 		browserTabsWrapperEl.insertBefore(tabEl, addNewTabBtnEl);
-	};
-
-	var enterBlankPageMode = function() {
-		isBlankPage = true;
-		_this.navigateTo("./blank-page.html");
 	};
 
 	var attachEventHandlers = function() {
@@ -192,14 +185,41 @@ function TabView(hackBrowserWindow, url) {
 	 public methods
 	 ====================================== */
 	_this.navigateTo = function(url) {
+
+		webViewEl.setAttribute("src", url);
+		return;
+
 		var URLInfo = URIParser.parse(url);
 
 		console.log(URLInfo);
 
+		// if an invalid URl is passed
+		if (URLInfo.isValid !== true) {
+			// do nothing
+			return;
+		}
+
 		if (URLInfo.type === "http") {
 			webViewEl.setAttribute("src", URLInfo.formattedURI);
-		} else {
+		}
 
+		else if (URLInfo.type === "file") {
+			console.log("User has entered a file URL into the addressbar: " + url);
+			webViewEl.setAttribute("src", URLInfo.formattedURI);
+		}
+
+		else if (URLInfo.type === "page") {
+			console.log("Opening HTML template file " + url);
+			webViewEl.setAttribute("src", URLInfo.formattedURI);
+		}
+
+		else if (URLInfo.type === "internal") {
+			console.log("User has navigated to an internal link: " + url);
+		}
+
+		else if (URLInfo.type === "search") {
+			console.log("User has searched " + url);
+			webViewEl.setAttribute("src", URLInfo.formattedURI);
 		}
 	};
 
@@ -266,13 +286,7 @@ function TabView(hackBrowserWindow, url) {
 	};
 
 	_this.getURL = function() {
-		console.log("isBlankPage === " + isBlankPage);
-
-		if (isBlankPage === true) {
-			return "";
-		} else {
-			return webViewURL;
-		}
+		return webViewURL;
 	};
 
 	_this.updateTabTitle = function(title) {
