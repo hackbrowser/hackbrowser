@@ -22,6 +22,7 @@ function TabView(hackBrowserWindow, url) {
 	var browserTabsWrapperEl;
 	var addNewTabBtnEl;
 	var tabEl;
+	var tabFaviconEl;
 	var tabCloseBtnEl;
 	var tabInnerTemplate;
 	var isDOMReady;
@@ -45,7 +46,7 @@ function TabView(hackBrowserWindow, url) {
 		addNewTabBtnEl = document.getElementById("add-tab");
 		webViewWrapperEl = document.getElementById("webview-wrapper");
 
-		tabInnerTemplate = '<span class="title">{{title}}</span><div class="close"><i class="icon ion-close"></i></div>';
+		tabInnerTemplate = '<div class="favicon-wrapper"><img src="http://www.hackbrowser.com/images/logo-hackbrowser.png" class="favicon"></div><span class="title">{{title}}</span><div class="close"><i class="icon ion-close"></i></div>';
 
 		// increase created tab view count
 		hackBrowserWindow.increaseCreatedTabViewCount();
@@ -84,6 +85,7 @@ function TabView(hackBrowserWindow, url) {
 
 		// save reference to close button
 		tabCloseBtnEl = tabEl.querySelector(".close");
+		tabFaviconEl = tabEl.querySelector("img.favicon");
 
 		browserTabsWrapperEl.insertBefore(tabEl, addNewTabBtnEl);
 	};
@@ -171,6 +173,13 @@ function TabView(hackBrowserWindow, url) {
 			if (hackBrowserWindow.getActiveTabView() === _this) {
 				hackBrowserWindow.updateWindowTitle(webViewTitle);
 			}
+		});
+
+		webViewEl.addEventListener("page-favicon-updated", function(e) {
+			console.log("[" + tabViewId + "] page-favicon-updated");
+			console.log(e);
+
+			_this.updateFavicon(e.favicons[0]);
 		});
 
 		webViewEl.addEventListener("new-window", function(e) {
@@ -282,6 +291,10 @@ function TabView(hackBrowserWindow, url) {
 
 	_this.getURL = function() {
 		return webViewURL;
+	};
+
+	_this.updateFavicon = function(imageURL) {
+		tabFaviconEl.setAttribute("src", imageURL);
 	};
 
 	_this.updateTabTitle = function(title) {
