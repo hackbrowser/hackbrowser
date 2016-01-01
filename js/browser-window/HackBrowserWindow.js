@@ -19,6 +19,7 @@ function HackBrowserWindow() {
 	var openTabViewCount;
 	var tabList;
 	var menuBar;
+	var browserTabBar;
 	var addressBar;
 	var addTabBtnEl;
 
@@ -30,6 +31,7 @@ function HackBrowserWindow() {
 		// create a new MenuBar object associated with current browser window
 		menuBar = new MenuBar(_this);
 		addressBar = new AddressBar(_this);
+		browserTabBar = new BrowserTabBar(_this);
 		createdTabViewCount = 0;
 		openTabViewCount = 0;
 		tabList = {};
@@ -41,11 +43,7 @@ function HackBrowserWindow() {
 	};
 
 	var attachEventHandlers = function() {
-		addTabBtnEl.addEventListener("click", function(e) {
-			_this.addNewTab(null, true);
 
-			e.preventDefault();
-		});
 	};
 
 
@@ -69,7 +67,7 @@ function HackBrowserWindow() {
 	 * @returns {string} ID of new tab
 	 */
 	_this.addNewTab = function(url, activate) {
-		var newTabView = new TabView(_this, url);
+		var newTabView = new TabView(_this, browserTabBar, url);
 		var newTabViewId = newTabView.getId();
 
 		// the default option for activating tab
@@ -131,6 +129,10 @@ function HackBrowserWindow() {
 
 		_this.updateWindowTitle(activeTabView.getWebViewTitle());
 		addressBar.updateURL(activeTabView.getURL());
+	};
+
+	_this.getBrowserTabBar = function() {
+		return browserTabBar;
 	};
 
 	_this.getMenuBar = function() {
@@ -205,7 +207,7 @@ function HackBrowserWindow() {
 	 *
 	 * @param tabViewId
 	 */
-	_this.closeTabById = function(tabViewId) {
+	_this.handleTabCloseById = function(tabViewId) {
 		delete tabList[tabViewId];
 
 		openTabViewCount--;

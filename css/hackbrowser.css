@@ -21,7 +21,7 @@
 	}
 
 		nav#navtabs > .tab {
-			color: #aaa; 
+			color: #666;
 			background: #e5e5e5; 
 			border-right: 1px solid #ddd; 
 			display: inline-block; 
@@ -31,7 +31,11 @@
 			float: left; 
 			cursor: pointer; 
 			position: relative; 
-			overflow: hidden; 
+			overflow: hidden;
+			-webkit-transition: all 120ms ease-in-out;
+			-moz-transition: all 120ms ease-in-out;
+			-o-transition: all 120ms ease-in-out;
+			transition: all 120ms ease-in-out;
 		}
 
 			nav#navtabs  > .tab > .favicon-wrapper {

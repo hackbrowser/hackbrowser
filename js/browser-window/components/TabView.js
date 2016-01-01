@@ -8,7 +8,7 @@
  *
  * @constructor
  */
-function TabView(hackBrowserWindow, url) {
+function TabView(hackBrowserWindow, browserTabBar, url) {
 	var _this = this;
 
 	/* ====================================
@@ -19,12 +19,8 @@ function TabView(hackBrowserWindow, url) {
 	var webViewURL;
 	var webViewWrapperEl;
 	var tabViewId;
-	var browserTabsWrapperEl;
-	var addNewTabBtnEl;
-	var tabEl;
-	var tabFaviconEl;
-	var tabCloseBtnEl;
-	var tabInnerTemplate;
+	var browserTab;
+
 	var isDOMReady;
 
 
@@ -40,13 +36,9 @@ function TabView(hackBrowserWindow, url) {
 		webViewEl = document.createElement("webview");
 		webViewTitle = "New Tab";
 		webViewURL = url;
+		webViewWrapperEl = document.getElementById("webview-wrapper");
 		isDOMReady = false;
 		tabViewId = "wv-" + hackBrowserWindow.getCreatedTabViewCount();
-		browserTabsWrapperEl = document.getElementById("navtabs");
-		addNewTabBtnEl = document.getElementById("add-tab");
-		webViewWrapperEl = document.getElementById("webview-wrapper");
-
-		tabInnerTemplate = '<div class="favicon-wrapper"><img src="http://www.hackbrowser.com/images/logo-hackbrowser.png" class="favicon"></div><span class="title">{{title}}</span><div class="close"><i class="icon ion-close"></i></div>';
 
 		// increase created tab view count
 		hackBrowserWindow.increaseCreatedTabViewCount();
@@ -56,7 +48,7 @@ function TabView(hackBrowserWindow, url) {
 		webViewEl.setAttribute("disablewebsecurity", "");
 
 		if (url === null) {
-			_this.navigateTo("./blank-page.html");
+			_this.navigateTo("./new-tab.html");
 		} else {
 			_this.navigateTo(url);
 		}
@@ -64,51 +56,12 @@ function TabView(hackBrowserWindow, url) {
 		// append the webview element to screen (#webview-wrapper)
 		webViewWrapperEl.appendChild(webViewEl);
 
-		createTab();
+		browserTab = browserTabBar.createTab(tabViewId);
 		attachEventHandlers();
 	};
 
-	/**
-	 * Create and add a new tab to browser window's tabs
-	 */
-	var createTab = function() {
-		// create a container for new tab
-		tabEl = document.createElement("div");
-
-		tabEl.setAttribute("data-webview-id", tabViewId);
-		tabEl.classList.add("tab");
-
-		// replace title with url (until title is set)
-		var tabTitle = (url === null) ? "New Tab" : url;
-
-		tabEl.innerHTML = tabInnerTemplate.replace("{{title}}", tabTitle);
-
-		// save reference to close button and favicon element
-		tabCloseBtnEl = tabEl.querySelector(".close");
-		tabFaviconEl = tabEl.querySelector("img.favicon");
-
-		browserTabsWrapperEl.insertBefore(tabEl, addNewTabBtnEl);
-	};
 
 	var attachEventHandlers = function() {
-		tabEl.addEventListener("click", function(e) {
-			hackBrowserWindow.activateTabById(tabViewId);
-		});
-
-		tabCloseBtnEl.addEventListener("click", function(e) {
-			_this.close();
-
-			// stop propagation to prevent activate() being called after tabview being closed
-			e.stopPropagation();
-			e.preventDefault();
-		}, false);
-
-
-		/*
-
-		 WebView event listeners
-
-		 */
 		webViewEl.addEventListener("load-commit", function(e) {
 			console.log("[" + tabViewId + "] load-commit");
 			console.log(e);
@@ -153,7 +106,6 @@ function TabView(hackBrowserWindow, url) {
 
 		webViewEl.addEventListener("did-get-redirect-request", function(e) {
 			console.log("[" + tabViewId + "] did-get-redirect-request");
-			console.log(e);
 		});
 
 		webViewEl.addEventListener("dom-ready", function() {
@@ -180,7 +132,7 @@ function TabView(hackBrowserWindow, url) {
 			console.log(e);
 
 			// the last element in favicons array is used
-			_this.updateFavicon(e.favicons[e.favicons.length - 1]);
+			_this.updateTabFavicon(e.favicons[e.favicons.length - 1]);
 		});
 
 		webViewEl.addEventListener("new-window", function(e) {
@@ -233,7 +185,7 @@ function TabView(hackBrowserWindow, url) {
 	 */
 	_this.activate = function() {
 		webViewEl.style.visibility = "visible";
-		tabEl.classList.add("active");
+		browserTab.activate();
 	};
 
 	/**
@@ -241,11 +193,11 @@ function TabView(hackBrowserWindow, url) {
 	 */
 	_this.deactivate = function() {
 		webViewEl.style.visibility = "hidden";
-		tabEl.classList.remove("active");
+		browserTab.deactivate();
 	};
 
 	/**
-	 * returns whether "dom-ready" was fired at least once in the <webview> object
+	 * check whether navigation actions (back, forward, reload, etc) can be performed on <webview>
 	 *
 	 * @returns {boolean} whether dom-ready was fired at least once in the <webview> object
 	 */
@@ -257,25 +209,8 @@ function TabView(hackBrowserWindow, url) {
 	 * close current TabView
 	 */
 	_this.close = function() {
-		// find the index of tab being closed
-		var tabIndex = Array.prototype.indexOf.call(browserTabsWrapperEl.querySelectorAll(".tab"), tabEl);
-
-		hackBrowserWindow.closeTabById(tabViewId, tabIndex);
-
-		browserTabsWrapperEl.removeChild(tabEl);
 		webViewWrapperEl.removeChild(webViewEl);
-
-		var tabIdToActivate;
-
-		var openTabsElArr = browserTabsWrapperEl.querySelectorAll(".tab");
-
-		if (tabIndex >= openTabsElArr.length) {
-			tabIdToActivate = openTabsElArr[tabIndex - 1].dataset.webviewId;
-		} else {
-			tabIdToActivate = openTabsElArr[tabIndex].dataset.webviewId;
-		}
-
-		hackBrowserWindow.activateTabById(tabIdToActivate);
+		browserTab.close();
 	};
 
 	_this.getId = function() {
@@ -294,12 +229,12 @@ function TabView(hackBrowserWindow, url) {
 		return webViewURL;
 	};
 
-	_this.updateFavicon = function(imageURL) {
-		tabFaviconEl.setAttribute("src", imageURL);
+	_this.updateTabFavicon = function(imageURL) {
+		browserTab.updateTabFavicon(imageURL);
 	};
 
 	_this.updateTabTitle = function(title) {
-		tabEl.querySelector(".title").innerText = title;
+		browserTab.updateTitle(title);
 	};
 
 	init(url);

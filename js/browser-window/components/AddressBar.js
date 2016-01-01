@@ -83,6 +83,11 @@ function AddressBar(hackBrowserWindow) {
 	};
 
 	_this.updateURL = function(url) {
+
+		if (url && url.startsWith("file://")) {
+			url = "";
+		}
+
 		addressBarEl.value = url;
 	};
 
