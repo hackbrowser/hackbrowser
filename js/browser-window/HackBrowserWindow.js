@@ -19,6 +19,7 @@ function HackBrowserWindow() {
 	var openTabViewCount;
 	var tabList;
 	var menuBar;
+	var addressBar;
 	var addTabBtnEl;
 
 
@@ -28,6 +29,7 @@ function HackBrowserWindow() {
 	var init = function() {
 		// create a new MenuBar object associated with current browser window
 		menuBar = new MenuBar(_this);
+		addressBar = new AddressBar(_this);
 		createdTabViewCount = 0;
 		openTabViewCount = 0;
 		tabList = {};
@@ -80,6 +82,10 @@ function HackBrowserWindow() {
 		// activate tab
 		if (activate === true) {
 			_this.activateTabById(newTabViewId);
+
+			if (!addressBar.isAddressBarFocused()) {
+				addressBar.focusOnAddressBar();
+			};
 		}
 
 		// increase open tab count
@@ -124,7 +130,7 @@ function HackBrowserWindow() {
 		}
 
 		_this.updateWindowTitle(activeTabView.getWebViewTitle());
-		menuBar.updateUrl(activeTabView.getURL());
+		addressBar.updateURL(activeTabView.getURL());
 	};
 
 	_this.getMenuBar = function() {

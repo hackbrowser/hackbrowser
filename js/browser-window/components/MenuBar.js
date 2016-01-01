@@ -16,7 +16,6 @@ function MenuBar(hackBrowserWindow) {
 	var backBtnEl;
 	var forwardBtnEl;
 	var reloadBtnEl;
-	var addressBarEl;
 	var menuBtnEl;
 
 	var disabledClass = "disabled";
@@ -29,11 +28,9 @@ function MenuBar(hackBrowserWindow) {
 		backBtnEl = document.getElementById("button-back");
 		forwardBtnEl = document.getElementById("button-forward");
 		reloadBtnEl = document.getElementById("button-reload");
-		addressBarEl = document.getElementById("address-bar");
 		menuBtnEl = document.getElementById("button-menu");
 
 		attachEventHandlers();
-		adjustAddressBarWidth();
 	};
 
 	/**
@@ -44,44 +41,6 @@ function MenuBar(hackBrowserWindow) {
 		forwardBtnEl.addEventListener("click", onForwardBtnClick);	 	// "Forward" button
 		reloadBtnEl.addEventListener("click", onReloadBtnClick); 		// "Refresh" button
 		menuBtnEl.addEventListener("click", onMenuBtnClick);			// "Menu" button
-
-		addressBarEl.addEventListener("click", function(e) {
-			// select text in input box
-			// TODO: only select if the input is not currently active
-			this.select();
-
-			e.preventDefault();
-		});
-
-		addressBarEl.addEventListener("keypress", function(e) {
-			// Enter key
-			if (e.charCode === 13) {
-				e.preventDefault();
-
-				var urlValue = addressBarEl.value;
-
-				if (urlValue.trim() === "") {
-					// do nothing
-					return;
-				}
-
-				hackBrowserWindow.navigateTo(urlValue);
-			}
-		});
-	};
-
-	/**
-	 * sets address bar's left and right padding based on control buttons
-	 * to ensure that the address bar is always at full width
-	 */
-	var adjustAddressBarWidth = function() {
-		// Calculate left and right controls' widths
-		var leftMenuEl = document.getElementById("menu-left");
-		var rightMenuEl = document.getElementById("menu-right");
-		var addressBarWrapperEl = document.getElementById("address-bar-wrapper");
-
-		addressBarWrapperEl.style.paddingLeft = leftMenuEl.offsetWidth + "px";
-		addressBarWrapperEl.style.paddingRight = rightMenuEl.offsetWidth + "px";
 	};
 
 	/**
@@ -166,17 +125,6 @@ function MenuBar(hackBrowserWindow) {
 		} else {
 			_this.disableForwardBtn();
 		}
-	};
-
-	/**
-	 * focus on address bar
-	 */
-	_this.focusOnAddressBar = function() {
-		addressBarEl.focus();
-	};
-
-	_this.updateUrl = function(url) {
-		addressBarEl.value = url;
 	};
 
 	init();

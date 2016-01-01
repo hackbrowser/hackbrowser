@@ -83,7 +83,7 @@ function TabView(hackBrowserWindow, url) {
 
 		tabEl.innerHTML = tabInnerTemplate.replace("{{title}}", tabTitle);
 
-		// save reference to close button
+		// save reference to close button and favicon element
 		tabCloseBtnEl = tabEl.querySelector(".close");
 		tabFaviconEl = tabEl.querySelector("img.favicon");
 
@@ -179,7 +179,8 @@ function TabView(hackBrowserWindow, url) {
 			console.log("[" + tabViewId + "] page-favicon-updated");
 			console.log(e);
 
-			_this.updateFavicon(e.favicons[0]);
+			// the last element in favicons array is used
+			_this.updateFavicon(e.favicons[e.favicons.length - 1]);
 		});
 
 		webViewEl.addEventListener("new-window", function(e) {
