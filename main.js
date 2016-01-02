@@ -12,6 +12,7 @@ const app = electron.app;
 const fs = require("fs");
 const dialog = require("dialog");
 const HackBrowserWindowManager = require("./js/main-process/HackBrowserWindowManager");
+const GlobalShortcutHandler = require("./js/main-process/GlobalShortcutHandler");
 
 app.on("window-all-closed", function() {
 	if (process.platform != "darwin") {
@@ -26,10 +27,14 @@ var startBrowser = function() {
 };
 
 app.on("ready", function() {
+
+	console.log("ready");
+
 	// check if .data directory exists
 	fs.exists(GLOBAL.__app.dataPath, function(exists) {
 		if (exists === false) {
 			// create directory if .data directory doesn't exist
+			// TODO: check directory create permissions on Linux
 			fs.mkdir(GLOBAL.__app.dataPath, function(err) {
 				if (err) {
 					// TODO: show error messagebox and quit app

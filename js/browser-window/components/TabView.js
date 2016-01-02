@@ -42,6 +42,7 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		// increase created tab view count
 		hackBrowserWindow.increaseCreatedTabViewCount();
 
+		// assign tabViewId to <webview> element's id
 		webViewEl.setAttribute("id", tabViewId);
 		webViewEl.setAttribute("plugins", "");
 		webViewEl.setAttribute("disablewebsecurity", "");
@@ -151,6 +152,9 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 
 		webViewEl.addEventListener("new-window", function(e) {
 			console.log("[" + tabViewId + "] new-window");
+
+
+
 			console.log(e);
 		});
 	};

@@ -30,7 +30,7 @@ HackBrowserWindowManager.prototype.openNewWindow = function(width, height, url) 
 		var newWindow = new BrowserWindow(browserSize);
 
 		// load the HTML file for browser window
-		newWindow.loadUrl("file://" + __app.basePath + "/html-pages/browser-window.html");
+		newWindow.loadURL("file://" + __app.basePath + "/html-pages/browser-window.html");
 
 		// Open the DevTools (debugging)
 		newWindow.webContents.openDevTools();
