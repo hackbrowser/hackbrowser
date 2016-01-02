@@ -1,7 +1,5 @@
 'use strict';
 
-const remote = require('electron').remote;
-
 /**
  * HackBrowserWindow controls all activities related to a browser window
  * all browser-related public-APIs can be accessed through HackBrowserWindow instance
@@ -9,20 +7,21 @@ const remote = require('electron').remote;
  * @constructor
  */
 function HackBrowserWindow() {
+	const remote = require('electron').remote;
+
 	var _this = this;
 
 	/* ====================================
 	 private member variables
 	 ====================================== */
+	var menuBar;
+	var addressBar;
+	var browserTabBar;
+	var contextMenu;
 	var activeTabView;
 	var createdTabViewCount;
 	var openTabViewCount;
 	var tabList;
-	var menuBar;
-	var addressBar;
-	var browserTabBar;
-
-	var addTabBtnEl;
 
 
 	/* ====================================
@@ -33,10 +32,10 @@ function HackBrowserWindow() {
 		menuBar = new NavigationControls(_this);
 		addressBar = new AddressBar(_this);
 		browserTabBar = new BrowserTabBar(_this);
+		contextMenu = new ContextMenu(_this);
 		createdTabViewCount = 0;
 		openTabViewCount = 0;
 		tabList = {};
-		addTabBtnEl = document.getElementById("add-tab");
 
 		_this.addNewTab("http://www.google.com/", true);
 

@@ -56,6 +56,10 @@ function AddressBar(hackBrowserWindow) {
 		});
 	};
 
+
+	/* ====================================
+	 public methods
+	 ====================================== */
 	/**
 	 * focus on address bar
 	 */
