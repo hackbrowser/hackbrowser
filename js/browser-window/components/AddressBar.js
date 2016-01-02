@@ -40,12 +40,16 @@ function AddressBar(hackBrowserWindow) {
 			if (e.charCode === 13) {
 				e.preventDefault();
 
+				// update url value
 				var urlValue = addressBarEl.value;
 
 				if (urlValue.trim() === "") {
 					// do nothing
 					return;
 				}
+
+				// focus out of current input element
+				document.activeElement.blur();
 
 				hackBrowserWindow.navigateTo(urlValue);
 			}

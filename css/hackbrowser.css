@@ -213,26 +213,19 @@
 .loader {
 	font-size: 10px;
 	text-indent: -9999em;
-	width: 11em;
-	height: 11em;
+	width: 14px;
+	height: 14px;
 	border-radius: 50%;
-	background: #ffffff;
-	background: -moz-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
-	background: -webkit-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
-	background: -o-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
-	background: -ms-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
-	background: linear-gradient(to right, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+	background: linear-gradient(to right, #999 10%, rgba(153, 153, 153, 0) 42%);
 	position: relative;
-	-webkit-animation: load3 1.4s infinite linear;
-	animation: load3 1.4s infinite linear;
-	-webkit-transform: translateZ(0);
-	-ms-transform: translateZ(0);
+	animation: load3 1.0s infinite linear;
 	transform: translateZ(0);
+	display: none;
 }
 .loader:before {
 	width: 50%;
 	height: 50%;
-	background: #ffffff;
+	background: #999;
 	border-radius: 100% 0 0 0;
 	position: absolute;
 	top: 0;
@@ -240,7 +233,7 @@
 	content: '';
 }
 .loader:after {
-	background: #0dc5c1;
+	background: #e5e5e5;
 	width: 75%;
 	height: 75%;
 	border-radius: 50%;
@@ -251,6 +244,9 @@
 	left: 0;
 	bottom: 0;
 	right: 0;
+}
+.tab.active .loader:after {
+	background: #f5f5f5;
 }
 @-webkit-keyframes load3 {
 	0% {

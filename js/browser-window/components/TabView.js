@@ -95,6 +95,9 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		webViewEl.addEventListener("did-start-loading", function() {
 			console.log("[" + tabViewId + "] did-start-loading");
 
+			// set loading icon
+			browserTab.startLoading();
+
 			if (hackBrowserWindow.getActiveTabView() === _this) {
 				hackBrowserWindow.getMenuBar().showLoadStopBtn();
 			}
@@ -102,6 +105,9 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 
 		webViewEl.addEventListener("did-stop-loading", function() {
 			console.log("[" + tabViewId + "] did-stop-loading");
+
+			// clear loading icon
+			browserTab.stopLoading();
 
 			if (hackBrowserWindow.getActiveTabView() === _this) {
 				hackBrowserWindow.getMenuBar().showReloadBtn();

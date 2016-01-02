@@ -15,6 +15,7 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 	var tabEl;
 	var tabFaviconWrapperEl;
 	var tabFaviconEl;
+	var tabLoadingSpinnerEl;
 	var tabCloseBtnEl;
 	var tabInnerTemplate;
 
@@ -23,7 +24,7 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 	 private methods
 	 ====================================== */
 	var init = function() {
-		tabInnerTemplate = '<div class="favicon-wrapper"><img src="http://www.hackbrowser.com/images/logo-hackbrowser.png" class="favicon"><div class="loader"></div></div><span class="title">{{title}}</span><div class="close"><i class="icon ion-close"></i></div>';
+		tabInnerTemplate = '<div class="favicon-wrapper"><img class="favicon"><div class="loader"></div></div><span class="title">{{title}}</span><div class="close"><i class="icon ion-close"></i></div>';
 
 		// create a container for new tab
 		tabEl = document.createElement("div");
@@ -39,6 +40,7 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 		// save references to favicon-related elements and close button
 		tabFaviconWrapperEl = tabEl.querySelector("favicon-wrapper");
 		tabFaviconEl = tabEl.querySelector("img.favicon");
+		tabLoadingSpinnerEl = tabEl.querySelector(".loader");
 		tabCloseBtnEl = tabEl.querySelector(".close");
 
 		attachEventHandlers();
@@ -59,6 +61,11 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 			e.stopPropagation();
 			e.preventDefault();
 		}, false);
+
+		// in case favicon src was invalid, display blank image
+		tabFaviconEl.addEventListener("error", function(e) {
+			tabFaviconEl.src = "";
+		});
 	};
 
 
@@ -75,13 +82,23 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 	};
 
 	_this.updateTabFavicon = function(imageURL) {
-		tabFaviconEl.style.display = "block";
 		tabFaviconEl.setAttribute("src", imageURL);
+		tabLoadingSpinnerEl.style.display = "none";
+		tabFaviconEl.style.display = "block";
 	};
 
-	_this.setFaviconToLoading = function() {
+	_this.startLoading = function() {
 		tabFaviconEl.style.display = "none";
-		tabFaviconWrapperEl.innerHTML = "";
+		tabLoadingSpinnerEl.style.display = "block";
+	};
+
+	_this.startLoadCommit = function() {
+
+	};
+
+	_this.stopLoading = function() {
+		tabLoadingSpinnerEl.style.display = "none";
+		tabFaviconEl.style.display = "block";
 	};
 
 	_this.updateTitle = function(title) {

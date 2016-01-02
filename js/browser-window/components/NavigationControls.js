@@ -1,13 +1,13 @@
 'use strict';
 
 /**
- * MenuBar module includes handling for back button, forward button,
+ * NavigationControls module includes handling for back button, forward button,
  * reload button, address bar, and menu button
  *
  * @param hackBrowserWindow
  * @constructor
  */
-function MenuBar(hackBrowserWindow) {
+function NavigationControls(hackBrowserWindow) {
 	var _this = this;
 
 	/* ====================================

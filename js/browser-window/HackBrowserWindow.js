@@ -29,8 +29,8 @@ function HackBrowserWindow() {
 	 private methods
 	 ====================================== */
 	var init = function() {
-		// create a new MenuBar object associated with current browser window
-		menuBar = new MenuBar(_this);
+		// create a new NavigationControls object associated with current browser window
+		menuBar = new NavigationControls(_this);
 		addressBar = new AddressBar(_this);
 		browserTabBar = new BrowserTabBar(_this);
 		createdTabViewCount = 0;
