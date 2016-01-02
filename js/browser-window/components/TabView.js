@@ -20,7 +20,6 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	var webViewWrapperEl;
 	var tabViewId;
 	var browserTab;
-
 	var isDOMReady;
 
 
@@ -60,7 +59,6 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		attachEventHandlers();
 	};
 
-
 	var attachEventHandlers = function() {
 		webViewEl.addEventListener("load-commit", function(e) {
 			console.log("[" + tabViewId + "] load-commit");
@@ -86,6 +84,8 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		webViewEl.addEventListener("did-fail-load", function(e) {
 			console.log("[" + tabViewId + "] did-fail-load");
 			console.log(e);
+
+			// TODO:
 		});
 
 		webViewEl.addEventListener("did-frame-finish-load", function(e) {
@@ -94,10 +94,18 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 
 		webViewEl.addEventListener("did-start-loading", function() {
 			console.log("[" + tabViewId + "] did-start-loading");
+
+			if (hackBrowserWindow.getActiveTabView() === _this) {
+				hackBrowserWindow.getMenuBar().showLoadStopBtn();
+			}
 		});
 
 		webViewEl.addEventListener("did-stop-loading", function() {
 			console.log("[" + tabViewId + "] did-stop-loading");
+
+			if (hackBrowserWindow.getActiveTabView() === _this) {
+				hackBrowserWindow.getMenuBar().showReloadBtn();
+			}
 		});
 
 		webViewEl.addEventListener("did-get-response-details", function(e) {
@@ -209,7 +217,10 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	 * close current TabView
 	 */
 	_this.close = function() {
+		// remove webview element
 		webViewWrapperEl.removeChild(webViewEl);
+
+		// remove browser tab
 		browserTab.close();
 	};
 

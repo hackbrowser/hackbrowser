@@ -55,8 +55,6 @@ function BrowserTabBar(hackBrowserWindow) {
 
 	_this.removeTab = function(tabViewId) {
 		var tabEl = browserTabsWrapperEl.querySelector("[data-webview-id='" + tabViewId + "']");
-		console.log("removeTab()");
-		console.log(tabEl);
 
 		// find the index of tab being closed
 		var tabIndex = Array.prototype.indexOf.call(browserTabsWrapperEl.querySelectorAll(".tab"), tabEl);

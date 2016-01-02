@@ -16,6 +16,7 @@ function MenuBar(hackBrowserWindow) {
 	var backBtnEl;
 	var forwardBtnEl;
 	var reloadBtnEl;
+	var stopLoadingBtnEl;
 	var menuBtnEl;
 
 	var disabledClass = "disabled";
@@ -28,6 +29,7 @@ function MenuBar(hackBrowserWindow) {
 		backBtnEl = document.getElementById("button-back");
 		forwardBtnEl = document.getElementById("button-forward");
 		reloadBtnEl = document.getElementById("button-reload");
+		stopLoadingBtnEl = document.getElementById("button-stop-loading")
 		menuBtnEl = document.getElementById("button-menu");
 
 		attachEventHandlers();
@@ -37,10 +39,11 @@ function MenuBar(hackBrowserWindow) {
 	 * attach event handlers for menu bar buttons
 	 */
 	var attachEventHandlers = function() {
-		backBtnEl.addEventListener("click", onBackBtnClick); 			// "Back" button
-		forwardBtnEl.addEventListener("click", onForwardBtnClick);	 	// "Forward" button
-		reloadBtnEl.addEventListener("click", onReloadBtnClick); 		// "Refresh" button
-		menuBtnEl.addEventListener("click", onMenuBtnClick);			// "Menu" button
+		backBtnEl.addEventListener("click", onBackBtnClick); 				// "Back" button
+		forwardBtnEl.addEventListener("click", onForwardBtnClick);	 		// "Forward" button
+		reloadBtnEl.addEventListener("click", onReloadBtnClick); 			// "Refresh" button
+		stopLoadingBtnEl.addEventListener("click", onStopLoadingBtnClick);	// "Stop Loading" button
+		menuBtnEl.addEventListener("click", onMenuBtnClick);				// "Menu" button
 	};
 
 	/**
@@ -82,6 +85,14 @@ function MenuBar(hackBrowserWindow) {
 		e.preventDefault();
 	};
 
+	var onStopLoadingBtnClick = function(e) {
+		console.log("Clicked load stop");
+
+		hackBrowserWindow.stopLoading();
+
+		e.preventDefault();
+	};
+
 	/**
 	 * event handler for menu button
 	 *
@@ -111,6 +122,16 @@ function MenuBar(hackBrowserWindow) {
 
 	_this.disableForwardBtn = function() {
 		forwardBtnEl.classList.add(disabledClass);
+	};
+
+	_this.showLoadStopBtn = function() {
+		reloadBtnEl.style.display = "none";
+		stopLoadingBtnEl.style.display = "block";
+	};
+
+	_this.showReloadBtn = function() {
+		reloadBtnEl.style.display = "block";
+		stopLoadingBtnEl.style.display = "none";
 	};
 
 	_this.updateBtnStatus = function(webViewEl) {

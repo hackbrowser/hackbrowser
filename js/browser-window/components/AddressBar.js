@@ -21,7 +21,6 @@ function AddressBar(hackBrowserWindow) {
 	var init = function() {
 		addressBarEl = document.getElementById("address-bar");
 		attachEventHandlers();
-		adjustAddressBarWidth();
 	};
 
 	/**
@@ -52,21 +51,6 @@ function AddressBar(hackBrowserWindow) {
 			}
 		});
 	};
-
-	/**
-	 * sets address bar's left and right padding based on control buttons
-	 * to ensure that the address bar is always at full width
-	 */
-	var adjustAddressBarWidth = function() {
-		// Calculate left and right controls' widths
-		var leftMenuEl = document.getElementById("menu-left");
-		var rightMenuEl = document.getElementById("menu-right");
-		var addressBarWrapperEl = document.getElementById("address-bar-wrapper");
-
-		addressBarWrapperEl.style.paddingLeft = leftMenuEl.offsetWidth + "px";
-		addressBarWrapperEl.style.paddingRight = rightMenuEl.offsetWidth + "px";
-	};
-
 
 	/**
 	 * focus on address bar

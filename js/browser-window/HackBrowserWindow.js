@@ -19,8 +19,9 @@ function HackBrowserWindow() {
 	var openTabViewCount;
 	var tabList;
 	var menuBar;
-	var browserTabBar;
 	var addressBar;
+	var browserTabBar;
+
 	var addTabBtnEl;
 
 
@@ -114,7 +115,6 @@ function HackBrowserWindow() {
 		}
 	};
 
-
 	_this.updateWindowControls = function() {
 		// check if active webview is still loading
 		// if webViewEl.canGoBack() or webViewEl.canGoForward() is called in menuBar.updateBtnStatus()
@@ -122,6 +122,13 @@ function HackBrowserWindow() {
 		if (activeTabView.isDOMReady() === true) {
 			// update back/forward button status
 			menuBar.updateBtnStatus(activeTabView.getWebViewEl());
+
+			// update reload button
+			if (activeTabView.getWebViewEl().isLoading() === true) {
+				menuBar.showLoadStopBtn();
+			} else {
+				menuBar.showReloadBtn();
+			}
 		} else {
 			menuBar.disableBackBtn();
 			menuBar.disableForwardBtn();
@@ -197,6 +204,13 @@ function HackBrowserWindow() {
 	 */
 	_this.reload = function() {
 		activeTabView.getWebViewEl().reload();
+	};
+
+	/**
+	 * stop loading a page on active TabView
+	 */
+	_this.stopLoading = function() {
+		activeTabView.getWebViewEl().stop();
 	};
 
 	/**
