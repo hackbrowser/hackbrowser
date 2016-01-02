@@ -63,12 +63,13 @@ function ContextMenu(hackBrowserWindow) {
 	};
 
 	/**
-	 * attach event handlers for menu bar buttons
+	 * attach event handlers
 	 */
 	var attachEventHandlers = function() {
 		window.addEventListener("contextmenu", function(e) {
 			e.preventDefault();
-			browserContextMenu.popup(remote.getCurrentWindow());
+
+			_this.popup();
 		});
 	};
 
@@ -80,7 +81,7 @@ function ContextMenu(hackBrowserWindow) {
 	_this.popup = function() {
 		var browserContextMenu = Menu.buildFromTemplate(windowContextMenuTemplate);
 
-		browserContextMenu.popup();
+		browserContextMenu.popup(remote.getCurrentWindow());
 	};
 
 	init();

@@ -22,6 +22,7 @@ app.on("window-all-closed", function() {
 
 var startBrowser = function() {
 	var manager = new HackBrowserWindowManager();
+	GlobalShortcutHandler.registerAll();
 
 	manager.openNewWindow();
 };
