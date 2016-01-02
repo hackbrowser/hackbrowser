@@ -13,6 +13,7 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 	 private member variables
 	 ====================================== */
 	var tabEl;
+	var tabFaviconWrapperEl;
 	var tabFaviconEl;
 	var tabCloseBtnEl;
 	var tabInnerTemplate;
@@ -22,7 +23,7 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 	 private methods
 	 ====================================== */
 	var init = function() {
-		tabInnerTemplate = '<div class="favicon-wrapper"><img src="http://www.hackbrowser.com/images/logo-hackbrowser.png" class="favicon"></div><span class="title">{{title}}</span><div class="close"><i class="icon ion-close"></i></div>';
+		tabInnerTemplate = '<div class="favicon-wrapper"><img src="http://www.hackbrowser.com/images/logo-hackbrowser.png" class="favicon"><div class="loader"></div></div><span class="title">{{title}}</span><div class="close"><i class="icon ion-close"></i></div>';
 
 		// create a container for new tab
 		tabEl = document.createElement("div");
@@ -35,7 +36,8 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 
 		tabEl.innerHTML = tabInnerTemplate.replace("{{title}}", tabTitle);
 
-		// save references to favicon element and close button
+		// save references to favicon-related elements and close button
+		tabFaviconWrapperEl = tabEl.querySelector("favicon-wrapper");
 		tabFaviconEl = tabEl.querySelector("img.favicon");
 		tabCloseBtnEl = tabEl.querySelector(".close");
 
@@ -73,7 +75,13 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 	};
 
 	_this.updateTabFavicon = function(imageURL) {
+		tabFaviconEl.style.display = "block";
 		tabFaviconEl.setAttribute("src", imageURL);
+	};
+
+	_this.setFaviconToLoading = function() {
+		tabFaviconEl.style.display = "none";
+		tabFaviconWrapperEl.innerHTML = "";
 	};
 
 	_this.updateTitle = function(title) {
