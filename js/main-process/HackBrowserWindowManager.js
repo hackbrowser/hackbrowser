@@ -14,7 +14,7 @@ function HackBrowserWindowManager() {
 	this.createdWindowCount = 0;
 }
 
-HackBrowserWindowManager.prototype.openNewWindow = function(width, height, url) {
+HackBrowserWindowManager.prototype.openNewWindow = function(url) {
 	var _this = this;
 
 	// get last browser size
@@ -44,6 +44,8 @@ HackBrowserWindowManager.prototype.openNewWindow = function(width, height, url) 
 };
 
 HackBrowserWindowManager.prototype.attachEventHandlers = function(browserWindow) {
+	let _this = this;
+
 	var windowId = browserWindow.id;
 
 	// save browser window's width/height when user closes it
@@ -61,8 +63,12 @@ HackBrowserWindowManager.prototype.attachEventHandlers = function(browserWindow)
 
 	// remove the window from windowList and remove reference so that GC clear is from memory
 	browserWindow.on('closed', function() {
-		delete windowList[windowId];
-		browserWindow = null;
+		if (_this.windowList.hasOwnProperty(windowId)) {
+			console.log("deleting window " + windowId);
+
+			delete _this.windowList[windowId];
+			browserWindow = null;
+		}
 	});
 };
 

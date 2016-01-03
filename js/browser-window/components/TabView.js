@@ -4,6 +4,7 @@
  * TabView consists of a browser tab and it's associated webview
  *
  * @param {HackBrowserWindow} hackBrowserWindow - the browser window
+ * @param {BrowserTabBar} browserTabBar
  * @param {string} url - initial url
  *
  * @constructor
@@ -40,7 +41,7 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		tabViewId = "wv-" + hackBrowserWindow.getCreatedTabViewCount();
 
 		// increase created tab view count
-		hackBrowserWindow.increaseCreatedTabViewCount();
+		hackBrowserWindow.incrementCreatedTabViewCount();
 
 		// assign tabViewId to <webview> element's id
 		webViewEl.setAttribute("id", tabViewId);

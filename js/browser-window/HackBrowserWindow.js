@@ -37,6 +37,10 @@ function HackBrowserWindow() {
 		openTabViewCount = 0;
 		tabList = {};
 
+		for (let i = 0; i < 3; i++) {
+			console.log("i: " + i);
+		}
+
 		_this.addNewTab("http://www.google.com/", true);
 
 		attachEventHandlers();
@@ -150,10 +154,10 @@ function HackBrowserWindow() {
 	};
 
 	/**
-	 * increase total number of created tabs including closed ones
+	 * increment total number of created tabs including closed ones
 	 * this method should be exposed publicly in case a new tab is created programmatically
 	 */
-	_this.increaseCreatedTabViewCount = function() {
+	_this.incrementCreatedTabViewCount = function() {
 		createdTabViewCount++;
 	};
 

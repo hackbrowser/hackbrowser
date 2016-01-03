@@ -4,6 +4,8 @@
  * Browser tab and related control
  *
  * @param hackBrowserWindow
+ * @param tabViewId
+ * @param title
  * @constructor
  */
 function BrowserTab(hackBrowserWindow, tabViewId, title) {
@@ -93,7 +95,7 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 	};
 
 	_this.startLoadCommit = function() {
-
+		// TODO: possibly change spinner direction & color when load-commit begins
 	};
 
 	_this.stopLoading = function() {

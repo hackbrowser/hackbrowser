@@ -1,30 +1,36 @@
 'use strict';
 
-// global object
-// be cautious with adding values here
+// shared globally
 GLOBAL.__app = {
 	basePath: __dirname,
 	dataPath: __dirname + "/.data/"
 };
 
+// import {IPCMainProcessHandler} from "./js/main-process/IPCMainProcessHandler";
 const electron = require("electron");
 const app = electron.app;
 const fs = require("fs");
 const dialog = require("dialog");
 const HackBrowserWindowManager = require("./js/main-process/HackBrowserWindowManager");
 const GlobalShortcutHandler = require("./js/main-process/GlobalShortcutHandler");
+const IPCMainProcessHandler = require("./js/main-process/IPCMainProcessHandler");
 
 app.on("window-all-closed", function() {
 	if (process.platform != "darwin") {
+		console.log("quitting app");
+
 		app.quit();
 	}
 });
 
 var startBrowser = function() {
-	var manager = new HackBrowserWindowManager();
-	GlobalShortcutHandler.registerAll();
+	var hackBrowserWindowManager = new HackBrowserWindowManager();
+	var shortcutHandler = new GlobalShortcutHandler(hackBrowserWindowManager);
 
-	manager.openNewWindow();
+	// register all global shortcuts
+	shortcutHandler.registerAll();
+
+	hackBrowserWindowManager.openNewWindow();
 };
 
 app.on("ready", function() {

@@ -1,13 +1,35 @@
+'use strict';
+
 const electron = require('electron');
-const app = electron.app;
 const globalShortcut = electron.globalShortcut;
 
-var GlobalShortcutHandler = {};
+class GlobalShortcutHandler {
+	constructor(hackBrowserWindowManager) {
+		this.hackBrowserWindowManager = hackBrowserWindowManager;
+	}
 
-GlobalShortcutHandler.registerAll = function() {
-	var ret = globalShortcut.register("ctrl+x", function() {
-		console.log("ctrl+x is pressed");
-	});
-};
+	registerAll() {
+		let _this = this;
+
+		var shortcutCommands = [
+			{
+				accelerator: "CommandOrControl+n",
+				action: function() {
+					_this.hackBrowserWindowManager.openNewWindow();
+				}
+			},
+			{
+				accelerator: "F12",
+				action: function() {
+					console.log("opening devtools");
+				}
+			}
+		];
+
+		for (var i = 0; i < shortcutCommands.length; i++) {
+			globalShortcut.register(shortcutCommands[i].accelerator, shortcutCommands[i].action);
+		}
+	};
+}
 
 module.exports = GlobalShortcutHandler;
