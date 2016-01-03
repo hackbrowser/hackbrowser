@@ -3,7 +3,7 @@
 
 	// bootstrap
 	var init = function() {
-		var hackBrowserWindow = new HackBrowserWindow();
+		var hackBrowserWindow = new HackBrowserWindowController();
 	};
 
 	if (document.readyState === "complete" || document.readyState === "loaded") {

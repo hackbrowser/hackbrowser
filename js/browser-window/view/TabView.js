@@ -3,7 +3,7 @@
 /**
  * TabView consists of a browser tab and it's associated webview
  *
- * @param {HackBrowserWindow} hackBrowserWindow - the browser window
+ * @param {HackBrowserWindowController} hackBrowserWindow - the browser window
  * @param {BrowserTabBar} browserTabBar
  * @param {string} url - initial url
  *
