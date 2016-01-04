@@ -200,7 +200,7 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	};
 
 	/**
-	 * activate TabView (user clicks on browser tab)
+	 * activate TabView (user clicks on this browser tab)
 	 */
 	_this.activate = function() {
 		webViewEl.style.visibility = "visible";
@@ -208,7 +208,7 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	};
 
 	/**
-	 * activate TabView (user clicks on another browser tab)
+	 * deactivate TabView (user clicks on another browser tab)
 	 */
 	_this.deactivate = function() {
 		webViewEl.style.visibility = "hidden";
