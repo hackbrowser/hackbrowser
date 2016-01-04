@@ -57,9 +57,10 @@ function BrowserTabBar(hackBrowserWindow) {
 		var tabEl = browserTabsWrapperEl.querySelector("[data-webview-id='" + tabViewId + "']");
 
 		// find the index of tab being closed
-		var tabIndex = Array.prototype.indexOf.call(browserTabsWrapperEl.querySelectorAll(".tab"), tabEl);
+		// var tabIndex = Array.prototype.indexOf.call(browserTabsWrapperEl.querySelectorAll(".tab"), tabEl);
 
-		hackBrowserWindow.handleTabCloseById(tabViewId, tabIndex);
+		// hackBrowserWindow.handleTabCloseById(tabViewId, tabIndex);
+		hackBrowserWindow.handleTabCloseById(tabViewId);
 
 		browserTabsWrapperEl.removeChild(tabEl);
 
