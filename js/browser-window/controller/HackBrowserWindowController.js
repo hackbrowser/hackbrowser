@@ -37,10 +37,6 @@ function HackBrowserWindowController() {
 		openTabViewCount = 0;
 		tabList = {};
 
-		for (let i = 0; i < 3; i++) {
-			console.log("i: " + i);
-		}
-
 		_this.addNewTab("http://www.google.com/", true);
 
 		attachEventHandlers();
@@ -87,7 +83,7 @@ function HackBrowserWindowController() {
 
 			if (!addressBar.isAddressBarFocused()) {
 				addressBar.focusOnAddressBar();
-			};
+			}
 		}
 
 		// increase open tab count

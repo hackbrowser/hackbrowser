@@ -27,7 +27,11 @@ HackBrowserWindowManager.prototype.openNewWindow = function(url) {
 		}
 
 		// create the browser window
-		var newWindow = new BrowserWindow(browserSize);
+		var newWindow = new BrowserWindow({
+			width: browserSize.width,
+			height: browserSize.height,
+			frame: true
+		});
 
 		// load the HTML file for browser window
 		newWindow.loadURL("file://" + __app.basePath + "/html-pages/browser-window.html");
