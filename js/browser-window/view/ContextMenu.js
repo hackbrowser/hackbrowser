@@ -53,12 +53,15 @@ function ContextMenu(hackBrowserWindow) {
 			}
 		}
 	];
+	var webViewWrapperEl;
 
 
 	/* ====================================
 	 private methods
 	 ====================================== */
 	var init = function() {
+		webViewWrapperEl = document.getElementById("webview-wrapper")
+
 		attachEventHandlers();
 	};
 
@@ -66,7 +69,7 @@ function ContextMenu(hackBrowserWindow) {
 	 * attach event handlers
 	 */
 	var attachEventHandlers = function() {
-		window.addEventListener("contextmenu", function(e) {
+		webViewWrapperEl.addEventListener("contextmenu", function(e) {
 			e.preventDefault();
 
 			_this.popup();

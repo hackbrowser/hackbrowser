@@ -19,6 +19,12 @@ class GlobalShortcutHandler {
 				}
 			},
 			{
+				accelerator: "F11",
+				action: function() {
+					console.log("F11");
+				}
+			},
+			{
 				accelerator: "F12",
 				action: function() {
 					console.log("opening devtools");
