@@ -92,7 +92,9 @@
 				position: absolute;
 				top: 0;
 				left: 150px;
-				overflow: hidden; 
+				overflow: hidden;
+				-webkit-transition: all 120ms ease-in-out;
+				transition: all 120ms ease-in-out;
 			}
 
 				nav#navtabs > #add-tab > .icon-wrapper {
