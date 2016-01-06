@@ -14,6 +14,8 @@ function BrowserTabBar(hackBrowserWindow) {
 	 ====================================== */
 	var browserTabsWrapperEl;
 	var addTabBtnEl;
+	var numOpenTabs;
+	var tabWidth;
 
 
 	/* ====================================
@@ -22,6 +24,7 @@ function BrowserTabBar(hackBrowserWindow) {
 	var init = function() {
 		browserTabsWrapperEl = document.getElementById("navtabs");
 		addTabBtnEl = document.getElementById("add-tab");
+		numOpenTabs = 0;
 
 		attachEventHandlers();
 	};
@@ -37,6 +40,22 @@ function BrowserTabBar(hackBrowserWindow) {
 		});
 	};
 
+	/**
+	 * adjust each tab's width based on number of tabs and window size
+	 */
+	var adjustWidth = function() {
+		tabWidth = Math.floor((browserTabsWrapperEl.clientWidth - addTabBtnEl.offsetWidth) / numOpenTabs);
+		tabWidth = (tabWidth > 200) ? 200 : tabWidth;
+		var allTabsEl = browserTabsWrapperEl.querySelectorAll(".tab");
+
+		for (var i = 0; i < allTabsEl.length; i++) {
+			allTabsEl[i].style.left = (tabWidth * i) + "px";
+			allTabsEl[i].style.width = tabWidth + "px";
+		}
+
+		addTabBtnEl.style.left = (tabWidth * allTabsEl.length) + "px";
+	};
+
 
 	/* ====================================
 	 public methods
@@ -48,7 +67,13 @@ function BrowserTabBar(hackBrowserWindow) {
 		var newTab = new BrowserTab(hackBrowserWindow, tabViewId, title);
 		var newTabEl = newTab.getTabEl();
 
+		// increase open tabs count
+		numOpenTabs++;
+
 		browserTabsWrapperEl.insertBefore(newTabEl, addTabBtnEl);
+
+		// adjust css accordingly (each tab's width)
+		adjustWidth();
 
 		return newTab;
 	};
@@ -56,13 +81,13 @@ function BrowserTabBar(hackBrowserWindow) {
 	_this.removeTab = function(tabViewId) {
 		var tabEl = browserTabsWrapperEl.querySelector("[data-webview-id='" + tabViewId + "']");
 
-		// find the index of tab being closed
-		// var tabIndex = Array.prototype.indexOf.call(browserTabsWrapperEl.querySelectorAll(".tab"), tabEl);
-
 		// hackBrowserWindow.handleTabCloseById(tabViewId, tabIndex);
 		hackBrowserWindow.handleTabCloseById(tabViewId);
 
 		browserTabsWrapperEl.removeChild(tabEl);
+		numOpenTabs--;
+
+		adjustWidth();
 
 		var tabIdToActivate;
 

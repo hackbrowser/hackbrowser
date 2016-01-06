@@ -31,7 +31,12 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 		// create a container for new tab
 		tabEl = document.createElement("div");
 
+		// save <webview> tag's id value to data-webview-id attribute
 		tabEl.setAttribute("data-webview-id", tabViewId);
+
+		//
+		tabEl.setAttribute("draggable", true);
+
 		tabEl.classList.add("tab");
 
 		// replace title with url (until title is set)
@@ -52,10 +57,12 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 	 * attach event handlers for menu bar buttons
 	 */
 	var attachEventHandlers = function() {
+		// activate tab by clicking on it
 		tabEl.addEventListener("click", function(e) {
 			hackBrowserWindow.activateTabById(tabViewId);
 		});
 
+		// "close tab" button
 		tabCloseBtnEl.addEventListener("click", function(e) {
 			_this.close();
 
@@ -65,11 +72,49 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 		}, false);
 
 		// in case favicon src was invalid, display blank image
+		// TODO: adjust position to reduce left padding?
 		tabFaviconEl.addEventListener("error", function(e) {
 			tabFaviconEl.src = "";
 		});
+
+		// drag tab to change position
+		tabEl.addEventListener("dragstart", onDragStart, false);
+		tabEl.addEventListener("dragenter", onDragEnter, false);
+		tabEl.addEventListener("dragover", onDragOver, false);
+		tabEl.addEventListener("dragleave", onDragLeave, false);
+		tabEl.addEventListener("drop", onDrop, false);
+		tabEl.addEventListener("dragend", onDragEnd, false);
 	};
 
+	var onDragStart = function(e) {
+		console.log("onDragStart");
+		console.log(e);
+	};
+
+	var onDragEnter = function(e) {
+		console.log("onDragEnter");
+		console.log(e);
+	};
+
+	var onDragOver = function(e) {
+		console.log("onDragOver");
+		console.log(e);
+	};
+
+	var onDragLeave = function(e) {
+		console.log("onDragLeave");
+		console.log(e);
+	};
+
+	var onDrop = function(e) {
+		console.log("onDrop");
+		console.log(e);
+	};
+
+	var onDragEnd = function(e) {
+		console.log("onDragEnd");
+		console.log(e);
+	};
 
 	/* ====================================
 	 public methods
