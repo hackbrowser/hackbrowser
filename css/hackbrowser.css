@@ -23,6 +23,15 @@
 		box-sizing: border-box;
 	}
 
+		/*
+			animation should be handled in a separate CSS class
+			to enable/disable the animation temporarily as required
+		*/
+		nav#navtabs.animate > .tab,
+		nav#navtabs.animate > #add-tab {
+			transition: all 120ms ease-in-out;
+		}
+
 		nav#navtabs > .tab {
 			color: #666;
 			background: #e5e5e5;
@@ -34,8 +43,6 @@
 			cursor: pointer; 
 			position: absolute;
 			overflow: hidden;
-			-webkit-transition: all 120ms ease-in-out;
-			transition: all 120ms ease-in-out;
 		}
 
 			nav#navtabs  > .tab > .favicon-wrapper {
@@ -93,8 +100,6 @@
 				top: 0;
 				left: 150px;
 				overflow: hidden;
-				-webkit-transition: all 120ms ease-in-out;
-				transition: all 120ms ease-in-out;
 			}
 
 				nav#navtabs > #add-tab > .icon-wrapper {

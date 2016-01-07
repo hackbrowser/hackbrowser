@@ -88,6 +88,9 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 
 	var onDragStart = function(e) {
 		console.log("onDragStart");
+
+		activateSelf();
+
 		console.log(e);
 	};
 
@@ -114,6 +117,10 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 	var onDragEnd = function(e) {
 		console.log("onDragEnd");
 		console.log(e);
+	};
+
+	var activateSelf = function() {
+		hackBrowserWindow.activateTabById(tabViewId);
 	};
 
 	/* ====================================

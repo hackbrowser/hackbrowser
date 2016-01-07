@@ -41,6 +41,20 @@ function BrowserTabBar(hackBrowserWindow) {
 	};
 
 	/**
+	 * enable sliding/fade animation for browser tabs
+	 */
+	var enableAnimation = function() {
+		browserTabsWrapperEl.classList.add("animate");
+	};
+
+	/**
+	 * disable sliding/fade animation for browser tabs
+	 */
+	var disableAnimation = function() {
+		browserTabsWrapperEl.classList.remove("animate");
+	};
+
+	/**
 	 * adjust each tab's width based on number of tabs and window size
 	 */
 	var adjustWidth = function() {
@@ -74,8 +88,16 @@ function BrowserTabBar(hackBrowserWindow) {
 
 		browserTabsWrapperEl.insertBefore(newTabEl, addTabBtnEl);
 
+		// temporarily disable animation
+		disableAnimation();
+
 		// adjust css accordingly (each tab's width)
 		adjustWidth();
+
+		// TODO: check if there is any way to avoid using setTimeout here
+		setTimeout(enableAnimation, 10);
+		// enable animation back on
+		// enableAnimation();
 
 		return newTab;
 	};
