@@ -12,6 +12,8 @@
 function TabView(hackBrowserWindow, browserTabBar, url) {
 	var _this = this;
 
+	const fs = require("fs");
+
 	/* ====================================
 	 private member variables
 	 ====================================== */
@@ -86,8 +88,6 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		webViewEl.addEventListener("did-fail-load", function(e) {
 			console.log("[" + tabViewId + "] did-fail-load");
 			console.log(e);
-
-			// TODO:
 		});
 
 		webViewEl.addEventListener("did-frame-finish-load", function(e) {
@@ -127,6 +127,19 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		webViewEl.addEventListener("dom-ready", function() {
 			console.log("[" + tabViewId + "] dom-ready");
 			isDOMReady = true;
+
+			console.log(__dirname + "/../js/inject/inject-to-webview.js");
+
+			// insert custom script to <webview> to handle click events
+			fs.readFile(__dirname + "/../js/inject/inject-to-webview.js", "utf-8", function(err, injectScript) {
+				if (err) {
+					console.log("[" + tabViewId + "] error loading inject script");
+					return;
+				}
+
+				webViewEl.executeJavascript(injectScript);
+				console.log("[" + tabViewId + "] successfully injected script to webview");
+			});
 		});
 
 		webViewEl.addEventListener("page-title-updated", function(e) {
@@ -154,9 +167,32 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		webViewEl.addEventListener("new-window", function(e) {
 			console.log("[" + tabViewId + "] new-window");
 
-
-
 			console.log(e);
+		});
+
+		webViewEl.addEventListener("console-message", function(msg) {
+
+			// check if message text begins with curly braces (for json format)
+			// most of the time, non-json formats would be filtered here
+			// if the first character of message text is curly braces
+			// but the message text is not json format, an exception is thrown
+			if (msg.message[0] == '{') {
+				try {
+					var msgObject = JSON.parse(msg.message);
+					console.log(msgObject);
+
+					if ((msgObject.eventType === "focus") && (msgObject.type === "input/password")) {
+						parentTrackBrowserWindow.setTrackingOnOff(false);
+					}
+
+					else if ((msgObject.eventType === "blur") && (msgObject.type === "input/password")) {
+						parentTrackBrowserWindow.setTrackingOnOff(true);
+					}
+				} catch(err) {
+					// console.error(err);
+					// do nothing
+				}
+			}
 		});
 	};
 
