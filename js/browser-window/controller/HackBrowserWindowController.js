@@ -17,7 +17,7 @@ function HackBrowserWindowController() {
 	var menuBar;
 	var addressBar;
 	var browserTabBar;
-	var contextMenu;
+	var contextMenuHandler;
 	var activeTabView;
 	var createdTabViewCount;
 	var openTabViewCount;
@@ -32,7 +32,7 @@ function HackBrowserWindowController() {
 		menuBar = new NavigationControls(_this);
 		addressBar = new AddressBar(_this);
 		browserTabBar = new BrowserTabBar(_this);
-		contextMenu = new ContextMenu(_this);
+		contextMenuHandler = new ContextMenuHandler(_this);
 		createdTabViewCount = 0;
 		openTabViewCount = 0;
 		tabList = {};
@@ -231,6 +231,12 @@ function HackBrowserWindowController() {
 			currentWindow.close();
 		}
 	};
+
+
+	_this.getContextMenuHandler = function() {
+		return contextMenuHandler;
+	};
+
 
 	init();
 }

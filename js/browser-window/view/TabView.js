@@ -191,12 +191,17 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 				var msgObject = JSON.parse(e.message);
 				console.log(msgObject);
 
-				if ((msgObject.eventType === "focus") && (msgObject.type === "input/password")) {
-					parentTrackBrowserWindow.setTrackingOnOff(false);
+				// if contextmenu action, pass it to context menu handler
+				if (msgObject.eventType === "contextmenu") {
+					hackBrowserWindow.getContextMenuHandler().handleWebViewContextMenu(msgObject);
+				}
+
+				else if ((msgObject.eventType === "focus") && (msgObject.type === "input/password")) {
+					// hackBrowserWindow.setTrackingOnOff(false);
 				}
 
 				else if ((msgObject.eventType === "blur") && (msgObject.type === "input/password")) {
-					parentTrackBrowserWindow.setTrackingOnOff(true);
+					// hackBrowserWindow.setTrackingOnOff(true);
 				}
 			} catch(err) {
 				// console.error(err);
@@ -207,6 +212,8 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 
 	var handleNewWindow = function(e) {
 		console.log("[" + tabViewId + "] new-window");
+
+		hackBrowserWindow.addNewTab(e.url, true);
 
 		console.log(e);
 	};

@@ -46,6 +46,8 @@
 		}
 
 		else {
+			var isLinkElement = false;
+
 			// check if link element
 			// srcElement may not be a link element (<a>) as the inner part
 			// of the <a> element have other nodes such as <strong> or <img>
@@ -55,10 +57,19 @@
 				if (e.path[i].nodeName === 'A') {
 					var linkEl = e.path[i];
 
-					returnObj.srcType = 'link';
+					returnObj.type = 'link';
 					returnObj.href = linkEl.href;
 					returnObj.target = linkEl.target;
+
+					isLinkElement = true;
+
+					// no need to traverse up anymore
+					break;
 				}
+			}
+
+			if (isLinkElement === false) {
+				returnObj.type = "document";
 			}
 		}
 
@@ -80,7 +91,9 @@
 
 		// Loop through elementTypeObj and append it to sendToBrowserWindowObj
 		for (var key in elementTypeObj) {
-			sendToBrowserWindowObj[key] = elementTypeObj[key];
+			if (elementTypeObj.hasOwnProperty(key)) {
+				sendToBrowserWindowObj[key] = elementTypeObj[key];
+			}
 		}
 
 		// send information to TrackBrowserWindow through console
