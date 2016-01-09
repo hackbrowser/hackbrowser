@@ -62,7 +62,8 @@ function ContextMenu(hackBrowserWindow) {
 	var init = function() {
 		webViewWrapperEl = document.getElementById("webview-wrapper")
 
-		attachEventHandlers();
+		// TODO: retrieve event from injected Javascript to check if right-click was performed on an image
+		// attachEventHandlers();
 	};
 
 	/**

@@ -128,16 +128,18 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 			console.log("[" + tabViewId + "] dom-ready");
 			isDOMReady = true;
 
-			console.log(__dirname + "/../js/inject/inject-to-webview.js");
+			var TRACK_SCRIPT_PATH = __dirname + "/../js/browser-window/inject/inject-to-webview.js";
+
+			console.log(TRACK_SCRIPT_PATH);
 
 			// insert custom script to <webview> to handle click events
-			fs.readFile(__dirname + "/../js/inject/inject-to-webview.js", "utf-8", function(err, injectScript) {
+			fs.readFile(TRACK_SCRIPT_PATH, "utf-8", function(err, injectScript) {
 				if (err) {
 					console.log("[" + tabViewId + "] error loading inject script");
 					return;
 				}
 
-				webViewEl.executeJavascript(injectScript);
+				webViewEl.executeJavaScript(injectScript);
 				console.log("[" + tabViewId + "] successfully injected script to webview");
 			});
 		});
@@ -171,6 +173,8 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		});
 
 		webViewEl.addEventListener("console-message", function(msg) {
+
+			console.log("[" + tabViewId + "] console-message");
 
 			// check if message text begins with curly braces (for json format)
 			// most of the time, non-json formats would be filtered here
