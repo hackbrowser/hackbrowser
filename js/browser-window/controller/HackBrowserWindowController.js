@@ -92,6 +92,11 @@ function HackBrowserWindowController() {
 		return newTabViewId;
 	};
 
+	/**
+	 * activates a tab
+	 *
+	 * @param {int} tabViewId
+	 */
 	_this.activateTabById = function(tabViewId) {
 		console.log("activateTabById(" + tabViewId + ")");
 
@@ -114,6 +119,9 @@ function HackBrowserWindowController() {
 		}
 	};
 
+	/**
+	 * updates back/forward buttons' enable/disable status
+	 */
 	_this.updateWindowControls = function() {
 		// check if active webview is still loading
 		// if webViewEl.canGoBack() or webViewEl.canGoForward() is called in menuBar.updateBtnStatus()
@@ -137,17 +145,42 @@ function HackBrowserWindowController() {
 		addressBar.updateURL(activeTabView.getURL());
 	};
 
+	/**
+	 * return BrowserTabBar handler
+	 *
+	 * @returns {BrowserTabBar} BrowserTabBar view component
+	 */
 	_this.getBrowserTabBar = function() {
 		return browserTabBar;
 	};
 
+	/**
+	 * return MenuBar handler
+	 *
+	 * @returns {MenuBar} MenuBar view component
+	 */
 	_this.getMenuBar = function() {
 		return menuBar;
 	};
 
+	/**
+	 * return active TabView object
+	 *
+	 * @returns {TabView} currently active TabView object
+	 */
 	_this.getActiveTabView = function() {
 		return activeTabView;
 	};
+
+	/**
+	 * getter for ContextMenuHandler
+	 *
+	 * @returns {ContextMenuHandler} handler for context menu actions
+	 */
+	_this.getContextMenuHandler = function() {
+		return contextMenuHandler;
+	};
+
 
 	/**
 	 * increment total number of created tabs including closed ones
@@ -223,9 +256,6 @@ function HackBrowserWindowController() {
 	_this.handleTabCloseById = function(tabViewId) {
 		var tabViewToClose = tabList[tabViewId];
 
-		console.log("tabViewToClose: ");
-		console.log(tabViewToClose);
-
 		// remove <webview> element
 		tabViewToClose.close();
 
@@ -240,12 +270,6 @@ function HackBrowserWindowController() {
 			currentWindow.close();
 		}
 	};
-
-
-	_this.getContextMenuHandler = function() {
-		return contextMenuHandler;
-	};
-
 
 	init();
 }
