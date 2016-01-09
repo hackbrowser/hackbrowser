@@ -19,6 +19,8 @@
 
 		var returnObj = {};
 
+		returnObj.nodeName = e.srcElement.nodeName;
+
 		// check if image node
 		if (e.srcElement.nodeName === 'IMG') {
 			returnObj.type = 'image';

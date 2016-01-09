@@ -64,140 +64,151 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	};
 
 	var attachEventHandlers = function() {
-		webViewEl.addEventListener("load-commit", function(e) {
-			console.log("[" + tabViewId + "] load-commit");
-			console.log(e);
+		webViewEl.addEventListener("load-commit", handleLoadCommit);
+		webViewEl.addEventListener("did-finish-load", handleDidFinishLoad);
+		webViewEl.addEventListener("did-fail-load", handleDidFailLoad);
+		webViewEl.addEventListener("did-frame-finish-load", handleDidFrameFinishLoad);
+		webViewEl.addEventListener("did-start-loading", handleDidStartLoading);
+		webViewEl.addEventListener("did-stop-loading", handleDidStopLoading);
+		webViewEl.addEventListener("did-get-response-details", handleDidGetResponseDetails);
+		webViewEl.addEventListener("did-get-redirect-request", handleDidGetRedirectRequest);
+		webViewEl.addEventListener("dom-ready", handleDOMReady);
+		webViewEl.addEventListener("page-title-updated", handlePageTitleUpdated);
+		webViewEl.addEventListener("page-favicon-updated", handlePageFaviconUpdated);
+		webViewEl.addEventListener("new-window", handleNewWindow);
+		webViewEl.addEventListener("console-message", handleConsoleMessage);
+	};
 
-			if (e.isMainFrame === true) {
-				webViewURL = e.url;
+	var handleLoadCommit = function(e) {
+		console.log("[" + tabViewId + "] load-commit");
 
-				if (hackBrowserWindow.getActiveTabView() === _this) {
-					hackBrowserWindow.updateWindowTitle(webViewURL);
-				}
-
-				if (hackBrowserWindow.getActiveTabView() === _this) {
-					hackBrowserWindow.updateWindowControls();
-				}
-			}
-		});
-
-		webViewEl.addEventListener("did-finish-load", function() {
-			console.log("[" + tabViewId + "] did-finish-load");
-		});
-
-		webViewEl.addEventListener("did-fail-load", function(e) {
-			console.log("[" + tabViewId + "] did-fail-load");
-			console.log(e);
-		});
-
-		webViewEl.addEventListener("did-frame-finish-load", function(e) {
-			webViewURL = webViewEl.getURL();
-		});
-
-		webViewEl.addEventListener("did-start-loading", function() {
-			console.log("[" + tabViewId + "] did-start-loading");
-
-			// set loading icon
-			browserTab.startLoading();
+		if (e.isMainFrame === true) {
+			webViewURL = e.url;
 
 			if (hackBrowserWindow.getActiveTabView() === _this) {
-				hackBrowserWindow.getMenuBar().showLoadStopBtn();
+				hackBrowserWindow.updateWindowTitle(webViewURL);
 			}
-		});
-
-		webViewEl.addEventListener("did-stop-loading", function() {
-			console.log("[" + tabViewId + "] did-stop-loading");
-
-			// clear loading icon
-			browserTab.stopLoading();
 
 			if (hackBrowserWindow.getActiveTabView() === _this) {
-				hackBrowserWindow.getMenuBar().showReloadBtn();
+				hackBrowserWindow.updateWindowControls();
 			}
+		}
+	};
+
+	var handleDidFinishLoad = function() {
+		console.log("[" + tabViewId + "] did-finish-load");
+	};
+
+	var handleDidFailLoad = function(e) {
+		console.log("[" + tabViewId + "] did-fail-load");
+		console.log(e);
+	};
+
+	var handleDidFrameFinishLoad = function(e) {
+		console.log("[" + tabViewId + "] did-frame-finish-load");
+		webViewURL = webViewEl.getURL();
+	};
+
+	var handleDidStartLoading = function() {
+		console.log("[" + tabViewId + "] did-start-loading");
+
+		// set loading icon
+		browserTab.startLoading();
+
+		if (hackBrowserWindow.getActiveTabView() === _this) {
+			hackBrowserWindow.getMenuBar().showLoadStopBtn();
+		}
+	};
+
+	var handleDidStopLoading = function() {
+		console.log("[" + tabViewId + "] did-stop-loading");
+
+		// clear loading icon
+		browserTab.stopLoading();
+
+		if (hackBrowserWindow.getActiveTabView() === _this) {
+			hackBrowserWindow.getMenuBar().showReloadBtn();
+		}
+	};
+
+	var handleDidGetResponseDetails = function(e) {
+		console.log("[" + tabViewId + "] did-get-response-details");
+	};
+
+	var handleDidGetRedirectRequest = function(e) {
+		console.log("[" + tabViewId + "] did-get-redirect-request");
+	};
+
+	var handleDOMReady = function() {
+		console.log("[" + tabViewId + "] dom-ready");
+
+		var TRACK_SCRIPT_PATH = __dirname + "/../js/browser-window/inject/inject-to-webview.js";
+
+		isDOMReady = true;
+
+		// insert custom script to <webview> to handle click events
+		fs.readFile(TRACK_SCRIPT_PATH, "utf-8", function(err, injectScript) {
+			if (err) {
+				console.log("[" + tabViewId + "] error loading inject script");
+				return;
+			}
+
+			webViewEl.executeJavaScript(injectScript);
+			console.log("[" + tabViewId + "] successfully injected script to webview");
 		});
+	};
 
-		webViewEl.addEventListener("did-get-response-details", function(e) {
-			console.log("[" + tabViewId + "] did-get-response-details");
-		});
+	var handlePageTitleUpdated = function(e) {
+		console.log("[" + tabViewId + "] page-title-updated");
 
-		webViewEl.addEventListener("did-get-redirect-request", function(e) {
-			console.log("[" + tabViewId + "] did-get-redirect-request");
-		});
+		webViewTitle = e.title;
 
-		webViewEl.addEventListener("dom-ready", function() {
-			console.log("[" + tabViewId + "] dom-ready");
-			isDOMReady = true;
+		// update tab title
+		_this.updateTabTitle(webViewTitle);
 
-			var TRACK_SCRIPT_PATH = __dirname + "/../js/browser-window/inject/inject-to-webview.js";
+		if (hackBrowserWindow.getActiveTabView() === _this) {
+			hackBrowserWindow.updateWindowTitle(webViewTitle);
+		}
+	}
 
-			console.log(TRACK_SCRIPT_PATH);
+	var handlePageFaviconUpdated = function(e) {
+		console.log("[" + tabViewId + "] page-favicon-updated");
 
-			// insert custom script to <webview> to handle click events
-			fs.readFile(TRACK_SCRIPT_PATH, "utf-8", function(err, injectScript) {
-				if (err) {
-					console.log("[" + tabViewId + "] error loading inject script");
-					return;
+		// the last element in favicons array is used
+		// TODO: if multiple favicon items are returned and last element is invalid, use other ones
+		_this.updateTabFavicon(e.favicons[e.favicons.length - 1]);
+	};
+
+	var handleConsoleMessage = function(e) {
+		console.log("[" + tabViewId + "] console-message");
+
+		// check if message text begins with curly braces (for json format)
+		// most of the time, non-json formats would be filtered here
+		// if the first character of message text is curly braces
+		// but the message text is not json format, an exception is thrown
+		if (e.message[0] == '{') {
+			try {
+				var msgObject = JSON.parse(e.message);
+				console.log(msgObject);
+
+				if ((msgObject.eventType === "focus") && (msgObject.type === "input/password")) {
+					parentTrackBrowserWindow.setTrackingOnOff(false);
 				}
 
-				webViewEl.executeJavaScript(injectScript);
-				console.log("[" + tabViewId + "] successfully injected script to webview");
-			});
-		});
-
-		webViewEl.addEventListener("page-title-updated", function(e) {
-			console.log("[" + tabViewId + "] page-title-updated");
-			console.log(e);
-
-			webViewTitle = e.title;
-
-			// update tab title
-			_this.updateTabTitle(webViewTitle);
-
-			if (hackBrowserWindow.getActiveTabView() === _this) {
-				hackBrowserWindow.updateWindowTitle(webViewTitle);
-			}
-		});
-
-		webViewEl.addEventListener("page-favicon-updated", function(e) {
-			console.log("[" + tabViewId + "] page-favicon-updated");
-			console.log(e);
-
-			// the last element in favicons array is used
-			_this.updateTabFavicon(e.favicons[e.favicons.length - 1]);
-		});
-
-		webViewEl.addEventListener("new-window", function(e) {
-			console.log("[" + tabViewId + "] new-window");
-
-			console.log(e);
-		});
-
-		webViewEl.addEventListener("console-message", function(msg) {
-
-			console.log("[" + tabViewId + "] console-message");
-
-			// check if message text begins with curly braces (for json format)
-			// most of the time, non-json formats would be filtered here
-			// if the first character of message text is curly braces
-			// but the message text is not json format, an exception is thrown
-			if (msg.message[0] == '{') {
-				try {
-					var msgObject = JSON.parse(msg.message);
-					console.log(msgObject);
-
-					if ((msgObject.eventType === "focus") && (msgObject.type === "input/password")) {
-						parentTrackBrowserWindow.setTrackingOnOff(false);
-					}
-
-					else if ((msgObject.eventType === "blur") && (msgObject.type === "input/password")) {
-						parentTrackBrowserWindow.setTrackingOnOff(true);
-					}
-				} catch(err) {
-					// console.error(err);
-					// do nothing
+				else if ((msgObject.eventType === "blur") && (msgObject.type === "input/password")) {
+					parentTrackBrowserWindow.setTrackingOnOff(true);
 				}
+			} catch(err) {
+				// console.error(err);
+				// since the console-message is not a HackBrowser message, do nothing
 			}
-		});
+		}
+	};
+
+	var handleNewWindow = function(e) {
+		console.log("[" + tabViewId + "] new-window");
+
+		console.log(e);
 	};
 
 
@@ -206,8 +217,6 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	 ====================================== */
 	_this.navigateTo = function(url) {
 		var URLInfo = URIParser.parse(url);
-
-		console.log(URLInfo);
 
 		// if an invalid URl is passed
 		if (URLInfo.isValid !== true) {

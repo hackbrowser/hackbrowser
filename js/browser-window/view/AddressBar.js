@@ -69,8 +69,6 @@ function AddressBar(hackBrowserWindow) {
 
 	// TODO: need to find a way to check how address bar input is focused at a given moment
 	_this.isAddressBarFocused = function() {
-		console.log("isAddressBarFocused(), document.activeElement == " + document.activeElement);
-
 		return (addressBarEl === document.activeElement);
 	};
 

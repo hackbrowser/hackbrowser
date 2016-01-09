@@ -15,44 +15,6 @@ function ContextMenu(hackBrowserWindow) {
 	/* ====================================
 	 private member variables
 	 ====================================== */
-	var windowContextMenuTemplate = [
-		{
-			label: 'Back',
-			accelerator: 'Alt+Left',
-			enabled: false,
-			click: function(item, focusedWindow) {
-				console.log("clicked back");
-				hackBrowserWindow.goBack();
-			}
-		},
-		{
-			label: "Forward",
-			accelerator: "Alt+Right",
-			enabled: false,
-			click: function(item, focusedWindow) {
-				console.log("clicked forward");
-				hackBrowserWindow.goForward();
-			}
-		},
-		{
-			label: "Reload",
-			accelerator: "CmdOrCtrl+R",
-			click: function(item, focusedWindow) {
-				hackBrowserWindow.reload();
-			}
-		},
-		{
-			type: "separator"
-		},
-		{
-			label: "Print",
-			accelerator: "CmdOrCtrl+P",
-			click: function(item, focusedWindow) {
-				console.log("clicked print");
-				hackBrowserWindow.getActiveTabView().getWebViewEl().print();
-			}
-		}
-	];
 	var webViewWrapperEl;
 
 
@@ -70,11 +32,6 @@ function ContextMenu(hackBrowserWindow) {
 	 * attach event handlers
 	 */
 	var attachEventHandlers = function() {
-		webViewWrapperEl.addEventListener("contextmenu", function(e) {
-			e.preventDefault();
-
-			_this.popup();
-		});
 	};
 
 
@@ -82,10 +39,49 @@ function ContextMenu(hackBrowserWindow) {
 	 public methods
 	 ====================================== */
 
-	_this.popup = function() {
+	_this.openGeneralContextMenu = function() {
+		var windowContextMenuTemplate = [
+			{
+				label: 'Back',
+				accelerator: 'Alt+Left',
+				enabled: hackBrowserWindow.getActiveTabView().canGoBack(),
+				click: function(item, focusedWindow) {
+					console.log("clicked back");
+					hackBrowserWindow.goBack();
+				}
+			},
+			{
+				label: "Forward",
+				accelerator: "Alt+Right",
+				enabled: hackBrowserWindow.getActiveTabView().canGoForward(),
+				click: function(item, focusedWindow) {
+					console.log("clicked forward");
+					hackBrowserWindow.goForward();
+				}
+			},
+			{
+				label: "Reload",
+				accelerator: "CmdOrCtrl+R",
+				click: function(item, focusedWindow) {
+					hackBrowserWindow.reload();
+				}
+			},
+			{
+				type: "separator"
+			},
+			{
+				label: "Print",
+				accelerator: "CmdOrCtrl+P",
+				click: function(item, focusedWindow) {
+					console.log("clicked print");
+					hackBrowserWindow.getActiveTabView().getWebViewEl().print();
+				}
+			}
+		];
+
 		var browserContextMenu = Menu.buildFromTemplate(windowContextMenuTemplate);
 
-		browserContextMenu.popup(remote.getCurrentWindow());
+		browserContextMenu.openGeneralContextMenu(remote.getCurrentWindow());
 	};
 
 	init();
