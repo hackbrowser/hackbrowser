@@ -286,9 +286,6 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	_this.close = function() {
 		// remove webview element
 		webViewWrapperEl.removeChild(webViewEl);
-
-		// remove browser tab
-		browserTab.close();
 	};
 
 	_this.getId = function() {

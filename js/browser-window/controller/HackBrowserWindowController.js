@@ -221,6 +221,15 @@ function HackBrowserWindowController() {
 	 * @param tabViewId
 	 */
 	_this.handleTabCloseById = function(tabViewId) {
+		var tabViewToClose = tabList[tabViewId];
+
+		console.log("tabViewToClose: ");
+		console.log(tabViewToClose);
+
+		// remove <webview> element
+		tabViewToClose.close();
+
+		// remove tabView from tabList map
 		delete tabList[tabViewId];
 
 		openTabViewCount--;
