@@ -6,7 +6,6 @@ GLOBAL.__app = {
 	dataPath: __dirname + "/.data/"
 };
 
-// import {IPCMainProcessHandler} from "./js/main-process/IPCMainProcessHandler";
 const electron = require("electron");
 const app = electron.app;
 const fs = require("fs");
