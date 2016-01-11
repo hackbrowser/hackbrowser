@@ -26,7 +26,7 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 	 private methods
 	 ====================================== */
 	var init = function() {
-		tabInnerTemplate = '<div class="favicon-wrapper"><img class="favicon"><div class="loader"></div></div><span class="title">{{title}}</span><div class="close"><i class="icon ion-close"></i></div>';
+		tabInnerTemplate = '<div class="favicon-wrapper"><img class="favicon"><div class="loader"></div></div><span class="title">{{title}}</span><div class="close-wrapper"><div class="close"><i class="icon ion-close"></i></div></div>';
 
 		// create a container for new tab
 		tabEl = document.createElement("div");
@@ -78,44 +78,57 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 		});
 
 		// drag tab to change position
-		tabEl.addEventListener("dragstart", onDragStart, false);
-		tabEl.addEventListener("dragenter", onDragEnter, false);
-		tabEl.addEventListener("dragover", onDragOver, false);
-		tabEl.addEventListener("dragleave", onDragLeave, false);
-		tabEl.addEventListener("drop", onDrop, false);
-		tabEl.addEventListener("dragend", onDragEnd, false);
+		tabEl.addEventListener("dragstart", handleDragStart, false);
+		tabEl.addEventListener("drag", handleDrag, false);
+		tabEl.addEventListener("dragenter", handleDragEnter, false);
+		tabEl.addEventListener("dragover", handleDragOver, false);
+		tabEl.addEventListener("dragleave", handleDragLeave, false);
+		tabEl.addEventListener("drop", handleDrop, false);
+		tabEl.addEventListener("dragend", handleDragEnd, false);
 	};
 
-	var onDragStart = function(e) {
-		console.log("onDragStart");
+	var handleDragStart = function(e) {
+		console.log("handleDragStart");
+		console.log(e);
 
+		e.dataTransfer.setData("tabLeft", e.srcElement.style.left);
+
+		console.log(e.dataTransfer.items);
+
+		// since dragstart event prevents click events,
+		// the tab is not activated until dragend event occurs
+		// activate the tab immediately
 		activateSelf();
+	};
+
+	var handleDrag = function(e) {
+		console.log("handleDrag");
 
 		console.log(e);
 	};
 
-	var onDragEnter = function(e) {
-		console.log("onDragEnter");
+	var handleDragEnter = function(e) {
+		console.log("handleDragEnter");
 		console.log(e);
 	};
 
-	var onDragOver = function(e) {
-		console.log("onDragOver");
+	var handleDragOver = function(e) {
+		console.log("handleDragOver");
 		console.log(e);
 	};
 
-	var onDragLeave = function(e) {
-		console.log("onDragLeave");
+	var handleDragLeave = function(e) {
+		console.log("handleDragLeave");
 		console.log(e);
 	};
 
-	var onDrop = function(e) {
-		console.log("onDrop");
+	var handleDrop = function(e) {
+		console.log("handleDrop");
 		console.log(e);
 	};
 
-	var onDragEnd = function(e) {
-		console.log("onDragEnd");
+	var handleDragEnd = function(e) {
+		console.log("handleDragEnd");
 		console.log(e);
 	};
 
@@ -171,6 +184,4 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 	};
 
 	init();
-
-
 }
