@@ -4,7 +4,7 @@
 
 HackBrowser is a cross-platform, hackable browser written in Javascript. HackBrowser is built with Electron (formerly Atom Shell), which enables building cross-platform desktop apps with HTML, CSS, and Javascript. Since every part of the application's code is visible, customizing the browser in any way is possible. 
 
-**This project is in heavy development. The first scheduled release is February 1st, 2016.**
+**This project is in heavy development. The first scheduled release is March 1st, 2016.**
 
 ## Features
 
