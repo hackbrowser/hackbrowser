@@ -9,7 +9,8 @@ const PersistentStorage = require(__app.basePath + "/js/common/PersistentStorage
  *
  * @constructor
  */
-function HackBrowserWindowManager() {
+function HackBrowserWindowManager(mainProcessController) {
+	var _this = this;
 	this.windowList = {};
 	this.createdWindowCount = 0;
 }
@@ -48,7 +49,7 @@ HackBrowserWindowManager.prototype.openNewWindow = function(url) {
 };
 
 HackBrowserWindowManager.prototype.attachEventHandlers = function(browserWindow) {
-	let _this = this;
+	var _this = this;
 
 	var windowId = browserWindow.id;
 

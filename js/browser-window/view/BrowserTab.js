@@ -26,7 +26,7 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 	 private methods
 	 ====================================== */
 	var init = function() {
-		tabInnerTemplate = '<div class="favicon-wrapper"><img class="favicon"><div class="loader"></div></div><span class="title">{{title}}</span><div class="close-wrapper"><div class="close"><i class="icon ion-close"></i></div></div>';
+		tabInnerTemplate = '<div class="favicon-wrapper"><img class="favicon"><div class="loader"></div></div><span class="title">{{title}}</span><div class="close"><i class="icon ion-close"></i></div>';
 
 		// create a container for new tab
 		tabEl = document.createElement("div");

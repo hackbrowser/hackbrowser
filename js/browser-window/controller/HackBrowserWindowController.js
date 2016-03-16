@@ -14,9 +14,11 @@ function HackBrowserWindowController() {
 	/* ====================================
 	 private member variables
 	 ====================================== */
+	var ipcHandler;
+
 	var menuBar;
-	var addressBar;
 	var browserTabBar;
+	var addressBar;
 	var contextMenuHandler;
 	var activeTabView;
 	var createdTabViewCount;
@@ -28,10 +30,13 @@ function HackBrowserWindowController() {
 	 private methods
 	 ====================================== */
 	var init = function() {
+		// note that handler for IPC communication be initialized before other view components
+		ipcHandler = new IPCRendererProcessHandler(_this);
+
 		// create a new NavigationControls object associated with current browser window
 		menuBar = new NavigationControls(_this);
-		addressBar = new AddressBar(_this);
 		browserTabBar = new BrowserTabBar(_this);
+		addressBar = new AddressBar(_this);
 		contextMenuHandler = new ContextMenuHandler(_this);
 		createdTabViewCount = 0;
 		openTabViewCount = 0;
@@ -43,7 +48,19 @@ function HackBrowserWindowController() {
 	};
 
 	var attachEventHandlers = function() {
+		// shortcuts
+		key('⌘+f, ctrl+f', function() {
+			activeTabView.getSearchBox().open();
+		});
 
+		// temporarily refresh browser page for debugging
+		key('ctrl+r', function() {
+			console.log("reloading browser page");
+		});
+
+		key('esc', function() {
+			activeTabView.getSearchBox().close();
+		});
 	};
 
 
@@ -271,5 +288,9 @@ function HackBrowserWindowController() {
 		}
 	};
 
+	_this.getIPCHandler = function() {
+		return ipcHandler;
+	};
+	
 	init();
 }

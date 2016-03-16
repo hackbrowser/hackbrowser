@@ -29,7 +29,7 @@ function NavigationControls(hackBrowserWindow) {
 		backBtnEl = document.getElementById("button-back");
 		forwardBtnEl = document.getElementById("button-forward");
 		reloadBtnEl = document.getElementById("button-reload");
-		stopLoadingBtnEl = document.getElementById("button-stop-loading")
+		stopLoadingBtnEl = document.getElementById("button-stop-loading");
 		menuBtnEl = document.getElementById("button-menu");
 
 		attachEventHandlers();
@@ -55,6 +55,7 @@ function NavigationControls(hackBrowserWindow) {
 		console.log("Clicked back");
 
 		hackBrowserWindow.goBack();
+		hackBrowserWindow.updateWindowControls();
 
 		e.preventDefault();
 	};
@@ -68,6 +69,7 @@ function NavigationControls(hackBrowserWindow) {
 		console.log("Clicked forward");
 
 		hackBrowserWindow.goForward();
+		hackBrowserWindow.updateWindowControls();
 
 		e.preventDefault();
 	};

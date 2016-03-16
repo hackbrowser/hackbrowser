@@ -4,20 +4,25 @@
 	<meta charset="UTF-8">
 	<title>HackBrowser</title>
 
-	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.18.1/build/cssreset/cssreset-min.css">
+	<link rel="stylesheet" type="text/css" href="css/cssreset-min.css">
 	<link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 	<link href='https://fonts.googleapis.com/css?family=Roboto:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" type="text/css" href="../css/hackbrowser.css">
+	<link rel="stylesheet" type="text/css" href="css/hackbrowser.css">
 
+	<script src="../js/browser-window/utility/Utility.js"></script>
 	<script src="../js/browser-window/utility/URIParser.js"></script>
+
+	<script src="../js/browser-window/lib/keymaster.js"></script>
 
 	<script src="../js/browser-window/view/BrowserTabBar.js"></script>
 	<script src="../js/browser-window/view/BrowserTab.js"></script>
 	<script src="../js/browser-window/view/AddressBar.js"></script>
+	<script src="../js/browser-window/view/SearchBox.js"></script>
 	<script src="../js/browser-window/view/NavigationControls.js"></script>
 	<script src="../js/browser-window/view/ContextMenuHandler.js"></script>
 	<script src="../js/browser-window/view/TabView.js"></script>
 	<script src="../js/browser-window/controller/HackBrowserWindowController.js"></script>
+	<script src="../js/browser-window/controller/IPCRendererProcessHandler.js"></script>
 
 	<script src="../js/browser-window/init.js"></script>
 </head>
@@ -59,7 +64,7 @@
 	</section><!-- // #menubar -->
 
 	<!-- Wrapper for WebView elements -->
-	<section id="webview-wrapper">
-	</section><!-- // section#webview-wrapper -->
+	<section id="webview-container">
+	</section><!-- // section#webview-container -->
 </body>
 </html>

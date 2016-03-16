@@ -1,9 +1,12 @@
+// exposed controller for communication
+var hackBrowserWindow;
+
 (function() {
 	'use strict';
 
 	// bootstrap
 	var init = function() {
-		var hackBrowserWindow = new HackBrowserWindowController();
+		hackBrowserWindow = new HackBrowserWindowController();
 	};
 
 	if (document.readyState === "complete" || document.readyState === "loaded") {
