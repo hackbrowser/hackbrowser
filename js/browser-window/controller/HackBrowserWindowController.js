@@ -67,10 +67,20 @@ function HackBrowserWindowController() {
 	/* ====================================
 	 public methods
 	 ====================================== */
+	/**
+	 * Navigate to a url
+	 *
+	 * @param url {string} new url
+	 */
 	_this.navigateTo = function(url) {
 		activeTabView.navigateTo(url);
 	};
 
+	/**
+	 * Updates window's title
+	 *
+	 * @param title {string} new title of the browser window
+	 */
 	_this.updateWindowTitle = function(title) {
 		document.title = title;
 	};
@@ -288,6 +298,9 @@ function HackBrowserWindowController() {
 		}
 	};
 
+	/**
+	 * getter for IPC Renderer Process handler
+	 */
 	_this.getIPCHandler = function() {
 		return ipcHandler;
 	};

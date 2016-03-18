@@ -98,7 +98,7 @@ function ContextMenuHandler(hackBrowserWindow) {
 			{
 				label: "Open link in new window",
 				click: function(item, focusedWindow) {
-					hackBrowserWindow.addNewTab(link);
+					hackBrowserWindow.getIPCHandler().openNewWindow(link);
 				}
 			},
 			{

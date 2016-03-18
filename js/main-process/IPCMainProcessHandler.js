@@ -10,14 +10,14 @@ function IPCMainProcessHandler(mainProcessController) {
 	const ipcMain = require("electron").ipcMain;
 
 	var _this = this;
-
-	var mainProcessEventEmitter;
+	var windowManager;
 
 	/* ====================================
 	 private methods
 	 ===================================== */
 	var init = function() {
 		// mainProcessEventEmitter = mainProcessController.getMainProcessEventEmitter();
+		windowManager = mainProcessController.getWindowManager();
 
 		attachEventHandlers();
 	};
@@ -27,7 +27,7 @@ function IPCMainProcessHandler(mainProcessController) {
 	};
 
 	var handleNewWindowOpenRequest = function(event, url) {
-		// TODO: open new window with passed url
+		windowManager.openNewWindow(url);
 
 		event.sender.send("newWindowOpenResponse", true);
 	};

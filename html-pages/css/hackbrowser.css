@@ -139,7 +139,6 @@ nav#navtabs:after {
 }
 
 #button-menu {
-	display: none;
 }
 
 .controls > [id^=button-] {
@@ -258,9 +257,12 @@ input#address-bar {
 	position: absolute;
 	top: 1px;
 	right: 54px;
-	background: #ff6666;
 	padding: 6px 4px 5px 6px;
 }
+
+	.search-wrapper .match-display.no-match {
+		background: #ff6666;
+	}
 
 .search-wrapper a.button {
 	font-size: 14px;
