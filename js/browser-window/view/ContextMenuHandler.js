@@ -85,9 +85,12 @@ function ContextMenuHandler(hackBrowserWindow) {
 		contextMenu.popup(remote.getCurrentWindow());
 	};
 
+	/**
+	 * Open context menu for <a> type element (or its children)
+	 *
+	 * @param link {string} url for the link
+	 */
 	var openWebViewLinkContextMenu = function(link) {
-		console.log("openWebViewLinkContextMenu()");
-
 		var template = [
 			{
 				label: "Open link in new tab",
@@ -119,6 +122,11 @@ function ContextMenuHandler(hackBrowserWindow) {
 	 public methods
 	 ====================================== */
 
+	/**
+	 * dispatch an action based on the passed object containing right click event information
+	 *
+	 * @param e {object} details of context menu object
+	 */
 	_this.handleWebViewContextMenu = function(msgObject) {
 		console.log("handleWebViewContextMenu()");
 		console.log(msgObject);

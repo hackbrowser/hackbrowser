@@ -74,6 +74,9 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		attachEventHandlers();
 	};
 
+	/**
+	 * attach event handlers for <webview> events
+	 */
 	var attachEventHandlers = function() {
 		/*
 			<webview> events are fired in the following order
@@ -277,36 +280,42 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	/* ====================================
 	 public methods
 	 ====================================== */
-	_this.navigateTo = function(url) {
-		var URLInfo = URIParser.parse(url);
+	/**
+	 * navigate to a URI
+	 * the type of URI will be determined by a URIParser helper object
+	 *
+	 * @param uri {string} uri to navigate to
+	 */
+	_this.navigateTo = function(uri) {
+		var URIInfo = URIParser.parse(uri);
 
 		// if an invalid URl is passed
-		if (URLInfo.isValid !== true) {
+		if (URIInfo.isValid !== true) {
 			// do nothing
 			return;
 		}
 
-		if (URLInfo.type === "http") {
-			webViewEl.setAttribute("src", URLInfo.formattedURI);
+		if (URIInfo.type === "http") {
+			webViewEl.setAttribute("src", URIInfo.formattedURI);
 		}
 
-		else if (URLInfo.type === "file") {
-			console.log("User has entered a file URL into the addressbar: " + url);
-			webViewEl.setAttribute("src", URLInfo.formattedURI);
+		else if (URIInfo.type === "file") {
+			console.log("User has entered a file URL into the addressbar: " + uri);
+			webViewEl.setAttribute("src", URIInfo.formattedURI);
 		}
 
-		else if (URLInfo.type === "page") {
-			console.log("Opening HTML template file " + url);
-			webViewEl.setAttribute("src", URLInfo.formattedURI);
+		else if (URIInfo.type === "page") {
+			console.log("Opening HTML template file " + uri);
+			webViewEl.setAttribute("src", URIInfo.formattedURI);
 		}
 
-		else if (URLInfo.type === "internal") {
-			console.log("User has navigated to an internal link: " + url);
+		else if (URIInfo.type === "internal") {
+			console.log("User has navigated to an internal link: " + uri);
 		}
 
-		else if (URLInfo.type === "search") {
-			console.log("User has searched " + url);
-			webViewEl.setAttribute("src", URLInfo.formattedURI);
+		else if (URIInfo.type === "search") {
+			console.log("User has searched " + uri);
+			webViewEl.setAttribute("src", URIInfo.formattedURI);
 		}
 	};
 
@@ -343,14 +352,29 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		webViewContainerEl.removeChild(webViewWrapperEl);
 	};
 
+	/**
+	 * returns current TabView object's string ID
+	 *
+	 * @returns {string} current TabView object's string ID
+	 */
 	_this.getId = function() {
 		return tabViewId;
 	};
 
+	/**
+	 * returns <webview> element
+	 *
+	 * @returns {DOMElement} <webview> element associated with current TabView object
+	 */
 	_this.getWebViewEl = function() {
 		return webViewEl;
 	};
 
+	/**
+	 * 
+	 * 
+	 * @returns {*}
+	 */
 	_this.getWebViewTitle = function() {
 		return webViewTitle;
 	};

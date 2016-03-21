@@ -68,10 +68,20 @@ function AddressBar(hackBrowserWindow) {
 	};
 
 	// TODO: need to find a way to check how address bar input is focused at a given moment
+	/**
+	 * check whether address bar input element has focus
+	 *
+	 * @returns {boolean} whether address bar is currently focused
+	 */
 	_this.isAddressBarFocused = function() {
 		return (addressBarEl === document.activeElement);
 	};
 
+	/**
+	 * updates URl string in address bar input element
+	 *
+	 * @param url {string} new url
+	 */
 	_this.updateURL = function(url) {
 
 		if (url && url.startsWith("file://")) {

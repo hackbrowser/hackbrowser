@@ -48,7 +48,7 @@ function SearchBox(tabView) {
 	};
 
 	/**
-	 * attach event handlers for menu bar buttons
+	 * attach event handlers for 'find-in-page' functionality
 	 */
 	var attachEventHandlers = function() {
 		searchInputEl.addEventListener("keyup", onSearchInputKeyUp);
@@ -58,6 +58,11 @@ function SearchBox(tabView) {
 		tabView.getWebViewEl().addEventListener("found-in-page", onFoundInPage);
 	};
 
+	/**
+	 * event handler for search box key up
+	 *
+	 * @param e {event} keyup event object
+	 */
 	var onSearchInputKeyUp = function(e) {
 		searchVal = searchInputEl.value;
 
@@ -85,6 +90,11 @@ function SearchBox(tabView) {
 		}
 	};
 
+	/**
+	 * event handler for 'prev' button click
+	 *
+	 * @param e {event} click event
+	 */
 	var onPrevBtnClick = function(e) {
 		tabView.getWebViewEl().findInPage(searchVal, {
 			forward: false,
@@ -94,6 +104,11 @@ function SearchBox(tabView) {
 		e.preventDefault();
 	};
 
+	/**
+	 * event handler for 'next' button click
+	 *
+	 * @param e {event} click event
+	 */
 	var onNextBtnClick = function(e) {
 		tabView.getWebViewEl().findInPage(searchVal, {
 			findNext: true
@@ -102,12 +117,22 @@ function SearchBox(tabView) {
 		e.preventDefault();
 	};
 
+	/**
+	 * event handler for 'close' button click
+	 *
+	 * @param e {event} click event
+	 */
 	var onCloseBtnClick = function(e) {
 		e.preventDefault();
 
 		_this.close();
 	};
 
+	/**
+	 * event handler for 'found-in-page' webContents event
+	 *
+	 * @param e {event} 'found-in-page' event
+	 */
 	var onFoundInPage = function(e) {
 		if (e.result.hasOwnProperty("activeMatchOrdinal")) {
 			updateOrdinalIndex(e.result.activeMatchOrdinal);
@@ -118,10 +143,20 @@ function SearchBox(tabView) {
 		}
 	};
 
+	/**
+	 * update ordinal index value on 'find-in-page' box
+	 *
+	 * @param ordinalIndex {integer}  new ordinal index
+	 */
 	var updateOrdinalIndex = function(ordinalIndex) {
 		ordinalIndexEl.innerHTML = ordinalIndex;
 	};
 
+	/**
+	 * update total match count value on 'find-in-page' box
+	 *
+	 * @param totalMatchCount {integer}  new total match count
+	 */
 	var updateTotalMatchCount = function(totalMatchCount) {
 		if (totalMatchCount === 0) {
 			matchDisplayEl.classList.add(NO_MATCH_CLASS);
@@ -132,10 +167,16 @@ function SearchBox(tabView) {
 		totalCountEl.innerHTML = totalMatchCount;
 	};
 
+	/**
+	 * show ordinal index and total match count
+	 */
 	var showFindResult = function() {
 		matchDisplayEl.style.display = "block";
 	};
 
+	/**
+	 * hide ordinal index and total match count
+	 */
 	var hideFindResult = function() {
 		matchDisplayEl.style.display = "none";
 	};
@@ -144,10 +185,18 @@ function SearchBox(tabView) {
 	/* ====================================
 	 public methods
 	 ====================================== */
+	/**
+	 * getter for 'find-in-page' wrapper element
+	 *
+	 * @returns {DOMElement} 'find-in-page' wrapper element
+	 */
 	_this.getSearchWrapperEl = function() {
 		return searchWrapperEl;
 	};
 
+	/**
+	 * open 'find-in-page' box
+	 */
 	_this.open = function() {
 		// temporarily set flag to prevent find-in-page running
 		// when opening up the search box
@@ -158,6 +207,9 @@ function SearchBox(tabView) {
 		searchInputEl.focus();
 	};
 
+	/**
+	 * close 'find-in-page' box
+	 */
 	_this.close = function() {
 		// stop find
 		tabView.getWebViewEl().stopFindInPage("clearSelection");

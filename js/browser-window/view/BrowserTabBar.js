@@ -2,6 +2,7 @@
 
 /**
  * Browser tabs and related controls
+ * BrowserTabBar contains one or more BrowserTab objects
  *
  * @param hackBrowserWindow
  * @constructor
@@ -77,7 +78,7 @@ function BrowserTabBar(hackBrowserWindow) {
 	 public methods
 	 ====================================== */
 	/**
-	 * Create and add a new tab
+	 * create and add a new tab
 	 */
 	_this.createTab = function(tabViewId, title) {
 		var newTab = new BrowserTab(hackBrowserWindow, tabViewId, title);
@@ -102,6 +103,11 @@ function BrowserTabBar(hackBrowserWindow) {
 		return newTab;
 	};
 
+	/**
+	 * remove a specific tab by tabViewId
+	 *
+	 * @param tabViewId {string} ID of TabView object to be removed from tabs
+	 */
 	_this.removeTab = function(tabViewId) {
 		var tabEl = browserTabsWrapperEl.querySelector("[data-webview-id='" + tabViewId + "']");
 		var tabIndex = Array.prototype.indexOf.call(browserTabsWrapperEl.querySelectorAll(".tab"), tabEl);
