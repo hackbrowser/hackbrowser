@@ -89,11 +89,17 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 
 	var handleDragStart = function(e) {
 		console.log("handleDragStart");
-		console.log(e);
 
-		e.dataTransfer.setData("tabLeft", e.srcElement.style.left);
+		// retrieve left position of the browser tab element
+		var tabStyle = window.getComputedStyle(e.target, null);
+		var leftPosition = parseInt(tabStyle.getPropertyValue("left"), 10);
 
-		console.log(e.dataTransfer.items);
+		var dragTransparentImage = document.createElement("img");
+		dragTransparentImage.width = 0;
+		dragTransparentImage.height = 0;
+
+		e.dataTransfer.setData("text/plain", leftPosition);
+		e.dataTransfer.setDragImage(dragTransparentImage, 0, 0);
 
 		// since dragstart event prevents click events,
 		// the tab is not activated until dragend event occurs
@@ -104,32 +110,34 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 	var handleDrag = function(e) {
 		console.log("handleDrag");
 
-		console.log(e);
-	};
+		e.target.style.left = e.clientX + "px";
 
-	var handleDragEnter = function(e) {
-		console.log("handleDragEnter");
-		console.log(e);
-	};
-
-	var handleDragOver = function(e) {
-		console.log("handleDragOver");
-		console.log(e);
-	};
-
-	var handleDragLeave = function(e) {
-		console.log("handleDragLeave");
-		console.log(e);
+		// console.log(e);
 	};
 
 	var handleDrop = function(e) {
-		console.log("handleDrop");
-		console.log(e);
+		// console.log("handleDrop");
+		// console.log(e);
+	};
+
+	var handleDragEnter = function(e) {
+		// console.log("handleDragEnter");
+		// console.log(e);
+	};
+
+	var handleDragOver = function(e) {
+		// console.log("handleDragOver");
+		// console.log(e);
+	};
+
+	var handleDragLeave = function(e) {
+		// console.log("handleDragLeave");
+		// console.log(e);
 	};
 
 	var handleDragEnd = function(e) {
-		console.log("handleDragEnd");
-		console.log(e);
+		// console.log("handleDragEnd");
+		// console.log(e);
 	};
 
 	var activateSelf = function() {

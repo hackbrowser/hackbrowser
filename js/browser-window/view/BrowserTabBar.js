@@ -39,6 +39,14 @@ function BrowserTabBar(hackBrowserWindow) {
 
 			e.preventDefault();
 		});
+
+
+		browserTabsWrapperEl.addEventListener("drop", handleDrop, false);
+	};
+
+	var handleDrop = function(e) {
+		console.log(e);
+
 	};
 
 	/**
