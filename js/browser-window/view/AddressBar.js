@@ -27,33 +27,46 @@ function AddressBar(hackBrowserWindow) {
 	 * attach event handlers for menu bar buttons
 	 */
 	var attachEventHandlers = function() {
-		addressBarEl.addEventListener("click", function(e) {
-			// select text in input box
-			// TODO: only select if the input is not currently active
-			this.select();
+		addressBarEl.addEventListener("click", handleAddressBarClick);
+		addressBarEl.addEventListener("keypress", handleAddressBarKeyPress);
+	};
 
+	/**
+	 * handle address bar click event
+	 *
+	 * @param e
+	 */
+	var handleAddressBarClick = function(e) {
+		// select text in input box
+		// TODO: only select if the input is not currently active
+		this.select();
+
+		e.preventDefault();
+	};
+
+	/**
+	 * handle address bar keypress event
+	 *
+	 * @param e
+	 */
+	var handleAddressBarKeyPress = function(e) {
+		// Enter key
+		if (e.charCode === 13) {
 			e.preventDefault();
-		});
 
-		addressBarEl.addEventListener("keypress", function(e) {
-			// Enter key
-			if (e.charCode === 13) {
-				e.preventDefault();
+			// update url value
+			var urlValue = addressBarEl.value;
 
-				// update url value
-				var urlValue = addressBarEl.value;
-
-				if (urlValue.trim() === "") {
-					// do nothing
-					return;
-				}
-
-				// focus out of current input element
-				document.activeElement.blur();
-
-				hackBrowserWindow.navigateTo(urlValue);
+			if (urlValue.trim() === "") {
+				// do nothing
+				return;
 			}
-		});
+
+			// focus out of current input element
+			document.activeElement.blur();
+
+			hackBrowserWindow.navigateTo(urlValue);
+		}
 	};
 
 

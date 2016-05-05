@@ -2,5 +2,7 @@
   "name": "hackbrowser",
   "version": "0.0.2",
   "main": "main.js",
-  "dependencies": {}
+  "dependencies": {
+    "nedb": "^1.8.0"
+  }
 }

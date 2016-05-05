@@ -20,13 +20,6 @@ function IPCRendererProcessHandler(hackBrowserWindow) {
 	 private methods
 	 ====================================== */
 	var init = function() {
-		attachEventHandlers();
-	};
-
-	/**
-	 * attach event handlers for messages from main process IPC
-	 */
-	var attachEventHandlers = function() {
 	};
 
 
@@ -47,6 +40,11 @@ function IPCRendererProcessHandler(hackBrowserWindow) {
 		ipcRenderer.once("newWindowOpenResponse", function(e, result) {
 			callback(result);
 		});
+	};
+
+
+	_this.addURLtoHistory = function(url, callback) {
+
 	};
 
 	init();

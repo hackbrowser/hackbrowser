@@ -12,6 +12,8 @@ function SearchBox(tabView) {
 	/* ====================================
 	 private member variables
 	 ====================================== */
+	const NO_MATCH_CLASS = "no-match";
+
 	var searchWrapperEl;
 	var searchInputEl;
 	var matchDisplayEl;
@@ -23,7 +25,6 @@ function SearchBox(tabView) {
 	var searchVal;
 	var isInputFocusEvent;
 
-	var NO_MATCH_CLASS = "no-match";
 
 	/* ====================================
 	 private methods
