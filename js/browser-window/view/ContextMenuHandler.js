@@ -23,16 +23,7 @@ function ContextMenuHandler(hackBrowserWindow) {
 	 private methods
 	 ====================================== */
 	var init = function() {
-		webViewWrapperEl = document.getElementById("webview-wrapper")
-
-		// TODO: retrieve event from injected Javascript to check if right-click was performed on an image
-		// attachEventHandlers();
-	};
-
-	/**
-	 * attach event handlers
-	 */
-	var attachEventHandlers = function() {
+		webViewWrapperEl = document.getElementById("webview-wrapper");
 	};
 
 	/**
@@ -101,7 +92,7 @@ function ContextMenuHandler(hackBrowserWindow) {
 			{
 				label: "Open link in new window",
 				click: function(item, focusedWindow) {
-					hackBrowserWindow.getIPCHandler().openNewWindow(link);
+					hackBrowserWindow.getIPCHandler().requestNewWindowOpen(link);
 				}
 			},
 			{
@@ -125,7 +116,7 @@ function ContextMenuHandler(hackBrowserWindow) {
 	/**
 	 * dispatch an action based on the passed object containing right click event information
 	 *
-	 * @param e {object} details of context menu object
+	 * @param msgObject {object} details of context menu object
 	 */
 	_this.handleWebViewContextMenu = function(msgObject) {
 		console.log("handleWebViewContextMenu()");

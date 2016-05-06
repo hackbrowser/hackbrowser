@@ -159,6 +159,15 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		// clear loading icon
 		browserTab.stopLoading();
 
+		// notify navigation details to main process
+		var navigationInfo = {
+			url: webViewURL,
+			title: webViewTitle
+		};
+
+		// save URL to navigation history
+		hackBrowserWindow.getNavigationHistoryHandler().addNavigationHistory(navigationInfo, function() {});
+
 		if (hackBrowserWindow.getActiveTabView() === _this) {
 			hackBrowserWindow.getMenuBar().showReloadBtn();
 		}
@@ -230,14 +239,6 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		console.log(e);
 
 		webViewURL = e.url;
-
-		var navigationInfo = {
-			url: webViewURL,
-			title: webViewTitle
-		};
-
-		// save URL to navigation history
-		hackBrowserWindow.getNavigationHistoryHandler().addNavigationHistory(navigationInfo, function() {});
 	};
 
 	var handleDidNavigateInPage = function(e) {

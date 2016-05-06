@@ -34,13 +34,15 @@ HackBrowserWindowManager.openNewWindow = function(url) {
 			frame: true
 		});
 
+		newWindow.initialURL = url;
+
 		// load the HTML file for browser window
 		newWindow.loadURL("file://" + __app.basePath + "/html-pages/browser-window.html");
 
 		// Open the DevTools (debugging)
 		newWindow.webContents.openDevTools();
-
 		windowList[newWindow.id] = newWindow;
+
 		_this.attachEventHandlers(newWindow);
 
 		// increase window count
@@ -66,7 +68,7 @@ HackBrowserWindowManager.attachEventHandlers = function(browserWindow) {
 		PersistentStorage.setItem("browserWindowSize", sizeObject);
 	});
 
-	// remove the window from windowList and remove reference so that GC clear is from memory
+	// remove the window from windowList and remove reference so that GC can clear it from memory
 	browserWindow.on('closed', function() {
 		if (windowList.hasOwnProperty(windowId)) {
 			console.log("deleting window " + windowId);

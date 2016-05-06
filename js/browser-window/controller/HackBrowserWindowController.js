@@ -15,7 +15,6 @@ function HackBrowserWindowController() {
 	 private member variables
 	 ====================================== */
 	var ipcHandler;
-
 	var menuBar;
 	var browserTabBar;
 	var addressBar;
@@ -44,7 +43,9 @@ function HackBrowserWindowController() {
 		openTabViewCount = 0;
 		tabList = {};
 
-		_this.addNewTab("http://www.google.com/", true);
+		var initialURL = remote.getCurrentWindow().initialURL ? remote.getCurrentWindow().initialURL : "http://www.google.com";
+
+		_this.addNewTab(initialURL, true);
 
 		attachEventHandlers();
 	};

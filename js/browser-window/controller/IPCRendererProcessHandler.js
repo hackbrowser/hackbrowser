@@ -12,34 +12,17 @@ function IPCRendererProcessHandler(hackBrowserWindow) {
 	var _this = this;
 
 	/* ====================================
-	 private member variables
-	 ====================================== */
-
-
-	/* ====================================
-	 private methods
-	 ====================================== */
-	var init = function() {
-	};
-
-
-	/* ====================================
 	 public methods
 	 ====================================== */
-
 	/**
 	 * send a request to open a new HackBrowser window
 	 *
 	 * @param url {string} url to open with new window
-	 * @param callback {function} callback with success/fail result
 	 */
-	_this.requestNewWindowOpen = function(url, callback) {
+	_this.requestNewWindowOpen = function(url) {
 		console.log("IPCRendererProcessHandler.requestNewWindowOpen()");
 
 		ipcRenderer.send("newWindowOpenRequest", url);
-		ipcRenderer.once("newWindowOpenResponse", function(e, result) {
-			callback(result);
-		});
 	};
 
 
@@ -51,6 +34,4 @@ function IPCRendererProcessHandler(hackBrowserWindow) {
 			callback(result);
 		});
 	};
-
-	init();
 }

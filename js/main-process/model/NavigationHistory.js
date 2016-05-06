@@ -6,9 +6,7 @@ const db = new Datastore({ filename: GLOBAL.__app.dataPath + '/navigation-histor
 var NavigationHistory = {};
 
 NavigationHistory.addNavigationHistory = function(navigationInfo, callback) {
-	var navigationInfoObj = JSON.parse(navigationInfo);
-
-	db.insert(navigationInfoObj, function(err, newDoc) {
+	db.insert(navigationInfo, function(err, newDoc) {
 		if (err) {
 			callback(err);
 		} else {

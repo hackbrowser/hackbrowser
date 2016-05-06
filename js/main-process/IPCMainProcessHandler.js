@@ -1,6 +1,6 @@
 'use strict';
 
-const navigationHistoryHandler = require(GLOBAL.__app.basePath + "/js/main-process/NavigationHistory");
+const navigationHistoryHandler = require(GLOBAL.__app.basePath + "/js/main-process/model/NavigationHistory");
 
 /**
  * handles all IPC communication with the renderer processes (browser windows)
@@ -36,6 +36,8 @@ function IPCMainProcessHandler(mainProcessController) {
 	};
 	
 	var handleAddNavigationHistoryRequest = function(event, navigationInfo) {
+		navigationInfo = JSON.parse(navigationInfo);
+
 		navigationHistoryHandler.addNavigationHistory(navigationInfo, function(err) {
 			if (err) {
 				event.sender.send("newNavigationHistoryResponse", false);
