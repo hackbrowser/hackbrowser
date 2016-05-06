@@ -19,6 +19,7 @@ function HackBrowserWindowController() {
 	var menuBar;
 	var browserTabBar;
 	var addressBar;
+	var navigationHistoryHandler;
 	var contextMenuHandler;
 	var activeTabView;
 	var createdTabViewCount;
@@ -37,6 +38,7 @@ function HackBrowserWindowController() {
 		menuBar = new NavigationControls(_this);
 		browserTabBar = new BrowserTabBar(_this);
 		addressBar = new AddressBar(_this);
+		navigationHistoryHandler = new NavigationHistoryHandler(_this);
 		contextMenuHandler = new ContextMenuHandler(_this);
 		createdTabViewCount = 0;
 		openTabViewCount = 0;
@@ -208,7 +210,6 @@ function HackBrowserWindowController() {
 		return contextMenuHandler;
 	};
 
-
 	/**
 	 * increment total number of created tabs including closed ones
 	 * this method should be exposed publicly in case a new tab is created programmatically
@@ -303,6 +304,13 @@ function HackBrowserWindowController() {
 	 */
 	_this.getIPCHandler = function() {
 		return ipcHandler;
+	};
+
+	/**
+	 * getter for navigation history handler
+	 */
+	_this.getNavigationHistoryHandler = function() {
+		return navigationHistoryHandler;
 	};
 	
 	init();

@@ -1,5 +1,7 @@
 'use strict';
 
+const navigationHistoryHandler = require(GLOBAL.__app.basePath + "/js/main-process/NavigationHistory");
+
 /**
  * handles all IPC communication with the renderer processes (browser windows)
  *
@@ -23,13 +25,24 @@ function IPCMainProcessHandler(mainProcessController) {
 	};
 
 	var attachEventHandlers = function() {
-		ipcMain.on("newWindowOpenRequest", handleNewWindowOpenRequest);
+		ipcMain.on("newWindowOpenRequest", handleNewWindowOpenRequest); 
+		ipcMain.on("addNavigationHistoryRequest", handleAddNavigationHistoryRequest);
 	};
 
 	var handleNewWindowOpenRequest = function(event, url) {
 		windowManager.openNewWindow(url);
 
 		event.sender.send("newWindowOpenResponse", true);
+	};
+	
+	var handleAddNavigationHistoryRequest = function(event, navigationInfo) {
+		navigationHistoryHandler.addNavigationHistory(navigationInfo, function(err) {
+			if (err) {
+				event.sender.send("newNavigationHistoryResponse", false);
+			} else {
+				event.sender.send("newNavigationHistoryResponse", true);
+			}
+		});
 	};
 
 	init();

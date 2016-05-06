@@ -9,13 +9,13 @@ const PersistentStorage = require(__app.basePath + "/js/common/PersistentStorage
  *
  * @constructor
  */
-function HackBrowserWindowManager(mainProcessController) {
-	var _this = this;
-	this.windowList = {};
-	this.createdWindowCount = 0;
-}
+var HackBrowserWindowManager = {};
 
-HackBrowserWindowManager.prototype.openNewWindow = function(url) {
+var windowList = {};
+var createdWindowCount = 0;
+
+// TODO: navigate to specified url
+HackBrowserWindowManager.openNewWindow = function(url) {
 	var _this = this;
 
 	// get last browser size
@@ -40,15 +40,15 @@ HackBrowserWindowManager.prototype.openNewWindow = function(url) {
 		// Open the DevTools (debugging)
 		newWindow.webContents.openDevTools();
 
-		_this.windowList[newWindow.id] = newWindow;
+		windowList[newWindow.id] = newWindow;
 		_this.attachEventHandlers(newWindow);
 
 		// increase window count
-		_this.createdWindowCount++;
+		createdWindowCount++;
 	});
 };
 
-HackBrowserWindowManager.prototype.attachEventHandlers = function(browserWindow) {
+HackBrowserWindowManager.attachEventHandlers = function(browserWindow) {
 	var _this = this;
 
 	var windowId = browserWindow.id;
@@ -68,10 +68,10 @@ HackBrowserWindowManager.prototype.attachEventHandlers = function(browserWindow)
 
 	// remove the window from windowList and remove reference so that GC clear is from memory
 	browserWindow.on('closed', function() {
-		if (_this.windowList.hasOwnProperty(windowId)) {
+		if (windowList.hasOwnProperty(windowId)) {
 			console.log("deleting window " + windowId);
 
-			delete _this.windowList[windowId];
+			delete windowList[windowId];
 			browserWindow = null;
 		}
 	});

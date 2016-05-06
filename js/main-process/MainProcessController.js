@@ -8,14 +8,14 @@ const path = require("path");
 const dialog = require("dialog");
 const EventEmitter = require("events").EventEmitter;
 const session = require("electron").session;
-const HackBrowserWindowManager = require(GLOBAL.__app.basePath + "/js/main-process/HackBrowserWindowManager");
+
+const hackBrowserWindowManager = require(GLOBAL.__app.basePath + "/js/main-process/HackBrowserWindowManager");
 const GlobalShortcutHandler = require(GLOBAL.__app.basePath + "/js/main-process/GlobalShortcutHandler");
 const IPCMainProcessHandler = require(GLOBAL.__app.basePath + "/js/main-process/IPCMainProcessHandler");
 
 function MainProcessController() {
 	var _this = this;
 
-	var hackBrowserWindowManager;
 	var ipcHandler;
 	var mainProcessEventEmitter;
 
@@ -95,8 +95,6 @@ function MainProcessController() {
 	var startBrowser = function() {
 		// create a shared EventEmitter for windowManager to communicate with ipcHandler
 		mainProcessEventEmitter = new EventEmitter();
-
-		hackBrowserWindowManager = new HackBrowserWindowManager(_this);
 		ipcHandler = new IPCMainProcessHandler(_this);
 
 		var shortcutHandler = new GlobalShortcutHandler(hackBrowserWindowManager);

@@ -230,6 +230,14 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		console.log(e);
 
 		webViewURL = e.url;
+
+		var navigationInfo = {
+			url: webViewURL,
+			title: webViewTitle
+		};
+
+		// save URL to navigation history
+		hackBrowserWindow.getNavigationHistoryHandler().addNavigationHistory(navigationInfo, function() {});
 	};
 
 	var handleDidNavigateInPage = function(e) {

@@ -43,8 +43,13 @@ function IPCRendererProcessHandler(hackBrowserWindow) {
 	};
 
 
-	_this.addURLtoHistory = function(url, callback) {
+	_this.requestAddNavigationHistory = function(navigationInfo, callback) {
+		console.log("IPCRendererProcessHandler.addNavigationHistory()");
 
+		ipcRenderer.send("addNavigationHistoryRequest", JSON.stringify(navigationInfo));
+		ipcRenderer.once("addNavigationHistoryResponse", function(e, result) {
+			callback(result);
+		});
 	};
 
 	init();
