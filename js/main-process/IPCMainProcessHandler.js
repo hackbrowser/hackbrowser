@@ -27,6 +27,7 @@ function IPCMainProcessHandler(mainProcessController) {
 	var attachEventHandlers = function() {
 		ipcMain.on("newWindowOpenRequest", handleNewWindowOpenRequest); 
 		ipcMain.on("addNavigationHistoryRequest", handleAddNavigationHistoryRequest);
+		ipcMain.on("autoCompleteEntriesRequest", handleAutoCompleteEntriesRequest);
 	};
 
 	var handleNewWindowOpenRequest = function(event, url) {
@@ -44,6 +45,12 @@ function IPCMainProcessHandler(mainProcessController) {
 			} else {
 				event.sender.send("newNavigationHistoryResponse", true);
 			}
+		});
+	};
+
+	var handleAutoCompleteEntriesRequest = function(event, searchTerm) {
+		navigationHistoryHandler.getAutoCompleteList(searchTerm, function(autoCompleteEntries) {
+			event.sender.send("autoCompleteEntriesResponse", JSON.stringify(autoCompleteEntries));
 		});
 	};
 

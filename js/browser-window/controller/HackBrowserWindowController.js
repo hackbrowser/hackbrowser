@@ -18,6 +18,7 @@ function HackBrowserWindowController() {
 	var menuBar;
 	var browserTabBar;
 	var addressBar;
+	var autoCompleteBox;
 	var navigationHistoryHandler;
 	var contextMenuHandler;
 	var activeTabView;
@@ -37,6 +38,7 @@ function HackBrowserWindowController() {
 		menuBar = new NavigationControls(_this);
 		browserTabBar = new BrowserTabBar(_this);
 		addressBar = new AddressBar(_this);
+		autoCompleteBox = new AutoCompleteBox(_this);
 		navigationHistoryHandler = new NavigationHistoryHandler(_this);
 		contextMenuHandler = new ContextMenuHandler(_this);
 		createdTabViewCount = 0;
@@ -56,9 +58,11 @@ function HackBrowserWindowController() {
 			activeTabView.getSearchBox().open();
 		});
 
-		// temporarily refresh browser page for debugging
+		// TODO: temporarily refresh browser page for debugging
 		key('ctrl+r', function() {
 			console.log("reloading browser page");
+
+			document.location.reload(true);
 		});
 
 		key('esc', function() {
@@ -312,6 +316,13 @@ function HackBrowserWindowController() {
 	 */
 	_this.getNavigationHistoryHandler = function() {
 		return navigationHistoryHandler;
+	};
+
+	/**
+	 * getter for auto complete box
+	 */
+	_this.getAutoCompleteBox = function() {
+		return autoCompleteBox; 
 	};
 	
 	init();

@@ -34,4 +34,16 @@ function IPCRendererProcessHandler(hackBrowserWindow) {
 			callback(result);
 		});
 	};
+
+	_this.requestAutoCompleteEntries = function(keyword, callback) {
+		console.log("IPCRendererProcessHandler.requestAutoCompleteEntries()");
+
+		ipcRenderer.send("autoCompleteEntriesRequest", keyword);
+		ipcRenderer.once("autoCompleteEntriesResponse", function(e, autoCompleteEntries) {
+			autoCompleteEntries = JSON.parse(autoCompleteEntries);
+			
+
+			callback(autoCompleteEntries);
+		});
+	};
 }

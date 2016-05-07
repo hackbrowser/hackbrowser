@@ -52,7 +52,6 @@
 			// srcElement may not be a link element (<a>) as the inner part
 			// of the <a> element have other nodes such as <strong> or <img>
 			// therefore, loop through bubbling path to see if link element exists
-			// TODO: add other information for screen capture (offsetX and offsetY)
 			for (var i = 0; i < e.path.length; i++) {
 				if (e.path[i].nodeName === 'A') {
 					var linkEl = e.path[i];
@@ -104,24 +103,20 @@
 	// Attach an event handler for regular clicks
 	document.addEventListener('click', function(e) {
 		handleMouseEvent(e);
-		console.log(e);
 	}); // END: document.addEventListener('click', function(e) {}
 
 	// Attach an event handler for right clicks
 	document.addEventListener('contextmenu', function(e) {
 		handleMouseEvent(e);
-		console.log(e);
 	}); // END: document.addEventListener('contextmenu', function(e) {}
 
 	// Attach event handlers for focus/blur events
 	// the third parameter enforces focus/blur events to bubble
 	document.addEventListener('focus', function(e) {
 		handleMouseEvent(e);
-		console.log(e);
 	}, true);
 
 	document.addEventListener('blur', function(e) {
 		handleMouseEvent(e);
-		console.log(e);
 	}, true);
 })();

@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Adress bar and related controls
+ * Address bar and related controls
  *
  * @param hackBrowserWindow
  * @constructor
@@ -28,7 +28,7 @@ function AddressBar(hackBrowserWindow) {
 	 */
 	var attachEventHandlers = function() {
 		addressBarEl.addEventListener("click", handleAddressBarClick);
-		addressBarEl.addEventListener("keypress", handleAddressBarKeyPress);
+		addressBarEl.addEventListener("keyup", handleAddressBarKeyUp);
 	};
 
 	/**
@@ -49,13 +49,13 @@ function AddressBar(hackBrowserWindow) {
 	 *
 	 * @param e
 	 */
-	var handleAddressBarKeyPress = function(e) {
+	var handleAddressBarKeyUp = function(e) {
+		// update url value
+		var urlValue = addressBarEl.value;
+
 		// Enter key
 		if (e.charCode === 13) {
 			e.preventDefault();
-
-			// update url value
-			var urlValue = addressBarEl.value;
 
 			if (urlValue.trim() === "") {
 				// do nothing
@@ -66,6 +66,12 @@ function AddressBar(hackBrowserWindow) {
 			document.activeElement.blur();
 
 			hackBrowserWindow.navigateTo(urlValue);
+		}
+
+		else {
+			if (urlValue.trim() !== "") {
+				hackBrowserWindow.getAutoCompleteBox().update(urlValue);
+			}
 		}
 	};
 

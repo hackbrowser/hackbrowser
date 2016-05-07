@@ -6,14 +6,15 @@ const db = new Datastore({ filename: GLOBAL.__app.dataPath + '/navigation-histor
 var NavigationHistory = {};
 
 NavigationHistory.addNavigationHistory = function(navigationInfo, callback) {
+	// add navigation history timestamp
+	navigationInfo.date = new Date();
+
 	db.insert(navigationInfo, function(err, newDoc) {
 		if (err) {
 			callback(err);
 		} else {
 			callback();
 		}
-
-		console.log(newDoc);
 	});
 };
 
@@ -26,8 +27,16 @@ NavigationHistory.clearNavigationHistory = function(callback) {
 	db.remove({}, callback);
 };
 
-NavigationHistory.getAutoCompleteList = function(searchTerm) {
+NavigationHistory.getAutoCompleteList = function(searchTerm, callback) {
+	var searchRegEx = new RegExp(searchTerm);
 
+	db.find({
+		url: searchRegEx
+	})
+		.limit(10)
+		.exec(function(err, autoCompleteEntries) {
+			callback(autoCompleteEntries);
+		});
 };
 
 module.exports = NavigationHistory;

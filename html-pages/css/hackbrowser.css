@@ -170,11 +170,8 @@ nav#navtabs:after {
 
 #address-bar-wrapper {
 	float: left;
-	padding-top: 4px;
-	padding-bottom: 4px;
+	padding: 4px 36px 4px 96px;
 	width: 100%;
-	padding-left: 96px;
-	padding-right: 36px;
 	-webkit-box-sizing: border-box;
 }
 
@@ -188,6 +185,55 @@ input#address-bar {
 	outline: none;
 }
 
+#auto-complete-box {
+	display: none;
+	background: #fff;
+	font-size: 13px;
+	line-height: 13px;
+	padding: 3px 36px 3px 96px;
+	border-bottom: 1px solid #aaa;
+	box-shadow: 0 4px 2px -2px #ccc;
+}
+
+	#auto-complete-box .item {
+		padding: 8px 6px;
+		cursor: default;
+	}
+
+		#auto-complete-box .item .url {
+			color: #6cbd30;
+		}
+
+		#auto-complete-box .item .title {
+			color: #bbb;
+		}
+
+		#auto-complete-box .item:hover {
+			background: #ffffcc;
+		}
+
+			#auto-complete-box .item:hover .url {
+				color: #3c8d00;
+			}
+
+			#auto-complete-box .item:hover .title {
+				color: #777;
+			}
+
+		#auto-complete-box .item.selected {
+			color: #ccffff;
+			background: #6cbd30;
+		}
+
+			#auto-complete-box .item.selected .url {
+				color: #fff;
+			}
+
+			#auto-complete-box .item.selected .title {
+				color: #ffffcc;
+			}
+
+
 
 /* Tabview */
 #webview-container {
@@ -196,6 +242,7 @@ input#address-bar {
 	padding-top: 64px;
 	padding-bottom: 48px;
 	box-sizing: border-box;
+	border-bottom: 1px solid #aaa;
 }
 
 .webview-wrapper {
@@ -303,6 +350,7 @@ input#address-bar {
 		right: 9px;
 	}
 
+
 /* ===============================================
 	common classes
 =============================================== */
@@ -375,4 +423,10 @@ input#address-bar {
 		-webkit-transform: rotate(360deg);
 		transform: rotate(360deg);
 	}
+}
+
+.clear {
+	content: '';
+	display: block;
+	clear: both;
 }
