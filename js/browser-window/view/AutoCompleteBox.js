@@ -13,6 +13,8 @@ function AutoCompleteBox(hackBrowserWindow) {
 	 private member variables
 	 ====================================== */
 	var autoCompleteBoxEl;
+	var autoCompleteEntries;
+	var currentIndex;			// index used for autocomplete entries
 
 
 	/* ====================================
@@ -20,6 +22,7 @@ function AutoCompleteBox(hackBrowserWindow) {
 	 ====================================== */
 	var init = function() {
 		autoCompleteBoxEl = document.getElementById("auto-complete-box");
+		currentIndex = -1;
 
 		attachEventHandlers();
 	};
@@ -30,7 +33,13 @@ function AutoCompleteBox(hackBrowserWindow) {
 	var attachEventHandlers = function() {
 	};
 
-
+	/**
+	 * add an autocomplete item to autocomplete DOM element
+	 *
+	 * @param url
+	 * @param title
+	 * @returns {DOMElement} DOM node of appended item
+	 */
 	var addItem = function(url, title) {
 		var autoCompleteItemInnerHTML = '<span class="url">{{url}}</span> - <span class="title">{{title}}</span>';
 		var itemEl;
@@ -46,61 +55,97 @@ function AutoCompleteBox(hackBrowserWindow) {
 		attachEventListenerToItem(itemEl);
 
 		autoCompleteBoxEl.appendChild(itemEl);
+
+		return itemEl;
 	};
 
 	var attachEventListenerToItem = function(itemEl) {
 		itemEl.addEventListener("click", function(e) {
 			e.preventDefault();
 
-			_this.hide();
+			_this.close();
 
 			hackBrowserWindow.navigateTo(itemEl.dataset.url);
 		});
 	};
 
-	var updateList = function(autoCompleteList) {
+	var render = function() {
 		autoCompleteBoxEl.innerHTML = "";
 
-		for (var i = 0, len = autoCompleteList.length; i < len; i++) {
-			addItem(autoCompleteList[i].url, autoCompleteList[i].title);
+		// if no autocomplete entry exist, close autocomplete box
+		if (autoCompleteEntries.length === 0) {
+			_this.close();
+
+			return;
 		}
 
-		_this.show();
+		for (var i = 0, len = autoCompleteEntries.length; i < len; i++) {
+			var appendedEl = addItem(autoCompleteEntries[i].url, autoCompleteEntries[i].title);
+			console.log(appendedEl);
+
+			autoCompleteEntries[i].el = appendedEl;
+		}
+
+		currentIndex = 0;
+		autoCompleteEntries[currentIndex].el.classList.add("selected");
+
+		_this.open();
+	};
+
+	var focusByIndex = function(newIndex) {
+		autoCompleteEntries[currentIndex].el.classList.remove("selected");
+		autoCompleteEntries[newIndex].el.classList.add("selected");
+
+		hackBrowserWindow.getAddressBar().updateURL(autoCompleteEntries[newIndex].url);
+
+		currentIndex = newIndex;
 	};
 
 
 	/* ====================================
 	 public methods
 	 ====================================== */
-	_this.show = function() {
+	_this.open = function() {
 		autoCompleteBoxEl.style.display = "block";
 	};
 
-	_this.hide = function() {
+	_this.close = function() {
 		autoCompleteBoxEl.style.display = "none";
 	};
 
+
+	_this.navigateDown = function() {
+		console.log("navigateDown()");
+
+		// if index points to last element in autocomplete entries,
+		// do nothing
+		if (currentIndex === autoCompleteEntries.length - 1) {
+			// do nothing
+			return;
+		}
+
+		focusByIndex(currentIndex + 1);
+	};
+
+	_this.navigateUp = function() {
+		console.log("navigateUp()");
+
+		// if index points to the first element in autocomplete entries,
+		// do nothing
+		if (currentIndex === 0) {
+			// do nothing
+			return;
+		}
+
+		focusByIndex(currentIndex - 1);
+	};
+
 	_this.update = function(searchTerm) {
-		hackBrowserWindow.getIPCHandler().requestAutoCompleteEntries(searchTerm, function(autoCompleteEntries) {
-			updateList(autoCompleteEntries);
+		hackBrowserWindow.getIPCHandler().requestAutoCompleteEntries(searchTerm, function(newAutoCompleteEntries) {
+			autoCompleteEntries = newAutoCompleteEntries;
+			render();
 		});
 	};
 
 	init();
-
-
-	updateList([
-		{
-			url: "http://www.facebook.com",
-			title: "Facebook - connect the world"
-		},
-		{
-			url: "http://www.theverge.com",
-			title: "Verge"
-		},
-		{
-			url: "http://www.hackbrowser.com",
-			title: "A hackable browser written in Javascript for the masses"
-		}
-	]);
 }

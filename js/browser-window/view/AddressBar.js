@@ -29,6 +29,7 @@ function AddressBar(hackBrowserWindow) {
 	var attachEventHandlers = function() {
 		addressBarEl.addEventListener("click", handleAddressBarClick);
 		addressBarEl.addEventListener("keyup", handleAddressBarKeyUp);
+		addressBarEl.addEventListener("focusout", handleAddressBarFocusOut);
 	};
 
 	/**
@@ -53,8 +54,11 @@ function AddressBar(hackBrowserWindow) {
 		// update url value
 		var urlValue = addressBarEl.value;
 
-		// Enter key
-		if (e.charCode === 13) {
+		console.log("addressBarKeyUp, charCode: " + e.charCode + ", keyCode: " + e.keyCode);
+		console.log(e);
+
+		// "enter" key
+		if (e.keyCode === 13) {
 			e.preventDefault();
 
 			if (urlValue.trim() === "") {
@@ -68,11 +72,36 @@ function AddressBar(hackBrowserWindow) {
 			hackBrowserWindow.navigateTo(urlValue);
 		}
 
+		// "up" key
+		else if (e.keyCode === 38) {
+			console.log("UP arrow key pressed");
+
+			hackBrowserWindow.getAutoCompleteBox().navigateUp();
+		}
+
+		// "down" key
+		else if (e.keyCode === 40) {
+			console.log("DOWN arrow key pressed");
+
+			hackBrowserWindow.getAutoCompleteBox().navigateDown();
+		}
+
+		// "esc" key
+		else if (e.keyCode === 27) {
+			console.log("ESC key pressed");
+
+			hackBrowserWindow.getAutoCompleteBox().close();
+		}
+
 		else {
 			if (urlValue.trim() !== "") {
 				hackBrowserWindow.getAutoCompleteBox().update(urlValue);
 			}
 		}
+	};
+
+	var handleAddressBarFocusOut = function() {
+		hackBrowserWindow.getAutoCompleteBox().close();
 	};
 
 
@@ -102,6 +131,7 @@ function AddressBar(hackBrowserWindow) {
 	 * @param url {string} new url
 	 */
 	_this.updateURL = function(url) {
+		console.log("AddressBar.updateURL(" + url + ")"); 
 
 		if (url && url.startsWith("file://")) {
 			url = "";

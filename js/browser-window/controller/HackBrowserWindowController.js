@@ -207,15 +207,6 @@ function HackBrowserWindowController() {
 	};
 
 	/**
-	 * getter for ContextMenuHandler
-	 *
-	 * @returns {ContextMenuHandler} handler for context menu actions
-	 */
-	_this.getContextMenuHandler = function() {
-		return contextMenuHandler;
-	};
-
-	/**
 	 * increment total number of created tabs including closed ones
 	 * this method should be exposed publicly in case a new tab is created programmatically
 	 */
@@ -304,11 +295,29 @@ function HackBrowserWindowController() {
 		}
 	};
 
+
+	/**
+	 * getter for ContextMenuHandler
+	 *
+	 * @returns {ContextMenuHandler} handler for context menu actions
+	 */
+	_this.getContextMenuHandler = function() {
+		return contextMenuHandler;
+	};
+
 	/**
 	 * getter for IPC Renderer Process handler
 	 */
 	_this.getIPCHandler = function() {
 		return ipcHandler;
+	};
+
+
+	/**
+	 * getter for address bar handler
+	 */
+	_this.getAddressBar = function() {
+		return addressBar;
 	};
 
 	/**
