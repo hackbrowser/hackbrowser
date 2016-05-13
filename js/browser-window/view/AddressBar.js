@@ -13,22 +13,26 @@ function AddressBar(hackBrowserWindow) {
 	 private member variables
 	 ====================================== */
 	var addressBarEl;
+	var hasFocus;
 
 
 	/* ====================================
 	 private methods
 	 ====================================== */
-	var init = function() {
+	var init = function () {
 		addressBarEl = document.getElementById("address-bar");
+		hasFocus = false;
+
 		attachEventHandlers();
 	};
 
 	/**
 	 * attach event handlers for menu bar buttons
 	 */
-	var attachEventHandlers = function() {
+	var attachEventHandlers = function () {
 		addressBarEl.addEventListener("click", handleAddressBarClick);
 		addressBarEl.addEventListener("keyup", handleAddressBarKeyUp);
+		addressBarEl.addEventListener("focus", handleAddressBarFocus);
 		addressBarEl.addEventListener("focusout", handleAddressBarFocusOut);
 	};
 
@@ -37,11 +41,7 @@ function AddressBar(hackBrowserWindow) {
 	 *
 	 * @param e
 	 */
-	var handleAddressBarClick = function(e) {
-		// select text in input box
-		// TODO: only select if the input is not currently active
-		this.select();
-
+	var handleAddressBarClick = function (e) {
 		e.preventDefault();
 	};
 
@@ -50,7 +50,7 @@ function AddressBar(hackBrowserWindow) {
 	 *
 	 * @param e
 	 */
-	var handleAddressBarKeyUp = function(e) {
+	var handleAddressBarKeyUp = function (e) {
 		// update url value
 		var urlValue = addressBarEl.value;
 
@@ -58,7 +58,7 @@ function AddressBar(hackBrowserWindow) {
 		console.log(e);
 
 		// "enter" key
-		if (e.keyCode === 13) {
+		if (e.keyCode === KeyCode.ENTER) {
 			e.preventDefault();
 
 			if (urlValue.trim() === "") {
@@ -73,21 +73,21 @@ function AddressBar(hackBrowserWindow) {
 		}
 
 		// "up" key
-		else if (e.keyCode === 38) {
+		else if (e.keyCode === KeyCode.UP) {
 			console.log("UP arrow key pressed");
 
 			hackBrowserWindow.getAutoCompleteBox().navigateUp();
 		}
 
 		// "down" key
-		else if (e.keyCode === 40) {
+		else if (e.keyCode === KeyCode.DOWN) {
 			console.log("DOWN arrow key pressed");
 
 			hackBrowserWindow.getAutoCompleteBox().navigateDown();
 		}
 
 		// "esc" key
-		else if (e.keyCode === 27) {
+		else if (e.keyCode === KeyCode.ESC) {
 			console.log("ESC key pressed");
 
 			hackBrowserWindow.getAutoCompleteBox().close();
@@ -100,7 +100,24 @@ function AddressBar(hackBrowserWindow) {
 		}
 	};
 
-	var handleAddressBarFocusOut = function() {
+	/**
+	 * handler to execute when address bar obtains focus
+	 */
+	var handleAddressBarFocus = function () {
+		// select text in input box
+		if (hasFocus === false) {
+			this.select();
+		}
+
+		hasFocus = true;
+	};
+
+	/**
+	 * handler to execute when address bar input loses focus
+	 */
+	var handleAddressBarFocusOut = function () {
+		hasFocus = false;
+
 		hackBrowserWindow.getAutoCompleteBox().close();
 	};
 
@@ -111,7 +128,7 @@ function AddressBar(hackBrowserWindow) {
 	/**
 	 * focus on address bar
 	 */
-	_this.focusOnAddressBar = function() {
+	_this.focusOnAddressBar = function () {
 		addressBarEl.focus();
 	};
 
@@ -121,7 +138,7 @@ function AddressBar(hackBrowserWindow) {
 	 *
 	 * @returns {boolean} whether address bar is currently focused
 	 */
-	_this.isAddressBarFocused = function() {
+	_this.isAddressBarFocused = function () {
 		return (addressBarEl === document.activeElement);
 	};
 
@@ -130,14 +147,16 @@ function AddressBar(hackBrowserWindow) {
 	 *
 	 * @param url {string} new url
 	 */
-	_this.updateURL = function(url) {
-		console.log("AddressBar.updateURL(" + url + ")"); 
+	_this.updateURL = function (url) {
+		console.log("AddressBar.updateURL(" + url + ")");
 
 		if (url && url.startsWith("file://")) {
 			url = "";
 		}
 
-		addressBarEl.value = url;
+		if (hasFocus === false) {
+			addressBarEl.value = url;
+		}
 	};
 
 	init();

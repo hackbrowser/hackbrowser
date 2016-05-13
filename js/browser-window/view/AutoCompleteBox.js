@@ -61,6 +61,8 @@ function AutoCompleteBox(hackBrowserWindow) {
 
 	var attachEventListenerToItem = function(itemEl) {
 		itemEl.addEventListener("click", function(e) {
+			console.log("item Clicked, url = " + itemEl.dataset.url);
+
 			e.preventDefault();
 
 			_this.close();

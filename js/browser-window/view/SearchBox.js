@@ -73,10 +73,10 @@ function SearchBox(tabView) {
 			showFindResult();
 		}
 
-		if (e.keyCode === 27) {				// esc key
+		if (e.keyCode === KeyCode.ESC) {				// esc key
 			_this.close();
-		} else if (e.keyCode === 13) {		// enter key
-			e.preventDefault();
+		} else if (e.keyCode === KeyCode.ENTER) {		// enter key
+			findNext();
 		} else {
 			// if the keyup event is not fired from input focus event
 			// and searchVal is not blank, find in page
@@ -97,12 +97,9 @@ function SearchBox(tabView) {
 	 * @param e {event} click event
 	 */
 	var onPrevBtnClick = function(e) {
-		tabView.getWebViewEl().findInPage(searchVal, {
-			forward: false,
-			findNext: true
-		});
-
 		e.preventDefault();
+
+		findPrev();
 	};
 
 	/**
@@ -111,11 +108,9 @@ function SearchBox(tabView) {
 	 * @param e {event} click event
 	 */
 	var onNextBtnClick = function(e) {
-		tabView.getWebViewEl().findInPage(searchVal, {
-			findNext: true
-		});
-
 		e.preventDefault();
+
+		findNext();
 	};
 
 	/**
@@ -127,6 +122,25 @@ function SearchBox(tabView) {
 		e.preventDefault();
 
 		_this.close();
+	};
+
+	/**
+	 * find previous search result
+	 */
+	var findPrev = function() {
+		tabView.getWebViewEl().findInPage(searchVal, {
+			forward: false,
+			findNext: true
+		});
+	};
+
+	/**
+	 * find next search result
+	 */
+	var findNext = function() {
+		tabView.getWebViewEl().findInPage(searchVal, {
+			findNext: true
+		});
 	};
 
 	/**
