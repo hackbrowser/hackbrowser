@@ -118,7 +118,9 @@ function AddressBar(hackBrowserWindow) {
 	var handleAddressBarFocusOut = function () {
 		hasFocus = false;
 
-		hackBrowserWindow.getAutoCompleteBox().close();
+		setTimeout(function() {
+			hackBrowserWindow.getAutoCompleteBox().close();
+		}, 100);
 	};
 
 
