@@ -1,13 +1,13 @@
 'use strict';
 
 // import {IPCMainProcessHandler} from "./js/main-process/IPCMainProcessHandler";
-const electron = require("electron");
+const electron = require('electron');
 const app = electron.app;
-const fs = require("fs");
-const path = require("path");
-const dialog = require("dialog");
-const EventEmitter = require("events").EventEmitter;
-const session = require("electron").session;
+const fs = require('fs');
+const path = require('path');
+const dialog = require('electron');
+const EventEmitter = require('events').EventEmitter;
+const session = require('electron').session;
 
 const hackBrowserWindowManager = require(GLOBAL.__app.basePath + "/js/main-process/HackBrowserWindowManager");
 const GlobalShortcutHandler = require(GLOBAL.__app.basePath + "/js/main-process/GlobalShortcutHandler");
