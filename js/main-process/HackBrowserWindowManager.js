@@ -1,6 +1,6 @@
 'use strict';
 
-const electron = require("electron");
+const electron = require('electron');
 const BrowserWindow = electron.BrowserWindow;
 const PersistentStorage = require(__app.basePath + "/js/common/PersistentStorage");
 

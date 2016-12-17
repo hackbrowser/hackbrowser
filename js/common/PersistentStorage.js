@@ -1,7 +1,7 @@
 'use strict';
 
-const fs = require("fs");
-const dialog = require("dialog");
+const fs = require('fs');
+const dialog = require('electron');
 const dataPath = GLOBAL.__app.basePath + "/.data/";
 
 /*

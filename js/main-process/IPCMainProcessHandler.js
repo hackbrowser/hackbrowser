@@ -9,7 +9,7 @@ const navigationHistoryHandler = require(GLOBAL.__app.basePath + "/js/main-proce
  * @constructor
  */
 function IPCMainProcessHandler(mainProcessController) {
-	const ipcMain = require("electron").ipcMain;
+	const ipcMain = require('electron').ipcMain;
 
 	var _this = this;
 	var windowManager;
