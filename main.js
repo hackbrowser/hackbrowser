@@ -1,5 +1,7 @@
 'use strict';
 
+const electron = require('electron');
+
 // shared globally
 GLOBAL.__app = {
 	basePath: __dirname,
