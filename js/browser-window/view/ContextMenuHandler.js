@@ -86,7 +86,7 @@ function ContextMenuHandler(hackBrowserWindow) {
 			{
 				label: "Open link in new tab",
 				click: function(item, focusedWindow) {
-					hackBrowserWindow.addNewTab(link);
+					hackBrowserWindow.addNewTab(link, false);
 				}
 			},
 			{
