@@ -1,11 +1,10 @@
 'use strict';
 
-// import {IPCMainProcessHandler} from "./js/main-process/IPCMainProcessHandler";
 const electron = require('electron');
 const app = electron.app;
+const {dialog} = require('electron');
 const fs = require('fs');
 const path = require('path');
-const dialog = require('electron');
 const EventEmitter = require('events').EventEmitter;
 const session = require('electron').session;
 
@@ -56,6 +55,8 @@ function MainProcessController() {
 								message: JSON.stringify(err),
 								detail: JSON.stringify(err)
 							});
+
+							app.quit(); 
 						} else {
 							startBrowser();
 						}
@@ -92,6 +93,9 @@ function MainProcessController() {
 		}
 	};
 
+	/**
+	 * Start the browser and open a new window
+	 */
 	var startBrowser = function() {
 		// create a shared EventEmitter for windowManager to communicate with ipcHandler
 		mainProcessEventEmitter = new EventEmitter();
