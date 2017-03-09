@@ -22,6 +22,7 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	var webViewURL;
 	var webViewContainerEl;
 	var webViewWrapperEl;
+	var webViewStatusBoxEl; 
 	var searchBox;
 	var searchBoxEl;
 	var tabViewId;
@@ -42,9 +43,11 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		webViewWrapperEl = document.createElement("div");
 		webViewWrapperEl.classList.add("webview-wrapper");
 		webViewWrapperEl.style.visibility = "hidden";
+		webViewStatusBoxEl = document.createElement("div"); 
+		webViewStatusBoxEl.classList.add("status-message-box"); 
 		webViewTitle = "New Tab";
 		webViewURL = url;
-		webViewContainerEl = document.getElementById("webview-container");
+		webViewContainerEl = document.getElementById("webview-container"); 
 		isDOMReady = false;
 		tabViewId = "wv-" + hackBrowserWindow.getCreatedTabViewCount();
 
@@ -69,7 +72,8 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		// append the webview element to screen (#webview-container)
 		webViewWrapperEl.appendChild(webViewEl);
 		webViewWrapperEl.appendChild(searchBoxEl);
-		webViewContainerEl.appendChild(webViewWrapperEl);
+		webViewWrapperEl.appendChild(webViewStatusBoxEl); 
+		webViewContainerEl.appendChild(webViewWrapperEl); 
 
 		browserTab = browserTabBar.createTab(tabViewId);
 		attachEventHandlers();
@@ -110,9 +114,10 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		webViewEl.addEventListener("did-navigate", handleDidNavigate);
 		webViewEl.addEventListener("did-navigate-in-page", handleDidNavigateInPage);
 		webViewEl.addEventListener("console-message", handleConsoleMessage);
-		webViewEl.addEventListener("crashed", handleCrash); 
-		webViewEl.addEventListener("gpu-crashed", handleGPUCrash); 
-		webViewEl.addEventListener("plugin-crashed", handlePluginCrash); 
+		webViewEl.addEventListener("crashed", handleCrashed); 
+		webViewEl.addEventListener("gpu-crashed", handleGPUCrashed); 
+		webViewEl.addEventListener("plugin-crashed", handlePluginCrashed); 
+		webViewEl.addEventListener("update-target-url", handleUpdateTargetURL); 
 	};
 
 	var handleLoadCommit = function(e) {
@@ -284,26 +289,44 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 				}
 			} catch(err) {
 				// console.error(err);
-				// since the console-message is not a HackBrowser message, do nothing
+				// since the console-message is not a HackBrowser message, do nothingq
 			}
 		}
 	};
 
-	var handleCrash = function(e) {
+	var handleCrashed = function(e) {
 		console.log("[" + tabViewId + "] crashed");
 		console.log(e);
 	}
 
-	var handleGPUCrash = function(e) {
+	var handleGPUCrashed = function(e) {
 		console.log("[" + tabViewId + "] gpu-crashed");
 		console.log(e);
 	}
 
-	var handlePluginCrash = function(e) {
+	var handlePluginCrashed = function(e) {
 		console.log("[" + tabViewId + "] plugin-crashed");
 		console.log(e); 
 	}
 
+	var handleUpdateTargetURL = function(e) {
+		console.log("[" + tabViewId + "] update-target-url");
+		console.log(e); 
+
+		displayStatusMessage(e.url); 
+	}
+
+	var displayStatusMessage = function(msg) {
+		if (!msg || msg === "") {
+			webViewStatusBoxEl.style.display = "none"; 
+		}
+
+		else {
+			webViewStatusBoxEl.style.display = "block"; 
+		}
+
+		webViewStatusBoxEl.innerHTML = msg; 
+	}; 
 
 
 
@@ -319,7 +342,7 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	_this.navigateTo = function(uri) {
 		var URIInfo = URIParser.parse(uri);
 
-		// if an invalid URl is passed
+		// if an invalid URL is passed
 		if (URIInfo.isValid !== true) {
 			// do nothing
 			return;
@@ -383,7 +406,7 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	};
 
 	/**
-	 * returns current TabView object's string ID
+	 * Returns current TabView object's string ID
 	 *
 	 * @returns {string} current TabView object's string ID
 	 */
@@ -392,7 +415,7 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	};
 
 	/**
-	 * returns <webview> element
+	 * Returns <webview> element
 	 *
 	 * @returns {DOMElement} <webview> element associated with current TabView object
 	 */
@@ -401,7 +424,7 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	};
 
 	/**
-	 * 
+	 * Returns <webview> element's title
 	 * 
 	 * @returns {*}
 	 */
