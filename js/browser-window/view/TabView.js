@@ -41,6 +41,7 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		webViewEl = document.createElement("webview");
 		webViewWrapperEl = document.createElement("div");
 		webViewWrapperEl.classList.add("webview-wrapper");
+		webViewWrapperEl.style.visibility = "hidden";
 		webViewTitle = "New Tab";
 		webViewURL = url;
 		webViewContainerEl = document.getElementById("webview-container");
@@ -109,6 +110,9 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		webViewEl.addEventListener("did-navigate", handleDidNavigate);
 		webViewEl.addEventListener("did-navigate-in-page", handleDidNavigateInPage);
 		webViewEl.addEventListener("console-message", handleConsoleMessage);
+		webViewEl.addEventListener("crashed", handleCrash); 
+		webViewEl.addEventListener("gpu-crashed", handleGPUCrash); 
+		webViewEl.addEventListener("plugin-crashed", handlePluginCrash); 
 	};
 
 	var handleLoadCommit = function(e) {
@@ -284,6 +288,23 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 			}
 		}
 	};
+
+	var handleCrash = function(e) {
+		console.log("[" + tabViewId + "] crashed");
+		console.log(e);
+	}
+
+	var handleGPUCrash = function(e) {
+		console.log("[" + tabViewId + "] gpu-crashed");
+		console.log(e);
+	}
+
+	var handlePluginCrash = function(e) {
+		console.log("[" + tabViewId + "] plugin-crashed");
+		console.log(e); 
+	}
+
+
 
 
 	/* ====================================
