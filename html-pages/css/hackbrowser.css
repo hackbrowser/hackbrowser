@@ -259,6 +259,23 @@ input#address-bar {
 	z-index: 10;
 }
 
+/* Status message box (URL, etc) */
+.webview-wrapper .status-message-box {
+	display: none; 
+	color: #666; 
+	background: #f5f5f5; 
+	font-size: 11px; 
+	line-height: 11px; 
+	border-top: 1px solid #e5e5e5; 
+	border-right: 1px solid #e5e5e5; 
+	padding: 8px 12px; 
+	width: 800px; 
+	position: absolute; 
+	left: 0; 
+	bottom: 0; 
+	z-index: 20; 
+}
+
 /* Search Box */
 .search-wrapper {
 	display: none;
