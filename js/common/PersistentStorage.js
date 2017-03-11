@@ -1,8 +1,7 @@
 'use strict';
 
 const fs = require('fs');
-const dialog = require('electron');
-const dataPath = GLOBAL.__app.basePath + "/.data/";
+const dataPath = global.__app.basePath + "/.data/";
 
 /*
  A very thin wrapper around file IO to store/retrieve JSON for persistence
@@ -40,7 +39,7 @@ PersistentStorage.setItem = function(key, value) {
 	// TODO: add check for valid file name format
 
 	var _this = this;
-	var fileToWrite = GLOBAL.__app.dataPath + key + ".json";
+	var fileToWrite = global.__app.dataPath + key + ".json";
 
 	if (typeof value === "object" && !Array.isArray(value)) {
 		if (_this.isCyclic(value)) {

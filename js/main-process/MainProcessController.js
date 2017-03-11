@@ -8,9 +8,9 @@ const path = require('path');
 const EventEmitter = require('events').EventEmitter;
 const session = require('electron').session;
 
-const hackBrowserWindowManager = require(GLOBAL.__app.basePath + "/js/main-process/HackBrowserWindowManager");
-const GlobalShortcutHandler = require(GLOBAL.__app.basePath + "/js/main-process/GlobalShortcutHandler");
-const IPCMainProcessHandler = require(GLOBAL.__app.basePath + "/js/main-process/IPCMainProcessHandler");
+const hackBrowserWindowManager = require(global.__app.basePath + "/js/main-process/HackBrowserWindowManager");
+const GlobalShortcutHandler = require(global.__app.basePath + "/js/main-process/GlobalShortcutHandler");
+const IPCMainProcessHandler = require(global.__app.basePath + "/js/main-process/IPCMainProcessHandler");
 
 function MainProcessController() {
 	var _this = this;
@@ -41,17 +41,17 @@ function MainProcessController() {
 			session.defaultSession.on("will-download", handleWillDownload);
 
 			// check if .data directory exists
-			fs.exists(GLOBAL.__app.dataPath, function(exists) {
+			fs.exists(global.__app.dataPath, function(exists) {
 				if (exists === false) {
 					// create directory if .data directory doesn't exist
 					// TODO: check directory create permissions on Linux
-					fs.mkdir(GLOBAL.__app.dataPath, function(err) {
+					fs.mkdir(global.__app.dataPath, function(err) {
 						if (err) {
 							// TODO: show error messagebox and quit app
 							dialog.showMessageBox({
 								type: "info",
 								buttons: ["ok"],
-								title: GLOBAL.__app.dataPath,
+								title: global.__app.dataPath,
 								message: JSON.stringify(err),
 								detail: JSON.stringify(err)
 							});
@@ -80,10 +80,10 @@ function MainProcessController() {
 		// specify flash path based on OS
 		if(process.platform  == 'win32'){
 			// Windows 7
-			ppapi_flash_path = path.join(GLOBAL.__app.basePath, "/binaries/pepflashplayer32_20_0_0_306.dll");
+			ppapi_flash_path = path.join(global.__app.basePath, "/binaries/pepflashplayer32_20_0_0_306.dll");
 		} else if (process.platform == 'darwin') {
 			// Mac OS
-			ppapi_flash_path = path.join(GLOBAL.__app.basePath, "/binaries/PepperFlashPlayer.plugin");
+			ppapi_flash_path = path.join(global.__app.basePath, "/binaries/PepperFlashPlayer.plugin");
 		}
 
 		// in case ppapi_flash_path is set

@@ -1,7 +1,7 @@
 'use strict';
 
 const Datastore = require('nedb');
-const db = new Datastore({ filename: GLOBAL.__app.dataPath + '/navigation-history.db', autoload: true });
+const db = new Datastore({ filename: global.__app.dataPath + '/navigation-history.db', autoload: true });
 
 var NavigationHistory = {};
 

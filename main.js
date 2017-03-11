@@ -1,15 +1,19 @@
 'use strict';
 
 const electron = require('electron');
+const winston = require('winston');
 
 // shared globally
-GLOBAL.__app = {
+global.__app = {
 	basePath: __dirname,
-	dataPath: (electron.app || electron.remote.app).getPath('userData')
+	dataPath: (electron.app || electron.remote.app).getPath('userData'),
+	winston: winston
 };
 
-const MainProcessController = require(GLOBAL.__app.basePath + "/js/main-process/MainProcessController.js");
+const MainProcessController = require(global.__app.basePath + "/js/main-process/MainProcessController.js");
 
 var mainController = new MainProcessController();
 
 mainController.start();
+
+winston.info('User\'s dataPath set at ' + global.__app.dataPath);
