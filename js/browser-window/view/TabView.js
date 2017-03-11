@@ -10,9 +10,12 @@
  * @constructor
  */
 function TabView(hackBrowserWindow, browserTabBar, url) {
-	var _this = this;
+	let _this = this;
 
-	const fs = require("fs");
+	const fs = require('fs');
+	const electron = require('electron');
+	const {remote} = require('electron');
+	const logger = remote.getGlobal('__app').logger;
 
 	/* ====================================
 	 private member variables
@@ -22,7 +25,7 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	var webViewURL;
 	var webViewContainerEl;
 	var webViewWrapperEl;
-	var webViewStatusBoxEl; 
+	var webViewStatusBoxEl;
 	var searchBox;
 	var searchBoxEl;
 	var tabViewId;
@@ -43,8 +46,8 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		webViewWrapperEl = document.createElement("div");
 		webViewWrapperEl.classList.add("webview-wrapper");
 		webViewWrapperEl.style.visibility = "hidden";
-		webViewStatusBoxEl = document.createElement("div"); 
-		webViewStatusBoxEl.classList.add("status-message-box"); 
+		webViewStatusBoxEl = document.createElement("div");
+		webViewStatusBoxEl.classList.add("status-message-box");
 		webViewTitle = "New Tab";
 		webViewURL = url;
 		webViewContainerEl = document.getElementById("webview-container"); 
@@ -297,24 +300,24 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	var handleCrashed = function(e) {
 		console.log("[" + tabViewId + "] crashed");
 		console.log(e);
-	}
+	};
 
 	var handleGPUCrashed = function(e) {
 		console.log("[" + tabViewId + "] gpu-crashed");
 		console.log(e);
-	}
+	};
 
 	var handlePluginCrashed = function(e) {
 		console.log("[" + tabViewId + "] plugin-crashed");
 		console.log(e); 
-	}
+	};
 
 	var handleUpdateTargetURL = function(e) {
 		console.log("[" + tabViewId + "] update-target-url");
 		console.log(e); 
 
 		displayStatusMessage(e.url); 
-	}
+	};
 
 	var displayStatusMessage = function(msg) {
 		if (!msg || msg === "") {
@@ -325,7 +328,19 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 			webViewStatusBoxEl.style.display = "block"; 
 		}
 
-		webViewStatusBoxEl.innerHTML = msg; 
+		webViewStatusBoxEl.innerHTML = msg;
+
+		// Get the Display object where mouse cursor is located at
+		let currentCursorPoint = electron.screen.getCursorScreenPoint();
+		let currentDisplay = electron.screen.getDisplayNearestPoint(currentCursorPoint);
+
+		logger.debug(currentCursorPoint);
+		logger.debug(currentDisplay);
+
+
+
+		// Check whether mouse is in the left side of the screen, or the right side of the screen
+
 	}; 
 
 

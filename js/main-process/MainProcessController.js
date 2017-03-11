@@ -7,10 +7,13 @@ const fs = require('fs');
 const path = require('path');
 const EventEmitter = require('events').EventEmitter;
 const session = require('electron').session;
+const winston = require('winston');
 
 const hackBrowserWindowManager = require(global.__app.basePath + "/js/main-process/HackBrowserWindowManager");
 const GlobalShortcutHandler = require(global.__app.basePath + "/js/main-process/GlobalShortcutHandler");
 const IPCMainProcessHandler = require(global.__app.basePath + "/js/main-process/IPCMainProcessHandler");
+
+var logger;
 
 function MainProcessController() {
 	var _this = this;
@@ -121,6 +124,30 @@ function MainProcessController() {
 				};
 			}
 		});
+	};
+
+	_this.checkAppDirectories = function() {
+		if (!fs.existsSync(global.__app.dataPath)) {
+			fs.mkdirSync(global.__app.dataPath);
+		}
+
+		if (!fs.existsSync(global.__app.logPath)) {
+			fs.mkdirSync(global.__app.logPath);
+		}
+	};
+
+	_this.startLogger = function() {
+		global.__app.logger = new (winston.Logger)({
+			transports: [
+				new (winston.transports.Console)({ level: 'silly' }),
+				new (winston.transports.File)({
+					filename: path.join(global.__app.logPath, 'app.log'),
+					level: 'info'
+				})
+			]
+		});
+
+		logger = global.__app.logger;
 	};
 
 	_this.start = function() {

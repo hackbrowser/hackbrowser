@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require('fs');
-const dataPath = global.__app.basePath + "/.data/";
+const dataPath = global.__app.dataPath;
 
 /*
  A very thin wrapper around file IO to store/retrieve JSON for persistence

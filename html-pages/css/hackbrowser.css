@@ -265,16 +265,23 @@ input#address-bar {
 	color: #666; 
 	background: #f5f5f5; 
 	font-size: 11px; 
-	line-height: 11px; 
+	line-height: 11px;
+	max-width: 50%;
 	border-top: 1px solid #e5e5e5; 
 	border-right: 1px solid #e5e5e5; 
-	padding: 8px 12px; 
-	width: 800px; 
+	padding: 5px 7px;
 	position: absolute; 
 	left: 0; 
 	bottom: 0; 
 	z-index: 20; 
 }
+
+	.webview-wrapper .status-message-box.right {
+		left: auto;
+		right: 0;
+		border-right: none;
+		border-left: 1px solid #e5e5e5;
+	}
 
 /* Search Box */
 .search-wrapper {
