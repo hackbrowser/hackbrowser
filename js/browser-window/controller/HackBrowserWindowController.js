@@ -293,8 +293,7 @@ function HackBrowserWindowController() {
 			var currentWindow = remote.getCurrentWindow();
 			currentWindow.close();
 		}
-	};
-
+	}; 
 
 	/**
 	 * getter for ContextMenuHandler

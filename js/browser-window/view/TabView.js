@@ -321,26 +321,35 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 
 	var displayStatusMessage = function(msg) {
 		if (!msg || msg === "") {
-			webViewStatusBoxEl.style.display = "none"; 
+			webViewStatusBoxEl.style.display = "none";
 		}
 
 		else {
-			webViewStatusBoxEl.style.display = "block"; 
+			// Check whether mouse is in the left side of the screen, or the right side of the screen
+			let browserWindowContentBounds = electron.remote.getCurrentWindow().getContentBounds();
+			let currentCursorXPos = electron.screen.getCursorScreenPoint().x;
+			let currentCursorRelativeXPos = currentCursorXPos - browserWindowContentBounds.x;
+			let contentCenterPos = browserWindowContentBounds.width / 2;
+
+			logger.debug('browserWindowContentBounds');
+			logger.debug(browserWindowContentBounds);
+
+			logger.debug('currentCursorXPos=' + currentCursorXPos);
+			logger.debug('currentCursorRelativeXPos=' + currentCursorRelativeXPos);
+			logger.debug('contentCenterPos=' + contentCenterPos);
+
+			if (currentCursorRelativeXPos < contentCenterPos) {
+				webViewStatusBoxEl.classList.add('right');
+				logger.debug('right');
+			} else {
+				webViewStatusBoxEl.classList.remove('right');
+				logger.debug('left');
+			}
+
+			webViewStatusBoxEl.style.display = "block";
 		}
 
 		webViewStatusBoxEl.innerHTML = msg;
-
-		// Get the Display object where mouse cursor is located at
-		let currentCursorPoint = electron.screen.getCursorScreenPoint();
-		let currentDisplay = electron.screen.getDisplayNearestPoint(currentCursorPoint);
-
-		logger.debug(currentCursorPoint);
-		logger.debug(currentDisplay);
-
-
-
-		// Check whether mouse is in the left side of the screen, or the right side of the screen
-
 	}; 
 
 

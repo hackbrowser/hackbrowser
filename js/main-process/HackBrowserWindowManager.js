@@ -3,6 +3,7 @@
 const electron = require('electron');
 const BrowserWindow = electron.BrowserWindow;
 const PersistentStorage = require(__app.basePath + "/js/common/PersistentStorage");
+var logger = global.__app.logger;
 
 /**
  * HackBrowserWindowManager handles opening and closing of browser windows
@@ -13,6 +14,9 @@ var HackBrowserWindowManager = {};
 
 var windowList = {};
 var createdWindowCount = 0;
+
+
+
 
 // TODO: navigate to specified url
 HackBrowserWindowManager.openNewWindow = function(url) {
@@ -25,6 +29,12 @@ HackBrowserWindowManager.openNewWindow = function(url) {
 				width: 1000,
 				height: 800
 			};
+
+			logger.debug('Could not get browserWindowSize from PersistentStorage');
+			logger.debug(browserSize);
+		} else {
+			logger.debug('Got browserWindowSize from PersistentStorage');
+			logger.debug(browserSize);
 		}
 
 		// create the browser window

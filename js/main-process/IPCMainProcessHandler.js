@@ -18,7 +18,6 @@ function IPCMainProcessHandler(mainProcessController) {
 	 private methods
 	 ===================================== */
 	var init = function() {
-		// mainProcessEventEmitter = mainProcessController.getMainProcessEventEmitter();
 		windowManager = mainProcessController.getWindowManager();
 
 		attachEventHandlers();
