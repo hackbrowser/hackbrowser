@@ -331,19 +331,12 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 			let currentCursorRelativeXPos = currentCursorXPos - browserWindowContentBounds.x;
 			let contentCenterPos = browserWindowContentBounds.width / 2;
 
-			logger.debug('browserWindowContentBounds');
-			logger.debug(browserWindowContentBounds);
-
-			logger.debug('currentCursorXPos=' + currentCursorXPos);
-			logger.debug('currentCursorRelativeXPos=' + currentCursorRelativeXPos);
-			logger.debug('contentCenterPos=' + contentCenterPos);
-
 			if (currentCursorRelativeXPos < contentCenterPos) {
+				// If mouse cursor is in the left side of the screen, show link on right
 				webViewStatusBoxEl.classList.add('right');
-				logger.debug('right');
 			} else {
+				// Otherwise, show on the left
 				webViewStatusBoxEl.classList.remove('right');
-				logger.debug('left');
 			}
 
 			webViewStatusBoxEl.style.display = "block";

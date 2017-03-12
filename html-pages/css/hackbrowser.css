@@ -73,7 +73,7 @@ nav#navtabs > .tab.active {
 
 /* Close button */
 nav#navtabs > .tab > .close {
-	background: #e5e5e5;
+	color: #bbb;
 	font-size: 10px;
 	line-height: 10px;
 	position: absolute;
@@ -85,12 +85,22 @@ nav#navtabs > .tab > .close {
 	background: linear-gradient(to right, rgba(229,229,229,0) 0%,rgba(229,229,229,1) 100%);
 }
 
+	nav#navtabs > .tab > .close:hover {
+		color: #666;
+	}
+
 nav#navtabs > .tab.active > .close {
+	color: #ccc;
 	background: linear-gradient(to right, rgba(245,245,245,0) 0%,rgba(245,245,245,0.6) 20%,rgba(245,245,245,1) 100%);
 }
 
+	nav#navtabs > .tab.active > .close:hover {
+		color: #555;
+	}
+
 nav#navtabs > #add-tab {
-	background: #fff;
+	color: #fff;
+	background: transparent;
 	display: inline-block;
 	height: 28px;
 	-webkit-box-sizing: border-box;
@@ -101,6 +111,11 @@ nav#navtabs > #add-tab {
 	left: 150px;
 	overflow: hidden;
 }
+
+	nav#navtabs > #add-tab:hover {
+		color: #ccc;
+		background: #fff;
+	}
 
 nav#navtabs > #add-tab > .icon-wrapper {
 	padding: 9px 10px;
