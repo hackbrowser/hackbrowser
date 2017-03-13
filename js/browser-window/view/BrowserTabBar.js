@@ -10,6 +10,8 @@
 function BrowserTabBar(hackBrowserWindow) {
 	var _this = this;
 
+	const navTabSelector = '.nav-tab'; 
+
 	/* ====================================
 	 private member variables
 	 ====================================== */
@@ -40,8 +42,7 @@ function BrowserTabBar(hackBrowserWindow) {
 			e.preventDefault();
 		});
 
-
-		browserTabsWrapperEl.addEventListener("drop", handleDrop, false);
+		// browserTabsWrapperEl.addEventListener("drop", handleDrop, false);
 	};
 
 	var handleDrop = function(e) {
@@ -70,7 +71,7 @@ function BrowserTabBar(hackBrowserWindow) {
 		tabWidth = Math.floor((browserTabsWrapperEl.clientWidth - addTabBtnEl.offsetWidth) / numOpenTabs);
 		tabWidth = (tabWidth > 200) ? 200 : tabWidth;
 
-		var allTabsEl = browserTabsWrapperEl.querySelectorAll(".tab");
+		var allTabsEl = browserTabsWrapperEl.querySelectorAll(navTabSelector);
 
 		// adjust tab add button's position first since this will kick off animation
 		addTabBtnEl.style.left = (tabWidth * allTabsEl.length) + "px";
@@ -101,7 +102,7 @@ function BrowserTabBar(hackBrowserWindow) {
 		disableAnimation();
 
 		// adjust css accordingly (each tab's width)
-		adjustWidth();
+		// adjustWidth();
 
 		// TODO: check if there is any way to avoid using setTimeout here
 		setTimeout(enableAnimation, 10);
@@ -118,18 +119,18 @@ function BrowserTabBar(hackBrowserWindow) {
 	 */
 	_this.removeTab = function(tabViewId) {
 		var tabEl = browserTabsWrapperEl.querySelector("[data-webview-id='" + tabViewId + "']");
-		var tabIndex = Array.prototype.indexOf.call(browserTabsWrapperEl.querySelectorAll(".tab"), tabEl);
+		var tabIndex = Array.prototype.indexOf.call(browserTabsWrapperEl.querySelectorAll(navTabSelector), tabEl);
 
 		hackBrowserWindow.handleTabCloseById(tabViewId);
 
 		browserTabsWrapperEl.removeChild(tabEl);
 		numOpenTabs--;
 
-		adjustWidth();
+		// adjustWidth();
 
 		var tabIdToActivate;
 
-		var openTabsElArr = browserTabsWrapperEl.querySelectorAll(".tab");
+		var openTabsElArr = browserTabsWrapperEl.querySelectorAll(navTabSelector);
 
 		if (tabIndex >= openTabsElArr.length) {
 			tabIdToActivate = openTabsElArr[tabIndex - 1].dataset.webviewId;

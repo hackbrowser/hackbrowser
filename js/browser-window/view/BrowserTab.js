@@ -10,6 +10,8 @@
  */
 function BrowserTab(hackBrowserWindow, tabViewId, title) {
 	var _this = this;
+	
+	const logger = require('electron').remote.getGlobal('__app').logger; 
 
 	/* ====================================
 	 private member variables
@@ -28,16 +30,16 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 	var init = function() {
 		tabInnerTemplate = '<div class="favicon-wrapper"><img class="favicon"><div class="loader"></div></div><span class="title">{{title}}</span><div class="close"><i class="icon ion-close"></i></div>';
 
-		// create a container for new tab
+		// Create a container for new tab
 		tabEl = document.createElement("div");
 
-		// save <webview> tag's id value to data-webview-id attribute
+		// Save <webview> tag's id value to data-webview-id attribute
 		tabEl.setAttribute("data-webview-id", tabViewId);
 
-		//
-		tabEl.setAttribute("draggable", true);
+		// Enable dragging
+		// tabEl.setAttribute("draggable", true);
 
-		tabEl.classList.add("tab");
+		tabEl.classList.add("nav-tab");
 
 		// replace title with url (until title is set)
 		var tabTitle = title ? title : "New Tab";
@@ -78,6 +80,7 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 		});
 
 		// drag tab to change position
+		/*
 		tabEl.addEventListener("dragstart", handleDragStart, false);
 		tabEl.addEventListener("drag", handleDrag, false);
 		tabEl.addEventListener("dragenter", handleDragEnter, false);
@@ -85,6 +88,7 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 		tabEl.addEventListener("dragleave", handleDragLeave, false);
 		tabEl.addEventListener("drop", handleDrop, false);
 		tabEl.addEventListener("dragend", handleDragEnd, false);
+		*/
 	};
 
 	var handleDragStart = function(e) {
@@ -105,10 +109,13 @@ function BrowserTab(hackBrowserWindow, tabViewId, title) {
 		// the tab is not activated until dragend event occurs
 		// activate the tab immediately
 		activateSelf();
+
+		logger.log('handleDragStart'); 
 	};
 
 	var handleDrag = function(e) {
 		console.log("handleDrag");
+		console.log(e); 
 
 		e.target.style.left = e.clientX + "px";
 

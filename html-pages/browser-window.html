@@ -8,6 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 	<link href='https://fonts.googleapis.com/css?family=Roboto:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="css/hackbrowser.css">
+	<link rel="stylesheet" type="text/css" href="css/dragula.css">
 
 	<script src="../js/browser-window/lib/keymaster.js"></script>
 	<script src="../js/browser-window/utility/Utility.js"></script>
@@ -72,5 +73,14 @@
 	<!-- Wrapper for WebView elements -->
 	<section id="webview-container">
 	</section><!-- // section#webview-container -->
+
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js'></script>
+
+	<script>
+		dragula([document.getElementById('navtabs')], {
+			direction: 'horizontal'
+		}); 
+		console.log('dragula activated'); 
+	</script>
 </body>
 </html>
