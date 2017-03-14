@@ -77,10 +77,15 @@
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js'></script>
 
 	<script>
-		dragula([document.getElementById('navtabs')], {
+		var dragListener = dragula([document.getElementById('navtabs')], {
 			direction: 'horizontal'
 		}); 
-		console.log('dragula activated'); 
+
+		dragListener.on('drag', function(el) {
+			if (el.classList.contains('nav-tab')) {
+				el.click(); 
+			}
+		});
 	</script>
 </body>
 </html>
