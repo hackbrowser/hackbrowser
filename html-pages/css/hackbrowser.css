@@ -33,7 +33,7 @@ nav#navtabs.animate > #add-tab {
 }
 
 .nav-tab {
-	color: #666;
+	color: #777;
 	background: #e5e5e5;
 	font-size: 12px; 
 	line-height: 12px; 
@@ -43,10 +43,20 @@ nav#navtabs.animate > #add-tab {
 	-webkit-box-sizing: border-box;
 	width: 200px;
 	cursor: pointer;
-	/* position: absolute; */
 	position: relative; 
 	overflow: hidden;
 }
+
+	.nav-tab.gu-transit, 
+	.nav-tab.active.gu-transit {
+		color: #111; 
+		background: #fff; 
+	}
+
+	.nav-tab.gu-transit > .close, 
+	.nav-tab.gu-transit.active > .close {
+		background: transparent; 
+	}
 
 .nav-tab > .favicon-wrapper {
 	position: absolute;
