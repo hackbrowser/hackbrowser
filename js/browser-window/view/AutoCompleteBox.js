@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Adress bar and related controls
+ * Address bar and related controls
  *
  * @param hackBrowserWindow
  * @constructor
@@ -9,12 +9,15 @@
 function AutoCompleteBox(hackBrowserWindow) {
 	var _this = this;
 
+	const logger = require('electron').remote.getGlobal('__app').logger; 
+
 	/* ====================================
 	 private member variables
 	 ====================================== */
 	var autoCompleteBoxEl;
 	var autoCompleteEntries;
 	var currentIndex;			// index used for autocomplete entries
+	var isVisible; 				// State of the auto complete box's visibility
 
 
 	/* ====================================
@@ -23,6 +26,7 @@ function AutoCompleteBox(hackBrowserWindow) {
 	var init = function() {
 		autoCompleteBoxEl = document.getElementById("auto-complete-box");
 		currentIndex = -1;
+		isVisible = false; 
 
 		attachEventHandlers();
 	};
@@ -51,7 +55,7 @@ function AutoCompleteBox(hackBrowserWindow) {
 		itemEl.classList.add("item");
 		itemEl.innerHTML = autoCompleteItemInnerHTML;
 		itemEl.dataset.url = url;
-
+		
 		attachEventListenerToItem(itemEl);
 
 		autoCompleteBoxEl.appendChild(itemEl);
@@ -60,14 +64,17 @@ function AutoCompleteBox(hackBrowserWindow) {
 	};
 
 	var attachEventListenerToItem = function(itemEl) {
-		itemEl.addEventListener("click", function(e) {
-			console.log("item Clicked, url = " + itemEl.dataset.url);
+		itemEl.addEventListener('mousedown', function(e) {
+			// console.log('item Clicked, url = ' + itemEl.dataset.url);
+			logger.debug('Item clicked'); 
 
 			e.preventDefault();
 
 			_this.close();
 
+			hackBrowserWindow.getAddressBar().updateURL(itemEl.dataset.url);
 			hackBrowserWindow.navigateTo(itemEl.dataset.url);
+
 		});
 	};
 
@@ -104,15 +111,18 @@ function AutoCompleteBox(hackBrowserWindow) {
 	};
 
 
+
 	/* ====================================
 	 public methods
 	 ====================================== */
 	_this.open = function() {
 		autoCompleteBoxEl.style.display = "block";
+		isVisible = true; 
 	};
 
 	_this.close = function() {
 		autoCompleteBoxEl.style.display = "none";
+		isVisible = false; 
 	};
 
 

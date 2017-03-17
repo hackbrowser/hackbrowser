@@ -186,7 +186,7 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	};
 
 	var handleDidGetResponseDetails = function(e) {
-		console.log("[" + tabViewId + "] did-get-response-details");
+		console.log("[" + tabViewId + "] did-get-response-details"); 
 	};
 
 	var handleDidGetRedirectRequest = function(e) {
@@ -313,8 +313,7 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	};
 
 	var handleUpdateTargetURL = function(e) {
-		console.log("[" + tabViewId + "] update-target-url");
-		console.log(e); 
+		console.log("[" + tabViewId + "] update-target-url"); 
 
 		displayStatusMessage(e.url); 
 	};

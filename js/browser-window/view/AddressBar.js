@@ -9,11 +9,14 @@
 function AddressBar(hackBrowserWindow) {
 	var _this = this;
 
+	const logger = require('electron').remote.getGlobal('__app').logger; 
+
 	/* ====================================
 	 private member variables
 	 ====================================== */
 	var addressBarEl;
 	var hasFocus;
+	var currentURL; 		// Used to restore the current URL in case user types some value to the address bar but doesn't navigate
 
 
 	/* ====================================
@@ -54,9 +57,6 @@ function AddressBar(hackBrowserWindow) {
 		// update url value
 		var urlValue = addressBarEl.value;
 
-		console.log("addressBarKeyUp, charCode: " + e.charCode + ", keyCode: " + e.keyCode);
-		console.log(e);
-
 		// "enter" key
 		if (e.keyCode === KeyCode.ENTER) {
 			e.preventDefault();
@@ -91,6 +91,9 @@ function AddressBar(hackBrowserWindow) {
 			console.log("ESC key pressed");
 
 			hackBrowserWindow.getAutoCompleteBox().close();
+
+			// Restore URL
+			_this.restoreURL(); 
 		}
 
 		else {
@@ -118,9 +121,9 @@ function AddressBar(hackBrowserWindow) {
 	var handleAddressBarFocusOut = function () {
 		hasFocus = false;
 
-		setTimeout(function() {
-			hackBrowserWindow.getAutoCompleteBox().close();
-		}, 100);
+		logger.debug('handleAddressBarFocusOut() - immediate');
+
+		hackBrowserWindow.getAutoCompleteBox().close();
 	};
 
 
@@ -145,7 +148,7 @@ function AddressBar(hackBrowserWindow) {
 	};
 
 	/**
-	 * updates URl string in address bar input element
+	 * updates URL string in address bar input element
 	 *
 	 * @param url {string} new url
 	 */
@@ -156,10 +159,31 @@ function AddressBar(hackBrowserWindow) {
 			url = "";
 		}
 
+		addressBarEl.value = url;
+
+		// Save the new URL to currentURL
+		// This value is used to restore the currentURL value 
+		// in case user types in some value to the address bar, 
+		// or if address bar's value is changed with an autocomplete suggestion, 
+		// but the user cancels the navigation by pressing ESC 
+		// -
+		// Losing focus on address bar will also restore currentURL
+		currentURL = url; 
+
+		// TODO: Why is hasFocus needed? 
+		/*
 		if (hasFocus === false) {
 			addressBarEl.value = url;
 		}
+		*/
 	};
+
+	/**
+	 * Restores URL value
+	 */
+	_this.restoreURL = function() {
+		addressBarEl.value = currentURL; 
+	}; 
 
 	init();
 }
