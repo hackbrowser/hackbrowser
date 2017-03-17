@@ -74,22 +74,16 @@ function AddressBar(hackBrowserWindow) {
 
 		// "up" key
 		else if (e.keyCode === KeyCode.UP) {
-			console.log("UP arrow key pressed");
-
 			hackBrowserWindow.getAutoCompleteBox().navigateUp();
 		}
 
 		// "down" key
 		else if (e.keyCode === KeyCode.DOWN) {
-			console.log("DOWN arrow key pressed");
-
 			hackBrowserWindow.getAutoCompleteBox().navigateDown();
 		}
 
 		// "esc" key
 		else if (e.keyCode === KeyCode.ESC) {
-			console.log("ESC key pressed");
-
 			hackBrowserWindow.getAutoCompleteBox().close();
 
 			// Restore URL
@@ -121,8 +115,6 @@ function AddressBar(hackBrowserWindow) {
 	var handleAddressBarFocusOut = function () {
 		hasFocus = false;
 
-		logger.debug('handleAddressBarFocusOut() - immediate');
-
 		hackBrowserWindow.getAutoCompleteBox().close();
 	};
 
@@ -137,7 +129,6 @@ function AddressBar(hackBrowserWindow) {
 		addressBarEl.focus();
 	};
 
-	// TODO: need to find a way to check how address bar input is focused at a given moment
 	/**
 	 * check whether address bar input element has focus
 	 *

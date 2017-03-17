@@ -17,7 +17,6 @@ function AutoCompleteBox(hackBrowserWindow) {
 	var autoCompleteBoxEl;
 	var autoCompleteEntries;
 	var currentIndex;			// index used for autocomplete entries
-	var isVisible; 				// State of the auto complete box's visibility
 
 
 	/* ====================================
@@ -26,7 +25,6 @@ function AutoCompleteBox(hackBrowserWindow) {
 	var init = function() {
 		autoCompleteBoxEl = document.getElementById("auto-complete-box");
 		currentIndex = -1;
-		isVisible = false; 
 
 		attachEventHandlers();
 	};
@@ -65,19 +63,20 @@ function AutoCompleteBox(hackBrowserWindow) {
 
 	var attachEventListenerToItem = function(itemEl) {
 		itemEl.addEventListener('mousedown', function(e) {
-			// console.log('item Clicked, url = ' + itemEl.dataset.url);
-			logger.debug('Item clicked'); 
-
+			// Prevent focusout by preventing mouse click behavior
 			e.preventDefault();
 
 			_this.close();
 
+			// Navigate to 
 			hackBrowserWindow.getAddressBar().updateURL(itemEl.dataset.url);
 			hackBrowserWindow.navigateTo(itemEl.dataset.url);
-
 		});
 	};
 
+	/**
+	 * Render the list of autocomplete entries
+	 */
 	var render = function() {
 		autoCompleteBoxEl.innerHTML = "";
 
@@ -90,7 +89,6 @@ function AutoCompleteBox(hackBrowserWindow) {
 
 		for (var i = 0, len = autoCompleteEntries.length; i < len; i++) {
 			var appendedEl = addItem(autoCompleteEntries[i].url, autoCompleteEntries[i].title);
-			console.log(appendedEl);
 
 			autoCompleteEntries[i].el = appendedEl;
 		}
@@ -101,6 +99,11 @@ function AutoCompleteBox(hackBrowserWindow) {
 		_this.open();
 	};
 
+	/**
+	 * Focus on a specific entry by index
+	 * 
+	 * @param {int} newIndex Index to focus on
+	 */
 	var focusByIndex = function(newIndex) {
 		autoCompleteEntries[currentIndex].el.classList.remove("selected");
 		autoCompleteEntries[newIndex].el.classList.add("selected");
@@ -115,20 +118,24 @@ function AutoCompleteBox(hackBrowserWindow) {
 	/* ====================================
 	 public methods
 	 ====================================== */
+	 /**
+	  * Open autocomplete box
+	  */
 	_this.open = function() {
 		autoCompleteBoxEl.style.display = "block";
-		isVisible = true; 
 	};
 
+	/**
+	 * Close autocomplete box
+	 */
 	_this.close = function() {
 		autoCompleteBoxEl.style.display = "none";
-		isVisible = false; 
 	};
 
-
+	/**
+	 * Move focus downward
+	 */
 	_this.navigateDown = function() {
-		console.log("navigateDown()");
-
 		// if index points to last element in autocomplete entries,
 		// do nothing
 		if (currentIndex === autoCompleteEntries.length - 1) {
@@ -139,9 +146,10 @@ function AutoCompleteBox(hackBrowserWindow) {
 		focusByIndex(currentIndex + 1);
 	};
 
+	/**
+	 * Move focus upward
+	 */
 	_this.navigateUp = function() {
-		console.log("navigateUp()");
-
 		// if index points to the first element in autocomplete entries,
 		// do nothing
 		if (currentIndex === 0) {
@@ -152,6 +160,9 @@ function AutoCompleteBox(hackBrowserWindow) {
 		focusByIndex(currentIndex - 1);
 	};
 
+	/**
+	 * Update autocomplete entries with a new search term
+	 */
 	_this.update = function(searchTerm) {
 		hackBrowserWindow.getIPCHandler().requestAutoCompleteEntries(searchTerm, function(newAutoCompleteEntries) {
 			autoCompleteEntries = newAutoCompleteEntries;
