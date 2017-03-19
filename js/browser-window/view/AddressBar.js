@@ -94,6 +94,11 @@ function AddressBar(hackBrowserWindow) {
 			if (urlValue.trim() !== "") {
 				hackBrowserWindow.getAutoCompleteBox().update(urlValue);
 			}
+
+			else {
+				// Close auto complete box if address bar is empty
+				hackBrowserWindow.getAutoCompleteBox().close(); 
+			}
 		}
 	};
 
