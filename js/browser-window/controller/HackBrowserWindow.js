@@ -1,12 +1,12 @@
 'use strict';
 
 /**
- * HackBrowserWindowController controls all activities related to a browser window
- * all browser-related public-APIs can be accessed through HackBrowserWindowController instance
+ * HackBrowserWindow controls all activities related to a browser window
+ * all browser-related public-APIs can be accessed through HackBrowserWindow instance
  *
  * @constructor
  */
-function HackBrowserWindowController() {
+function HackBrowserWindow() {
 	const remote = require('electron').remote;
 
 	var _this = this;

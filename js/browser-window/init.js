@@ -6,7 +6,7 @@ var hackBrowserWindow;
 
 	// bootstrap
 	var init = function() {
-		hackBrowserWindow = new HackBrowserWindowController();
+		hackBrowserWindow = new HackBrowserWindow();
 
 		attachEventListeners(); 
 	};
