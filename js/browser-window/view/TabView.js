@@ -166,7 +166,7 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		browserTab.startLoading();
 
 		if (hackBrowserWindow.getActiveTabView() === _this) {
-			hackBrowserWindow.getMenuBar().showLoadStopBtn();
+			hackBrowserWindow.getNavigationControls().showLoadStopBtn();
 		}
 	};
 
@@ -186,7 +186,7 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		hackBrowserWindow.getNavigationHistoryHandler().addNavigationHistory(navigationInfo, function() {});
 
 		if (hackBrowserWindow.getActiveTabView() === _this) {
-			hackBrowserWindow.getMenuBar().showReloadBtn();
+			hackBrowserWindow.getNavigationControls().showReloadBtn();
 		}
 	};
 

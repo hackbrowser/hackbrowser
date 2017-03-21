@@ -15,10 +15,11 @@ function HackBrowserWindow() {
 	 private member variables
 	 ====================================== */
 	var ipcHandler;
-	var menuBar;
+	var navigationControls;
 	var browserTabBar;
 	var addressBar;
 	var autoCompleteBox;
+	var userMenu; 
 	var navigationHistoryHandler;
 	var contextMenuHandler;
 	var activeTabView;
@@ -35,10 +36,11 @@ function HackBrowserWindow() {
 		ipcHandler = new IPCRendererProcessHandler(_this);
 
 		// create a new NavigationControls object associated with current browser window
-		menuBar = new NavigationControls(_this);
+		navigationControls = new NavigationControls(_this);
 		browserTabBar = new BrowserTabBar(_this);
 		addressBar = new AddressBar(_this);
 		autoCompleteBox = new AutoCompleteBox(_this);
+		userMenu = new UserMenu(_this); 
 		navigationHistoryHandler = new NavigationHistoryHandler(_this);
 		contextMenuHandler = new ContextMenuHandler(_this);
 		createdTabViewCount = 0;
@@ -157,22 +159,22 @@ function HackBrowserWindow() {
 	 * updates back/forward buttons' enable/disable status
 	 */
 	_this.updateWindowControls = function() {
-		// check if active webview is still loading
-		// if webViewEl.canGoBack() or webViewEl.canGoForward() is called in menuBar.updateBtnStatus()
+		// Check if active webview is still loading
+		// if webViewEl.canGoBack() or webViewEl.canGoForward() is called in navigationControls.updateBtnStatus()
 		// before <webview> element is loaded, an exception will be thrown
 		if (activeTabView.isDOMReady() === true) {
 			// update back/forward button status
-			menuBar.updateBtnStatus(activeTabView.getWebViewEl());
+			navigationControls.updateBtnStatus(activeTabView.getWebViewEl());
 
 			// update reload button
 			if (activeTabView.getWebViewEl().isLoading() === true) {
-				menuBar.showLoadStopBtn();
+				navigationControls.showLoadStopBtn();
 			} else {
-				menuBar.showReloadBtn();
+				navigationControls.showReloadBtn();
 			}
 		} else {
-			menuBar.disableBackBtn();
-			menuBar.disableForwardBtn();
+			navigationControls.disableBackBtn();
+			navigationControls.disableForwardBtn();
 		}
 
 		_this.updateWindowTitle(activeTabView.getWebViewTitle());
@@ -189,12 +191,12 @@ function HackBrowserWindow() {
 	};
 
 	/**
-	 * return MenuBar handler
+	 * return NavigationControls handler
 	 *
-	 * @returns {MenuBar} MenuBar view component
+	 * @returns {NavigationControls} NavigationControls view component
 	 */
-	_this.getMenuBar = function() {
-		return menuBar;
+	_this.getNavigationControls = function() {
+		return navigationControls;
 	};
 
 	/**
