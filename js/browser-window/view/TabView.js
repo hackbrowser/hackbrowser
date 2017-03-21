@@ -39,12 +39,13 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	 private methods
 	 ====================================== */
 	/**
-	 * create a new <webview> element and linked browser tab
+	 * Create a new <webview> element and linked browser tab
 	 *
 	 * @param url
 	 */
 	var init = function(url) {
 		webViewEl = document.createElement("webview");
+		webContents = webViewEl.getWebContents(); 
 		webViewWrapperEl = document.createElement("div");
 		webViewWrapperEl.classList.add("webview-wrapper");
 		webViewWrapperEl.style.visibility = "hidden";

@@ -12,6 +12,14 @@ function UserMenu(hackBrowserWindow) {
 	const Menu = remote.Menu;
 	const logger = remote.getGlobal('__app').logger; 
 
+	let menuTemplate; 
+
+	// An estimate of the user menu's width
+	// Since there is no way to programmatically get the width 
+	// of user menu, the fixed value here is used to open the 
+	// logger
+	const menuWidth = 221; 
+
 	var _this = this;
 
 	/* ====================================
@@ -25,25 +33,10 @@ function UserMenu(hackBrowserWindow) {
 	var init = function() {
 		userMenuBtnEl = document.getElementById('button-menu'); 
 
-		attachEventListeners(); 
-	};
-
-	var attachEventListeners = function() {
-		userMenuBtnEl.addEventListener('click', buildUserMenu, false); 
-	};
-
-	/**
-	 * open general context menu in <webview>
-	 * this is in case the user clicks on a general area of <webview> tag
-	 * (excluding links and images)
-	 */
-	var buildUserMenu = function() {
-		console.log("openWebViewDocumentContextMenu()");
-
-		var template = [
+		menuTemplate = [
 			{
 				label: "New tab",
-				accelerator: "Alt+Left",
+				accelerator: "Ctrl+T",
 				enabled: true, 
 				click: function(item, focusedWindow) {
 					logger.debug('New Tab'); 
@@ -51,7 +44,7 @@ function UserMenu(hackBrowserWindow) {
 			},
 			{
 				label: "New window",
-				accelerator: "Alt+Right",
+				accelerator: "Ctrl+N",
 				enabled: true,
 				click: function(item, focusedWindow) {
 					logger.debug('New window'); 
@@ -65,15 +58,54 @@ function UserMenu(hackBrowserWindow) {
 				label: "Print",
 				accelerator: "CmdOrCtrl+P",
 				click: function(item, focusedWindow) {
-					// hackBrowserWindow.getActiveTabView().getWebViewEl().print();
-					logger.debug('Print'); 
+					hackBrowserWindow.getActiveTabView().getWebViewEl().print();
 				}
 			}
-		];
+		]; 
 
-		var userMenu = Menu.buildFromTemplate(template);
+		attachEventListeners(); 
+	};
 
-		userMenu.popup(remote.getCurrentWindow());
+	var attachEventListeners = function() {
+		userMenuBtnEl.addEventListener('click', handleMenuBtnClick, false); 
+	};
+
+	var handleMenuBtnClick = function(e) { 
+		e.preventDefault(); 
+
+		showUserMenu(); 
+	};
+
+	var calculateOpenPosition = function() {
+		// Calculate open position
+		let browserWindowContentBounds = electron.remote.getCurrentWindow().getContentBounds();
+		let windowXPos = browserWindowContentBounds.x;
+		let windowWidth = browserWindowContentBounds.width;
+
+		return {
+			x: windowWidth - menuWidth, 
+			y: 60
+		}
+	}; 
+
+	/**
+	 * Build and show user menu
+	 */
+	var buildUserMenu = function() {
+		var userMenu = Menu.buildFromTemplate(menuTemplate); 
+
+		return userMenu; 
+	};
+
+	var showUserMenu = function() {
+		let userMenu = buildUserMenu(); 
+		let openPosition = calculateOpenPosition(); 
+
+		userMenu.popup(remote.getCurrentWindow(), { 
+			x: openPosition.x, 
+			y: openPosition.y, 
+			async: true 
+		});
 	};
 
 
@@ -84,8 +116,8 @@ function UserMenu(hackBrowserWindow) {
 	/**
 	 * Open user menu
 	 */
-	_this.openUserMenu = function() {
-		buildUserMenu(); 
+	_this.open = function() {
+		showUserMenu(); 
 	};
 
 	init();
