@@ -1,4 +1,4 @@
-<p align="center"><img src="http://www.hackbrowser.com/images/github-readme-image.png" alt="HackBrowser" /></p>
+<p align="center"><a href="http://www.hackbrowser.com/"><img src="http://www.hackbrowser.com/images/github-readme-image.png" alt="HackBrowser" /></a></p>
 
 ## HackBrowser
 
