@@ -80,17 +80,16 @@ function MainProcessController() {
 
 		// specify flash path based on OS
 		if(process.platform  == 'win32'){
-			// Windows 7
-			ppapi_flash_path = path.join(global.__app.basePath, "/binaries/pepflashplayer32_20_0_0_306.dll");
+			ppapi_flash_path = path.join(global.__app.basePath, 'binaries', 'pepflashplayer64_25_0_0_127.dll');
 		} else if (process.platform == 'darwin') {
 			// Mac OS
-			ppapi_flash_path = path.join(global.__app.basePath, "/binaries/PepperFlashPlayer.plugin");
+			ppapi_flash_path = path.join(global.__app.basePath, 'binaries', 'PepperFlashPlayer.plugin');
 		}
 
 		// in case ppapi_flash_path is set
 		if (ppapi_flash_path) {
 			app.commandLine.appendSwitch('ppapi-flash-path', ppapi_flash_path);
-			app.commandLine.appendSwitch('ppapi-flash-version', '20.0.0.306');
+			app.commandLine.appendSwitch('ppapi-flash-version', '25.0.0.127');
 		}
 	};
 
