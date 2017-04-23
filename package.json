@@ -1,12 +1,23 @@
 {
-  "name": "hackbrowser",
-  "version": "0.0.2",
-  "main": "main.js",
-  "dependencies": {
-    "nedb": "^1.8.0",
-    "winston": "^2.3.1"
-  },
-  "devDependencies": {
-    "electron": "^1.6.2"
-  }
+	"name": "hackbrowser",
+	"productName": "HackBrowser",
+	"version": "0.0.3",
+	"main": "main.js",
+	"dependencies": {
+		"nedb": "^1.8.0",
+		"winston": "^2.3.1"
+	},
+	"devDependencies": {
+		"electron": "^1.6.2"
+	},
+	"build": {
+		"appId": "your.id",
+		"mac": {
+			"category": "your.app.category.type"
+		}
+	},
+	"scripts": {
+		"pack": "build --dir",
+		"dist": "build"
+	}
 }

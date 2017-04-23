@@ -7,7 +7,7 @@ const path = require('path');
 
 // shared globally
 global.__app = {
-	basePath: __dirname,
+	srcPath: path.join(__dirname, 'src'),
 	dataPath: path.join(electron.app.getPath('userData')),
 	logPath: path.join(electron.app.getPath('userData'), 'logs'),
 	logger: null
@@ -29,7 +29,7 @@ global.__app.logger = new (winston.Logger)({
 	]
 });
 
-const MainProcessController = require(global.__app.basePath + "/js/main-process/MainProcessController.js");
+const MainProcessController = require(path.join(global.__app.srcPath, 'js', 'main-process', 'MainProcessController'));
 
 let mainController = new MainProcessController();
 mainController.start();

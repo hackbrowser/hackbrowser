@@ -1,6 +1,6 @@
 'use strict';
 
-const navigationHistoryHandler = require(global.__app.basePath + "/js/main-process/model/NavigationHistory");
+const navigationHistoryHandler = require(global.__app.srcPath + "/js/main-process/model/NavigationHistory");
 
 /**
  * handles all IPC communication with the renderer processes (browser windows)

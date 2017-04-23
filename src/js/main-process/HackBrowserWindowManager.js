@@ -2,7 +2,7 @@
 
 const electron = require('electron');
 const BrowserWindow = electron.BrowserWindow;
-const PersistentStorage = require(__app.basePath + "/js/common/PersistentStorage");
+const PersistentStorage = require(__app.srcPath + "/js/common/PersistentStorage");
 var logger = global.__app.logger;
 
 /**
@@ -47,7 +47,7 @@ HackBrowserWindowManager.openNewWindow = function(url) {
 		newWindow.initialURL = url;
 
 		// load the HTML file for browser window
-		newWindow.loadURL("file://" + __app.basePath + "/html-pages/browser-window.html");
+		newWindow.loadURL("file://" + __app.srcPath + "/html-pages/browser-window.html");
 
 		// Open the DevTools (debugging)
 		newWindow.webContents.openDevTools();
