@@ -6,13 +6,17 @@ HackBrowser is a cross-platform, hackable browser written in Javascript. HackBro
 
 **This project is in heavy development.**
 
-## Features
 
-- Browser tabs
-- Options
-- Custom "New Tab" page
-- Screen Capture
 
+
+
+## Application Distribution
+
+HackBrowser uses [electron-builder](https://github.com/electron-userland/electron-builder) to create installers. 
+```
+# Use electron-builder to build and create installer
+$ npm run dist
+```
 
 ## License
 
