@@ -25,7 +25,7 @@ UserSetting.set = function(settingKey, settingValue, callback) {
 	}, {
 		upsert: true
 	}, function() {
-		console.log("setting complete");
+		console.log('setting complete');
 	});
 };
 

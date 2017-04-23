@@ -9,9 +9,9 @@ const EventEmitter = require('events').EventEmitter;
 const session = require('electron').session;
 const winston = require('winston');
 
-const hackBrowserWindowManager = require(global.__app.srcPath + "/js/main-process/HackBrowserWindowManager");
-const GlobalShortcutHandler = require(global.__app.srcPath + "/js/main-process/GlobalShortcutHandler");
-const IPCMainProcessHandler = require(global.__app.srcPath + "/js/main-process/IPCMainProcessHandler");
+const hackBrowserWindowManager = require(path.join(global.__app.srcPath, 'js', 'main-process', 'HackBrowserWindowManager'));
+const GlobalShortcutHandler = require(path.join(global.__app.srcPath, 'js', 'main-process', 'GlobalShortcutHandler'));
+const IPCMainProcessHandler = require(path.join(global.__app.srcPath, 'js', 'main-process', 'IPCMainProcessHandler'));
 
 function MainProcessController() {
 	var _this = this;
@@ -28,18 +28,18 @@ function MainProcessController() {
 	};
 
 	var attachEventHandlers = function() {
-		app.on("window-all-closed", function() {
-			console.log("window-all-closed, quitting");
+		app.on('window-all-closed', function() {
+			console.log('window-all-closed, quitting');
 
-			if (process.platform != "darwin") {
-				console.log("quitting src");
+			if (process.platform != 'darwin') {
+				console.log('quitting app');
 
 				app.quit();
 			}
 		});
 
-		app.on("ready", function() {
-			session.defaultSession.on("will-download", handleWillDownload);
+		app.on('ready', function() {
+			session.defaultSession.on('will-download', handleWillDownload);
 
 			// check if .data directory exists
 			fs.exists(global.__app.dataPath, function(exists) {
@@ -50,7 +50,7 @@ function MainProcessController() {
 						if (err) {
 							// TODO: show error messagebox and quit src
 							dialog.showMessageBox({
-								type: "info",
+								type: 'info',
 								buttons: ["ok"],
 								title: global.__app.dataPath,
 								message: JSON.stringify(err),
@@ -111,9 +111,9 @@ function MainProcessController() {
 
 	var handleWillDownload = function(event, item, webContents) {
 		item.on("done", function(e, state) {
-			if (state === "completed") {
+			if (state === 'completed') {
 				var itemInfoObj = {
-					type: "file-download",
+					type: 'file-download',
 					fileSize: item.getTotalBytes(),
 					fileURL: item.getURL(),
 					fileName: item.getFilename(),

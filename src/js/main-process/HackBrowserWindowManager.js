@@ -1,8 +1,9 @@
 'use strict';
 
 const electron = require('electron');
+const path = require('path');
 const BrowserWindow = electron.BrowserWindow;
-const PersistentStorage = require(__app.srcPath + "/js/common/PersistentStorage");
+const PersistentStorage = require(path.join(__app.srcPath, 'js', 'common', 'PersistentStorage'));
 var logger = global.__app.logger;
 
 /**
@@ -23,7 +24,7 @@ HackBrowserWindowManager.openNewWindow = function(url) {
 	var _this = this;
 
 	// get last browser size
-	PersistentStorage.getItem("browserWindowSize", function(err, browserSize) {
+	PersistentStorage.getItem('browserWindowSize', function(err, browserSize) {
 		if (err) {
 			browserSize = {
 				width: 1000,
@@ -46,6 +47,7 @@ HackBrowserWindowManager.openNewWindow = function(url) {
 
 		newWindow.initialURL = url;
 
+		// TODO: Use path.join or some other URL concat method
 		// load the HTML file for browser window
 		newWindow.loadURL("file://" + __app.srcPath + "/html-pages/browser-window.html");
 
@@ -70,18 +72,18 @@ HackBrowserWindowManager.attachEventHandlers = function(browserWindow) {
 		var size = browserWindow.getSize();
 
 		var sizeObject = {
-			"width": size[0],
-			"height": size[1]
+			'width': size[0],
+			'height': size[1]
 		};
 
 		// save to persistent storage
-		PersistentStorage.setItem("browserWindowSize", sizeObject);
+		PersistentStorage.setItem('browserWindowSize', sizeObject);
 	});
 
 	// remove the window from windowList and remove reference so that GC can clear it from memory
 	browserWindow.on('closed', function() {
 		if (windowList.hasOwnProperty(windowId)) {
-			console.log("deleting window " + windowId);
+			console.log('deleting window ' + windowId);
 
 			delete windowList[windowId];
 			browserWindow = null;

@@ -1,23 +1,26 @@
 {
-	"name": "hackbrowser",
-	"productName": "HackBrowser",
-	"version": "0.0.3",
-	"main": "main.js",
-	"dependencies": {
-		"nedb": "^1.8.0",
-		"winston": "^2.3.1"
-	},
-	"devDependencies": {
-		"electron": "^1.6.2"
-	},
-	"build": {
-		"appId": "your.id",
-		"mac": {
-			"category": "your.app.category.type"
-		}
-	},
-	"scripts": {
-		"pack": "build --dir",
-		"dist": "build"
-	}
+  "name": "hackbrowser",
+  "description": "HackBrowser is a cross-platform, hackable browser written in Javascript. HackBrowser is built with Electron (formerly Atom Shell), which enables building cross-platform desktop apps with HTML, CSS, and Javascript. Since every part of the application's code is visible, customizing the browser in any way is possible.",
+  "author": "Ye Joo Park<subwaymatch@gmail.com",
+  "productName": "HackBrowser",
+  "version": "0.0.3",
+  "main": "main.js",
+  "dependencies": {
+    "nedb": "^1.8.0",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "electron": "^1.6.2",
+    "electron-builder": "^17.0.3"
+  },
+  "build": {
+    "appId": "com.hackbrowser",
+    "mac": {
+      "category": "public.app-category.utilities"
+    }
+  },
+  "scripts": {
+    "pack": "build --dir",
+    "dist": "build"
+  }
 }

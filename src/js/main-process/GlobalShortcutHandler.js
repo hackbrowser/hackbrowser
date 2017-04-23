@@ -13,19 +13,19 @@ class GlobalShortcutHandler {
 
 		var shortcutCommands = [
 			{
-				accelerator: "CommandOrControl+n",
+				accelerator: 'CommandOrControl+n',
 				action: function() {
 					_this.hackBrowserWindowManager.openNewWindow();
 				}
 			},
 			{
-				accelerator: "F11",
+				accelerator: 'F11',
 				action: function() {
 					console.log("F11");
 				}
 			},
 			{
-				accelerator: "F12",
+				accelerator: 'F12',
 				action: function() {
 					console.log("opening devtools");
 				}
