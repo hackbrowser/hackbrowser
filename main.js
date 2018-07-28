@@ -4,6 +4,7 @@ const electron = require('electron');
 const winston = require('winston');
 const fs = require('fs');
 const path = require('path');
+const mkdirp = require('mkdirp');
 
 // shared globally
 global.__app = {
@@ -15,7 +16,7 @@ global.__app = {
 
 // Check and create log path
 if (!fs.existsSync(global.__app.logPath)) {
-	fs.mkdirSync(global.__app.logPath);
+	mkdirp(global.__app.logPath);
 }
 
 // Create logger
