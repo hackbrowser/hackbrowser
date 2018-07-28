@@ -1,16 +1,17 @@
-'use strict';
+const DataStore = require('nedb')
+const db = new DataStore({
+	filename: global.__app.dataPath + '/user-settings.db',
+	autoload: true
+})
 
-const Datastore = require('nedb');
-const db = new Datastore({ filename: global.__app.dataPath + '/user-settings.db', autoload: true });
-
-var UserSetting = {};
+let UserSetting = {}
 
 /**
  * reset user settings
  */
 UserSetting.reset = function() {
 
-};
+}
 
 /**
  * set a specific setting for a user
@@ -22,11 +23,13 @@ UserSetting.reset = function() {
 UserSetting.set = function(settingKey, settingValue, callback) {
 	db.update({
 		settingKey: settingValue
-	}, {
+	},
+	{
 		upsert: true
-	}, function() {
-		console.log('setting complete');
-	});
-};
+	},
+	function() {
+		console.log('setting complete')
+	})
+}
 
-module.exports = UserSetting;
+module.exports = UserSetting

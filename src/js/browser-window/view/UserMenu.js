@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * User menu and related controls
@@ -7,31 +7,30 @@
  * @constructor
  */
 function UserMenu(hackBrowserWindow) {
-	const electron = require('electron'); 
-	const remote = electron.remote; 
-	const Menu = remote.Menu;
-	const logger = remote.getGlobal('__app').logger; 
+	const electron = require('electron') 
+	const remote = electron.remote 
+	const Menu = remote.Menu
+	const logger = remote.getGlobal('__app').logger 
 
-	let menuTemplate; 
+	let menuTemplate 
 
 	// An estimate of the user menu's width
 	// Since there is no way to programmatically get the width 
-	// of user menu, the fixed value here is used to open the 
-	// logger
-	const menuWidth = 221; 
+	// of user menu, the fixed value here is used to open the logger
+	const menuWidth = 221
 
-	var _this = this;
+	let _this = this
 
 	/* ====================================
 	 private member variables
 	 ====================================== */
-	var userMenuBtnEl;
+	let userMenuBtnEl
 
 	/* ====================================
 	 private methods
 	 ====================================== */
-	var init = function() {
-		userMenuBtnEl = document.getElementById('button-menu'); 
+	let init = function() {
+		userMenuBtnEl = document.getElementById('button-menu') 
 
 		menuTemplate = [
 			{
@@ -39,7 +38,7 @@ function UserMenu(hackBrowserWindow) {
 				accelerator: "Ctrl+T",
 				enabled: true, 
 				click: function(item, focusedWindow) {
-					logger.debug('New Tab'); 
+					logger.debug('New Tab') 
 				}
 			},
 			{
@@ -47,8 +46,8 @@ function UserMenu(hackBrowserWindow) {
 				accelerator: "Ctrl+N",
 				enabled: true,
 				click: function(item, focusedWindow) {
-					logger.debug('New window'); 
-					// hackBrowserWindow.goForward();
+					logger.debug('New window') 
+					// hackBrowserWindow.goForward()
 				}
 			},
 			{
@@ -58,55 +57,55 @@ function UserMenu(hackBrowserWindow) {
 				label: "Print",
 				accelerator: "CmdOrCtrl+P",
 				click: function(item, focusedWindow) {
-					hackBrowserWindow.getActiveTabView().getWebViewEl().print();
+					hackBrowserWindow.getActiveTabView().getWebViewEl().print()
 				}
 			}
-		]; 
+		] 
 
-		attachEventListeners(); 
-	};
+		attachEventListeners() 
+	}
 
-	var attachEventListeners = function() {
-		userMenuBtnEl.addEventListener('click', handleMenuBtnClick, false); 
-	};
+	let attachEventListeners = function() {
+		userMenuBtnEl.addEventListener('click', handleMenuBtnClick, false) 
+	}
 
-	var handleMenuBtnClick = function(e) { 
-		e.preventDefault(); 
+	let handleMenuBtnClick = function(e) {
+		e.preventDefault() 
 
-		showUserMenu(); 
-	};
+		showUserMenu() 
+	}
 
-	var calculateOpenPosition = function() {
+	let calculateOpenPosition = function() {
 		// Calculate open position
-		let browserWindowContentBounds = electron.remote.getCurrentWindow().getContentBounds();
-		let windowXPos = browserWindowContentBounds.x;
-		let windowWidth = browserWindowContentBounds.width;
+		let browserWindowContentBounds = electron.remote.getCurrentWindow().getContentBounds()
+		let windowXPos = browserWindowContentBounds.x
+		let windowWidth = browserWindowContentBounds.width
 
 		return {
 			x: windowWidth - menuWidth, 
 			y: 60
 		}
-	}; 
+	} 
 
 	/**
 	 * Build and show user menu
 	 */
-	var buildUserMenu = function() {
-		var userMenu = Menu.buildFromTemplate(menuTemplate); 
+	let buildUserMenu = function() {
+		var userMenu = Menu.buildFromTemplate(menuTemplate) 
 
-		return userMenu; 
-	};
+		return userMenu 
+	}
 
-	var showUserMenu = function() {
-		let userMenu = buildUserMenu(); 
-		let openPosition = calculateOpenPosition(); 
+	let showUserMenu = function() {
+		let userMenu = buildUserMenu() 
+		let openPosition = calculateOpenPosition() 
 
 		userMenu.popup(remote.getCurrentWindow(), { 
 			x: openPosition.x, 
 			y: openPosition.y, 
 			async: true 
-		});
-	};
+		})
+	}
 
 
 	/* ====================================
@@ -117,8 +116,8 @@ function UserMenu(hackBrowserWindow) {
 	 * Open user menu
 	 */
 	_this.open = function() {
-		showUserMenu(); 
-	};
+		showUserMenu() 
+	}
 
-	init();
+	init()
 }

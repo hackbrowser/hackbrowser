@@ -10,9 +10,9 @@
 	 Test script usage:
 	 $ node URLRegExTest.js
  */
-var urlRegEx = /^((?:(?:https?|ftp):\/\/)|)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+let urlRegEx = /^((?:(?:https?|ftp):\/\/)|)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i
 
-var domainsToTest = [
+let domainsToTest = [
 	{ "url": "list.com", "expectedResult": true },
 	{ "url": "http://foo.com/blah_blah", "expectedResult": true },
 	{ "url": "http://foo.com/blah_blah/", "expectedResult": true },
@@ -98,31 +98,31 @@ var domainsToTest = [
 	{ "url": "http://.www.foo.bar./", "expectedResult": false },
 	{ "url": "http://10.1.1.1", "expectedResult": false },
 	{ "url": "http://10.1.1.254", "expectedResult": false }
-];
+]
 
-var passCount = 0;
-var failCount = 0;
+let passCount = 0
+let failCount = 0
 
-for (var i = 0; i < domainsToTest.length; i++) {
-	var domainToTest = domainsToTest[i].url;
-	var expectedResult = domainsToTest[i].expectedResult;
-	var actualResult = urlRegEx.test(domainToTest);
-	var testResult = (expectedResult === actualResult);
+for (let i = 0; i < domainsToTest.length; i++) {
+	let domainToTest = domainsToTest[i].url
+	let expectedResult = domainsToTest[i].expectedResult
+	let actualResult = urlRegEx.test(domainToTest)
+	let testResult = (expectedResult === actualResult)
 
 	// increase pass/fail counts
-	if (testResult) passCount++;
-	else failCount++;
+	if (testResult) passCount++
+	else failCount++
 
 	// only print result if pass fails
 	if (testResult === false) {
-		console.log("====================================================");
-		console.log("Testing " + domainToTest);
-		console.log("Result: " + (testResult ? "PASS" : "FAIL"));
-		console.log("Expected: " + expectedResult + ", Actual: " + actualResult);
+		console.log("====================================================")
+		console.log("Testing " + domainToTest)
+		console.log("Result: " + (testResult ? "PASS" : "FAIL"))
+		console.log("Expected: " + expectedResult + ", Actual: " + actualResult)
 	}
 }
 
-console.log("====================================================");
-console.log("                       SUMMARY                      ");
-console.log("            Pass: " + passCount + ", Fail: " + failCount + ", Total: " + domainsToTest.length);
-console.log("====================================================");
+console.log("====================================================")
+console.log("                       SUMMARY                      ")
+console.log("            Pass: " + passCount + ", Fail: " + failCount + ", Total: " + domainsToTest.length)
+console.log("====================================================")

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * TabView consists of a browser tab and it's associated webview
@@ -10,29 +10,29 @@
  * @constructor
  */
 function TabView(hackBrowserWindow, browserTabBar, url) {
-	let _this = this;
+	let _this = this
 
-	const fs = require('fs');
-	const electron = require('electron');
-	const {remote} = require('electron');
-	const logger = remote.getGlobal('__app').logger;
+	const fs = require('fs')
+	const electron = require('electron')
+	const {remote} = require('electron')
+	const logger = remote.getGlobal('__app').logger
 
 	/* ====================================
 	 private member variables
 	 ====================================== */
-	var webViewEl;				// DOM element of <webview>
-	var webContents;			// WebContents object underlying <webview>
-	var webViewTitle;			// <webview> page's title (title of the embedded HTML page)
-	var webViewURL;				// Current URL of <webview> element
-	var webViewContainerEl;		// Container of <webview> elements (#webview-container)
-	var webViewWrapperEl;		// Wrapper of a single <webview> element
-	var webViewStatusBoxEl;		// Status box DOM element (show URL links on hover, etc.)
-	var searchBox;				// An instance SearchBox controller object
-	var searchBoxEl;			// Search box DOM element
-	var tabViewId;				// A unique id of current TabView
-	var browserTab;				// Browser tab corresponding to current TabView
-	var isDOMReady;				// A boolean flag to check whether DOMReady
-	var currentZoomLevel; 		// <webview>-specific zoom level
+	let webViewEl				// DOM element of <webview>
+	let webContents				// WebContents object underlying <webview>
+	let webViewTitle			// <webview> page's title (title of the embedded HTML page)
+	let webViewURL				// Current URL of <webview> element
+	let webViewContainerEl		// Container of <webview> elements (#webview-container)
+	let webViewWrapperEl		// Wrapper of a single <webview> element
+	let webViewStatusBoxEl		// Status box DOM element (show URL links on hover, etc.)
+	let searchBox				// An instance SearchBox controller object
+	let searchBoxEl				// Search box DOM element
+	let tabViewId				// A unique id of current TabView
+	let browserTab				// Browser tab corresponding to current TabView
+	let isDOMReady				// A boolean flag to check whether DOMReady
+	let currentZoomLevel 		// <webview>-specific zoom level
 
 
 	/* ====================================
@@ -43,55 +43,55 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	 *
 	 * @param url
 	 */
-	var init = function(url) {
-		webViewEl = document.createElement("webview");
-		webContents = webViewEl.getWebContents(); 
-		webViewWrapperEl = document.createElement("div");
-		webViewWrapperEl.classList.add("webview-wrapper");
-		webViewWrapperEl.style.visibility = "hidden";
-		webViewStatusBoxEl = document.createElement("div");
-		webViewStatusBoxEl.classList.add("status-message-box");
-		webViewTitle = "New Tab";
-		webViewURL = url;
-		webViewContainerEl = document.getElementById("webview-container"); 
+	let init = function(url) {
+		webViewEl = document.createElement("webview")
+		webContents = webViewEl.getWebContents() 
+		webViewWrapperEl = document.createElement("div")
+		webViewWrapperEl.classList.add("webview-wrapper")
+		webViewWrapperEl.style.visibility = "hidden"
+		webViewStatusBoxEl = document.createElement("div")
+		webViewStatusBoxEl.classList.add("status-message-box")
+		webViewTitle = "New Tab"
+		webViewURL = url
+		webViewContainerEl = document.getElementById("webview-container") 
 		
-		isDOMReady = false;
-		currentZoomLevel = 0; 
+		isDOMReady = false
+		currentZoomLevel = 0 
 
-		tabViewId = "wv-" + hackBrowserWindow.getCreatedTabViewCount();
+		tabViewId = "wv-" + hackBrowserWindow.getCreatedTabViewCount()
 
 		// Increase created tab view count
-		hackBrowserWindow.incrementCreatedTabViewCount();
+		hackBrowserWindow.incrementCreatedTabViewCount()
 
 		// Assign tabViewId to <webview> element's id
-		webViewEl.setAttribute("id", tabViewId);
-		webViewEl.setAttribute("plugins", "");
-		webViewEl.setAttribute("disablewebsecurity", "");
+		webViewEl.setAttribute("id", tabViewId)
+		webViewEl.setAttribute("plugins", "")
+		webViewEl.setAttribute("disablewebsecurity", "")
 
 		if (url === null) {
-			_this.navigateTo("./new-tab.html");
+			_this.navigateTo("./new-tab.html")
 		} else {
-			_this.navigateTo(url);
+			_this.navigateTo(url)
 		}
 
 		// Append search box
-		searchBox = new SearchBox(_this);
-		searchBoxEl = searchBox.getSearchWrapperEl();
+		searchBox = new SearchBox(_this)
+		searchBoxEl = searchBox.getSearchWrapperEl()
 
 		// Append the webview element to screen (#webview-container)
-		webViewWrapperEl.appendChild(webViewEl);
-		webViewWrapperEl.appendChild(searchBoxEl);
-		webViewWrapperEl.appendChild(webViewStatusBoxEl); 
-		webViewContainerEl.appendChild(webViewWrapperEl); 
+		webViewWrapperEl.appendChild(webViewEl)
+		webViewWrapperEl.appendChild(searchBoxEl)
+		webViewWrapperEl.appendChild(webViewStatusBoxEl) 
+		webViewContainerEl.appendChild(webViewWrapperEl) 
 
-		browserTab = browserTabBar.createTab(tabViewId);
-		attachEventHandlers();
-	};
+		browserTab = browserTabBar.createTab(tabViewId)
+		attachEventHandlers()
+	}
 
 	/**
 	 * Attach event handlers for <webview> events
 	 */
-	var attachEventHandlers = function() {
+	let attachEventHandlers = function() {
 		/*
 			<webview> events are fired in the following order
 
@@ -107,165 +107,165 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 			did-finish-load
 		 */
 
-		webViewEl.addEventListener("load-commit", handleLoadCommit);
-		webViewEl.addEventListener("did-finish-load", handleDidFinishLoad);
-		webViewEl.addEventListener("did-fail-load", handleDidFailLoad);
-		webViewEl.addEventListener("did-frame-finish-load", handleDidFrameFinishLoad);
-		webViewEl.addEventListener("did-start-loading", handleDidStartLoading);
-		webViewEl.addEventListener("did-stop-loading", handleDidStopLoading);
-		webViewEl.addEventListener("did-get-response-details", handleDidGetResponseDetails);
-		webViewEl.addEventListener("did-get-redirect-request", handleDidGetRedirectRequest);
-		webViewEl.addEventListener("dom-ready", handleDOMReady);
-		webViewEl.addEventListener("page-title-updated", handlePageTitleUpdated);
-		webViewEl.addEventListener("page-favicon-updated", handlePageFaviconUpdated);
-		webViewEl.addEventListener("new-window", handleNewWindow);
-		webViewEl.addEventListener("will-navigate", handleWillNavigate);
-		webViewEl.addEventListener("did-navigate", handleDidNavigate);
-		webViewEl.addEventListener("did-navigate-in-page", handleDidNavigateInPage);
-		webViewEl.addEventListener("console-message", handleConsoleMessage);
-		webViewEl.addEventListener("crashed", handleCrashed); 
-		webViewEl.addEventListener("gpu-crashed", handleGPUCrashed); 
-		webViewEl.addEventListener("plugin-crashed", handlePluginCrashed); 
-		webViewEl.addEventListener("update-target-url", handleUpdateTargetURL); 
-	};
+		webViewEl.addEventListener("load-commit", handleLoadCommit)
+		webViewEl.addEventListener("did-finish-load", handleDidFinishLoad)
+		webViewEl.addEventListener("did-fail-load", handleDidFailLoad)
+		webViewEl.addEventListener("did-frame-finish-load", handleDidFrameFinishLoad)
+		webViewEl.addEventListener("did-start-loading", handleDidStartLoading)
+		webViewEl.addEventListener("did-stop-loading", handleDidStopLoading)
+		webViewEl.addEventListener("did-get-response-details", handleDidGetResponseDetails)
+		webViewEl.addEventListener("did-get-redirect-request", handleDidGetRedirectRequest)
+		webViewEl.addEventListener("dom-ready", handleDOMReady)
+		webViewEl.addEventListener("page-title-updated", handlePageTitleUpdated)
+		webViewEl.addEventListener("page-favicon-updated", handlePageFaviconUpdated)
+		webViewEl.addEventListener("new-window", handleNewWindow)
+		webViewEl.addEventListener("will-navigate", handleWillNavigate)
+		webViewEl.addEventListener("did-navigate", handleDidNavigate)
+		webViewEl.addEventListener("did-navigate-in-page", handleDidNavigateInPage)
+		webViewEl.addEventListener("console-message", handleConsoleMessage)
+		webViewEl.addEventListener("crashed", handleCrashed) 
+		webViewEl.addEventListener("gpu-crashed", handleGPUCrashed) 
+		webViewEl.addEventListener("plugin-crashed", handlePluginCrashed) 
+		webViewEl.addEventListener("update-target-url", handleUpdateTargetURL) 
+	}
 
-	var handleLoadCommit = function(e) {
-		console.log("[" + tabViewId + "] load-commit");
+	let handleLoadCommit = function(e) {
+		console.log("[" + tabViewId + "] load-commit")
 
 		if (e.isMainFrame === true) {
-			webViewURL = e.url;
+			webViewURL = e.url
 
 			if (hackBrowserWindow.getActiveTabView() === _this) {
-				hackBrowserWindow.updateWindowTitle(webViewURL);
+				hackBrowserWindow.updateWindowTitle(webViewURL)
 			}
 
 			if (hackBrowserWindow.getActiveTabView() === _this) {
-				hackBrowserWindow.updateWindowControls();
+				hackBrowserWindow.updateWindowControls()
 			}
 		}
-	};
+	}
 
 	// 'did-finish-load' event fires after onload event is dispatched from the WebView
-	var handleDidFinishLoad = function() {
-		console.log("[" + tabViewId + "] did-finish-load");
-	};
+	let handleDidFinishLoad = function() {
+		console.log("[" + tabViewId + "] did-finish-load")
+	}
 
-	var handleDidFailLoad = function(e) {
-		console.log("[" + tabViewId + "] did-fail-load");
-		console.log(e);
-	};
+	let handleDidFailLoad = function(e) {
+		console.log("[" + tabViewId + "] did-fail-load")
+		console.log(e)
+	}
 
-	var handleDidFrameFinishLoad = function(e) {
-		console.log("[" + tabViewId + "] did-frame-finish-load");
-		webViewURL = webViewEl.getURL();
-	};
+	let handleDidFrameFinishLoad = function(e) {
+		console.log("[" + tabViewId + "] did-frame-finish-load")
+		webViewURL = webViewEl.getURL()
+	}
 
-	var handleDidStartLoading = function() {
-		console.log("[" + tabViewId + "] did-start-loading");
+	let handleDidStartLoading = function() {
+		console.log("[" + tabViewId + "] did-start-loading")
 
 		// Set loading icon
-		browserTab.startLoading();
+		browserTab.startLoading()
 
 		if (hackBrowserWindow.getActiveTabView() === _this) {
-			hackBrowserWindow.getNavigationControls().showLoadStopBtn();
+			hackBrowserWindow.getNavigationControls().showLoadStopBtn()
 		}
-	};
+	}
 
-	var handleDidStopLoading = function() {
-		console.log("[" + tabViewId + "] did-stop-loading");
+	let handleDidStopLoading = function() {
+		console.log("[" + tabViewId + "] did-stop-loading")
 
 		// Clear loading icon
-		browserTab.stopLoading();
+		browserTab.stopLoading()
 
 		// Notify navigation details to main process
 		var navigationInfo = {
 			url: webViewURL,
 			title: webViewTitle
-		};
+		}
 
 		// Save URL to navigation history
-		hackBrowserWindow.getNavigationHistoryHandler().addNavigationHistory(navigationInfo, function() {});
+		hackBrowserWindow.getNavigationHistoryHandler().addNavigationHistory(navigationInfo, function() {})
 
 		if (hackBrowserWindow.getActiveTabView() === _this) {
-			hackBrowserWindow.getNavigationControls().showReloadBtn();
+			hackBrowserWindow.getNavigationControls().showReloadBtn()
 		}
-	};
+	}
 
-	var handleDidGetResponseDetails = function(e) {
-		console.log("[" + tabViewId + "] did-get-response-details"); 
-	};
+	let handleDidGetResponseDetails = function(e) {
+		console.log("[" + tabViewId + "] did-get-response-details") 
+	}
 
-	var handleDidGetRedirectRequest = function(e) {
-		console.log("[" + tabViewId + "] did-get-redirect-request");
-	};
+	let handleDidGetRedirectRequest = function(e) {
+		console.log("[" + tabViewId + "] did-get-redirect-request")
+	}
 
 	var handleDOMReady = function() {
-		console.log("[" + tabViewId + "] dom-ready");
+		console.log("[" + tabViewId + "] dom-ready")
 
-		var TRACK_SCRIPT_PATH = __dirname + "/../js/browser-window/inject/inject-to-webview.js";
+		let TRACK_SCRIPT_PATH = __dirname + "/../js/browser-window/inject/inject-to-webview.js"
 
-		isDOMReady = true;
+		isDOMReady = true
 
 		// Insert custom script to <webview> to handle click events
 		fs.readFile(TRACK_SCRIPT_PATH, "utf-8", function(err, injectScript) {
 			if (err) {
-				console.log("[" + tabViewId + "] error loading inject script");
-				return;
+				console.log("[" + tabViewId + "] error loading inject script")
+				return
 			}
 
-			webViewEl.executeJavaScript(injectScript);
-			console.log("[" + tabViewId + "] successfully injected script to webview");
-		});
-	};
+			webViewEl.executeJavaScript(injectScript)
+			console.log("[" + tabViewId + "] successfully injected script to webview")
+		})
+	}
 
-	var handlePageTitleUpdated = function(e) {
-		console.log("[" + tabViewId + "] page-title-updated");
+	let handlePageTitleUpdated = function(e) {
+		console.log("[" + tabViewId + "] page-title-updated")
 
-		webViewTitle = e.title;
+		webViewTitle = e.title
 
 		// Update tab title
-		_this.updateTabTitle(webViewTitle);
+		_this.updateTabTitle(webViewTitle)
 
 		if (hackBrowserWindow.getActiveTabView() === _this) {
-			hackBrowserWindow.updateWindowTitle(webViewTitle);
+			hackBrowserWindow.updateWindowTitle(webViewTitle)
 		}
-	};
+	}
 
-	var handlePageFaviconUpdated = function(e) {
-		console.log("[" + tabViewId + "] page-favicon-updated");
+	let handlePageFaviconUpdated = function(e) {
+		console.log("[" + tabViewId + "] page-favicon-updated")
 
 		// The last element in favicons array is used
 		// TODO: if multiple favicon items are returned and last element is invalid, use other ones
-		_this.updateTabFavicon(e.favicons[e.favicons.length - 1]);
-	};
+		_this.updateTabFavicon(e.favicons[e.favicons.length - 1])
+	}
 
-	var handleNewWindow = function(e) {
-		console.log("[" + tabViewId + "] new-window");
+	let handleNewWindow = function(e) {
+		console.log("[" + tabViewId + "] new-window")
 
-		hackBrowserWindow.addNewTab(e.url, true);
+		hackBrowserWindow.addNewTab(e.url, true)
 
-		console.log(e);
-	};
+		console.log(e)
+	}
 
-	var handleWillNavigate = function(e) {
-		console.log("[" + tabViewId + "] will-navigate");
-		console.log(e);
-	};
+	let handleWillNavigate = function(e) {
+		console.log("[" + tabViewId + "] will-navigate")
+		console.log(e)
+	}
 
-	var handleDidNavigate = function(e) {
-		console.log("[" + tabViewId + "] did-navigate");
-		console.log(e);
+	let handleDidNavigate = function(e) {
+		console.log("[" + tabViewId + "] did-navigate")
+		console.log(e)
 
-		webViewURL = e.url;
-	};
+		webViewURL = e.url
+	}
 
-	var handleDidNavigateInPage = function(e) {
-		console.log("[" + tabViewId + "] did-navigate-in-page");
-		console.log(e);
-	};
+	let handleDidNavigateInPage = function(e) {
+		console.log("[" + tabViewId + "] did-navigate-in-page")
+		console.log(e)
+	}
 
-	var handleConsoleMessage = function(e) {
-		console.log("[" + tabViewId + "] console-message");
+	let handleConsoleMessage = function(e) {
+		console.log("[" + tabViewId + "] console-message")
 
 		// Check if message text begins with curly braces (for json format)
 		// most of the time, non-json formats would be filtered here
@@ -273,12 +273,12 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 		// but the message text is not json format, an exception is thrown
 		if (e.message[0] == '{') {
 			try {
-				var msgObject = JSON.parse(e.message);
-				console.log(msgObject);
+				var msgObject = JSON.parse(e.message)
+				console.log(msgObject)
 
 				// If contextmenu action, pass it to context menu handler
 				if (msgObject.eventType === "contextmenu") {
-					hackBrowserWindow.getContextMenuHandler().handleWebViewContextMenu(msgObject);
+					hackBrowserWindow.getContextMenuHandler().handleWebViewContextMenu(msgObject)
 				}
 
 				// Record click event
@@ -300,56 +300,56 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 				// Since the console-message is not a HackBrowser message, do nothingq
 			}
 		}
-	};
+	}
 
-	var handleCrashed = function(e) {
-		console.log("[" + tabViewId + "] crashed");
-		console.log(e);
-	};
+	let handleCrashed = function(e) {
+		console.log("[" + tabViewId + "] crashed")
+		console.log(e)
+	}
 
-	var handleGPUCrashed = function(e) {
-		console.log("[" + tabViewId + "] gpu-crashed");
-		console.log(e);
-	};
+	let handleGPUCrashed = function(e) {
+		console.log("[" + tabViewId + "] gpu-crashed")
+		console.log(e)
+	}
 
-	var handlePluginCrashed = function(e) {
-		console.log("[" + tabViewId + "] plugin-crashed");
-		console.log(e); 
-	};
+	let handlePluginCrashed = function(e) {
+		console.log("[" + tabViewId + "] plugin-crashed")
+		console.log(e) 
+	}
 
-	var handleUpdateTargetURL = function(e) {
-		console.log("[" + tabViewId + "] update-target-url"); 
+	let handleUpdateTargetURL = function(e) {
+		console.log("[" + tabViewId + "] update-target-url") 
 
-		displayStatusMessage(e.url); 
-	};
+		displayStatusMessage(e.url) 
+	}
 
-	var displayStatusMessage = function(msg) {
+	let displayStatusMessage = function(msg) {
 		if (!msg || msg === "") {
-			webViewStatusBoxEl.style.display = "none";
+			webViewStatusBoxEl.style.display = "none"
 		}
 
 		else {
 			// Check whether mouse is in the left side of the screen, or the right side of the screen
-			let browserWindowContentBounds = electron.remote.getCurrentWindow().getContentBounds();
-			let currentCursorXPos = electron.screen.getCursorScreenPoint().x;
-			let currentCursorRelativeXPos = currentCursorXPos - browserWindowContentBounds.x;
-			let contentCenterPos = browserWindowContentBounds.width / 2;
+			let browserWindowContentBounds = electron.remote.getCurrentWindow().getContentBounds()
+			let currentCursorXPos = electron.screen.getCursorScreenPoint().x
+			let currentCursorRelativeXPos = currentCursorXPos - browserWindowContentBounds.x
+			let contentCenterPos = browserWindowContentBounds.width / 2
 
 			// TODO: Check vertical position to show link URL on the left side of the screen 
 			// when mouse cursor is not at the bottom
 			if (currentCursorRelativeXPos < contentCenterPos) {
 				// If mouse cursor is in the left side of the screen, show link on right
-				webViewStatusBoxEl.classList.add('right');
+				webViewStatusBoxEl.classList.add('right')
 			} else {
 				// Otherwise, show on the left
-				webViewStatusBoxEl.classList.remove('right');
+				webViewStatusBoxEl.classList.remove('right')
 			}
 
-			webViewStatusBoxEl.style.display = "block";
+			webViewStatusBoxEl.style.display = "block"
 		}
 
-		webViewStatusBoxEl.innerHTML = msg;
-	}; 
+		webViewStatusBoxEl.innerHTML = msg
+	} 
 
 
 
@@ -363,53 +363,53 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	 * @param uri {string} uri to navigate to
 	 */
 	_this.navigateTo = function(uri) {
-		var URIInfo = URIParser.parse(uri);
+		let URIInfo = URIParser.parse(uri)
 
 		// if an invalid URL is passed
 		if (URIInfo.isValid !== true) {
 			// do nothing
-			return;
+			return
 		}
 
 		if (URIInfo.type === "http") {
-			webViewEl.setAttribute("src", URIInfo.formattedURI);
+			webViewEl.setAttribute("src", URIInfo.formattedURI)
 		}
 
 		else if (URIInfo.type === "file") {
-			console.log("User has entered a file URL into the addressbar: " + uri);
-			webViewEl.setAttribute("src", URIInfo.formattedURI);
+			console.log("User has entered a file URL into the addressbar: " + uri)
+			webViewEl.setAttribute("src", URIInfo.formattedURI)
 		}
 
 		else if (URIInfo.type === "page") {
-			console.log("Opening HTML template file " + uri);
-			webViewEl.setAttribute("src", URIInfo.formattedURI);
+			console.log("Opening HTML template file " + uri)
+			webViewEl.setAttribute("src", URIInfo.formattedURI)
 		}
 
 		else if (URIInfo.type === "internal") {
-			console.log("User has navigated to an internal link: " + uri);
+			console.log("User has navigated to an internal link: " + uri)
 		}
 
 		else if (URIInfo.type === "search") {
-			console.log("User has searched " + uri);
-			webViewEl.setAttribute("src", URIInfo.formattedURI);
+			console.log("User has searched " + uri)
+			webViewEl.setAttribute("src", URIInfo.formattedURI)
 		}
-	};
+	}
 
 	/**
 	 * Activate TabView (user clicks on this browser tab)
 	 */
 	_this.activate = function() {
-		webViewWrapperEl.style.visibility = "visible";
-		browserTab.activate();
-	};
+		webViewWrapperEl.style.visibility = "visible"
+		browserTab.activate()
+	}
 
 	/**
 	 * Deactivate TabView (user clicks on another browser tab)
 	 */
 	_this.deactivate = function() {
-		webViewWrapperEl.style.visibility = "hidden";
-		browserTab.deactivate();
-	};
+		webViewWrapperEl.style.visibility = "hidden"
+		browserTab.deactivate()
+	}
 
 	/**
 	 * Check whether navigation actions (back, forward, reload, etc) can be performed on <webview>
@@ -417,16 +417,16 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	 * @returns {boolean} whether dom-ready was fired at least once in the <webview> object
 	 */
 	_this.isDOMReady = function() {
-		return isDOMReady;
-	};
+		return isDOMReady
+	}
 
 	/**
 	 * Close current TabView
 	 */
 	_this.close = function() {
 		// remove webview element
-		webViewContainerEl.removeChild(webViewWrapperEl);
-	};
+		webViewContainerEl.removeChild(webViewWrapperEl)
+	}
 
 	/**
 	 * Returns current TabView object's string ID
@@ -434,8 +434,8 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	 * @returns {string} current TabView object's string ID
 	 */
 	_this.getId = function() {
-		return tabViewId;
-	};
+		return tabViewId
+	}
 
 	/**
 	 * Returns <webview> element
@@ -443,8 +443,8 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	 * @returns {DOMElement} <webview> element associated with current TabView object
 	 */
 	_this.getWebViewEl = function() {
-		return webViewEl;
-	};
+		return webViewEl
+	}
 
 	/**
 	 * Returns <webview> element's title
@@ -452,58 +452,57 @@ function TabView(hackBrowserWindow, browserTabBar, url) {
 	 * @returns {*}
 	 */
 	_this.getWebViewTitle = function() {
-		return webViewTitle;
-	};
+		return webViewTitle
+	}
 
 	_this.getURL = function() {
-		return webViewURL;
-	};
+		return webViewURL
+	}
 
 	_this.getSearchBox = function() {
-		return searchBox;
-	};
+		return searchBox
+	}
 
 	_this.updateTabFavicon = function(imageURL) {
-		browserTab.updateTabFavicon(imageURL);
-	};
+		browserTab.updateTabFavicon(imageURL)
+	}
 
 	_this.updateTabTitle = function(title) {
-		browserTab.updateTitle(title);
-	};
+		browserTab.updateTitle(title)
+	}
 
 	/**
 	 * Zoom in <webview> element
 	 */
 	_this.zoomIn = function() {
-		logger.debug('TabView.zoomIn()'); 
+		logger.debug('TabView.zoomIn()') 
 		webViewEl.setZoomLevel(++currentZoomLevel);  
 		
 		webViewEl.getWebContents().getZoomLevel((zoomLevel) => {
-			logger.debug('Current zoom level: ' + zoomLevel); 
+			logger.debug('Current zoom level: ' + zoomLevel) 
 
 			webViewEl.getWebContents().getZoomFactor((zoomFactor) => {
-				logger.debug('Current zoom factor: ' + zoomFactor); 
-			}); 
-		}); 
-	}; 
+				logger.debug('Current zoom factor: ' + zoomFactor) 
+			}) 
+		}) 
+	} 
 
 	/**
 	 * Zoom out <webview> element
 	 */
 	_this.zoomOut = function() {
-		logger.debug('TabView.zoomOut()'); 
-		webViewEl.setZoomLevel(--currentZoomLevel); 
+		logger.debug('TabView.zoomOut()') 
+		webViewEl.setZoomLevel(--currentZoomLevel) 
 
 		webViewEl.getWebContents().getZoomLevel((zoomLevel) => {
-			logger.debug('Current zoom level: ' + zoomLevel); 
+			logger.debug('Current zoom level: ' + zoomLevel) 
 
 			webViewEl.getWebContents().getZoomFactor((zoomFactor) => {
-				logger.debug('Current zoom factor: ' + zoomFactor); 
-			}); 
-		}); 
-	}; 
+				logger.debug('Current zoom factor: ' + zoomFactor) 
+			}) 
+		}) 
+	} 
 
 
-
-	init(url);
+	init(url)
 }

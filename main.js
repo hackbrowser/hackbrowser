@@ -1,10 +1,10 @@
-'use strict';
+'use strict'
 
-const electron = require('electron');
-const winston = require('winston');
-const fs = require('fs');
-const path = require('path');
-const mkdirp = require('mkdirp');
+const electron = require('electron')
+const winston = require('winston')
+const fs = require('fs')
+const path = require('path')
+const mkdirp = require('mkdirp')
 
 // shared globally
 global.__app = {
@@ -12,11 +12,11 @@ global.__app = {
 	dataPath: path.join(electron.app.getPath('userData')),
 	logPath: path.join(electron.app.getPath('userData'), 'logs'),
 	logger: null
-};
+}
 
 // Check and create log path
 if (!fs.existsSync(global.__app.logPath)) {
-	mkdirp(global.__app.logPath);
+	mkdirp(global.__app.logPath)
 }
 
 // Create logger
@@ -28,9 +28,9 @@ global.__app.logger = new (winston.Logger)({
 			level: 'info'
 		})
 	]
-});
+})
 
-const MainProcessController = require(path.join(global.__app.srcPath, 'js', 'main-process', 'MainProcessController'));
+const MainProcessController = require(path.join(global.__app.srcPath, 'js', 'main-process', 'MainProcessController'))
 
-let mainController = new MainProcessController();
-mainController.start();
+let mainController = new MainProcessController()
+mainController.start()

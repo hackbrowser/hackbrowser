@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * handles all IPC communication with the main process
  *
@@ -7,7 +5,7 @@
  * @constructor
  */
 function NavigationHistoryHandler(hackBrowserWindow) {
-	var _this = this;
+	let _this = this
 
 	/* ====================================
 	 private member variables
@@ -17,16 +15,16 @@ function NavigationHistoryHandler(hackBrowserWindow) {
 	/* ====================================
 	 private methods
 	 ====================================== */
-	var init = function() {
-	};
+	let init = function() {
+	}
 
 
 	/* ====================================
 	 public methods
 	 ====================================== */
 	_this.addNavigationHistory = function(navigationInfo, callback) {
-		hackBrowserWindow.getIPCHandler().requestAddNavigationHistory(navigationInfo, callback);
-	};
+		hackBrowserWindow.getIPCHandler().requestAddNavigationHistory(navigationInfo, callback)
+	}
 
-	init();
+	init()
 }

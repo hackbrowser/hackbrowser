@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * Address bar and related controls
@@ -7,33 +7,33 @@
  * @constructor
  */
 function AutoCompleteBox(hackBrowserWindow) {
-	var _this = this;
+	let _this = this
 
-	const logger = require('electron').remote.getGlobal('__app').logger; 
+	const logger = require('electron').remote.getGlobal('__app').logger 
 
 	/* ====================================
 	 private member variables
 	 ====================================== */
-	var autoCompleteBoxEl;
-	var autoCompleteEntries;
-	var currentIndex;			// index used for autocomplete entries
+	let autoCompleteBoxEl
+	let autoCompleteEntries
+	let currentIndex			// index used for autocomplete entries
 
 
 	/* ====================================
 	 private methods
 	 ====================================== */
-	var init = function() {
-		autoCompleteBoxEl = document.getElementById("auto-complete-box");
-		currentIndex = -1;
+	let init = function() {
+		autoCompleteBoxEl = document.getElementById("auto-complete-box")
+		currentIndex = -1
 
-		attachEventHandlers();
-	};
+		attachEventHandlers()
+	}
 
 	/**
 	 * attach event handlers for auto complete box
 	 */
-	var attachEventHandlers = function() {
-	};
+	let attachEventHandlers = function() {
+	}
 
 	/**
 	 * add an autocomplete item to autocomplete DOM element
@@ -42,76 +42,76 @@ function AutoCompleteBox(hackBrowserWindow) {
 	 * @param title
 	 * @returns {DOMElement} DOM node of appended item
 	 */
-	var addItem = function(url, title) {
-		var autoCompleteItemInnerHTML = '<span class="url">{{url}}</span> - <span class="title">{{title}}</span>';
-		var itemEl;
+	let addItem = function(url, title) {
+		let autoCompleteItemInnerHTML = '<span class="url">{{url}}</span> - <span class="title">{{title}}</span>'
+		let itemEl
 
-		autoCompleteItemInnerHTML = autoCompleteItemInnerHTML.replace("{{url}}", url);
-		autoCompleteItemInnerHTML = autoCompleteItemInnerHTML.replace("{{title}}", title);
+		autoCompleteItemInnerHTML = autoCompleteItemInnerHTML.replace("{{url}}", url)
+		autoCompleteItemInnerHTML = autoCompleteItemInnerHTML.replace("{{title}}", title)
 
-		itemEl = document.createElement("div");
-		itemEl.classList.add("item");
-		itemEl.innerHTML = autoCompleteItemInnerHTML;
-		itemEl.dataset.url = url;
+		itemEl = document.createElement("div")
+		itemEl.classList.add("item")
+		itemEl.innerHTML = autoCompleteItemInnerHTML
+		itemEl.dataset.url = url
 		
-		attachEventListenerToItem(itemEl);
+		attachEventListenerToItem(itemEl)
 
-		autoCompleteBoxEl.appendChild(itemEl);
+		autoCompleteBoxEl.appendChild(itemEl)
 
-		return itemEl;
-	};
+		return itemEl
+	}
 
-	var attachEventListenerToItem = function(itemEl) {
+	let attachEventListenerToItem = function(itemEl) {
 		itemEl.addEventListener('mousedown', function(e) {
 			// Prevent focusout by preventing mouse click behavior
-			e.preventDefault();
+			e.preventDefault()
 
-			_this.close();
+			_this.close()
 
 			// Navigate to 
-			hackBrowserWindow.getAddressBar().updateURL(itemEl.dataset.url);
-			hackBrowserWindow.navigateTo(itemEl.dataset.url);
-		});
-	};
+			hackBrowserWindow.getAddressBar().updateURL(itemEl.dataset.url)
+			hackBrowserWindow.navigateTo(itemEl.dataset.url)
+		})
+	}
 
 	/**
 	 * Render the list of autocomplete entries
 	 */
-	var render = function() {
-		autoCompleteBoxEl.innerHTML = "";
+	let render = function() {
+		autoCompleteBoxEl.innerHTML = ""
 
 		// if no autocomplete entry exist, close autocomplete box
 		if (autoCompleteEntries.length === 0) {
-			_this.close();
+			_this.close()
 
-			return;
+			return
 		}
 
-		for (var i = 0, len = autoCompleteEntries.length; i < len; i++) {
-			var appendedEl = addItem(autoCompleteEntries[i].url, autoCompleteEntries[i].title);
+		for (let i = 0, len = autoCompleteEntries.length; i < len; i++) {
+			let appendedEl = addItem(autoCompleteEntries[i].url, autoCompleteEntries[i].title)
 
-			autoCompleteEntries[i].el = appendedEl;
+			autoCompleteEntries[i].el = appendedEl
 		}
 
-		currentIndex = 0;
-		autoCompleteEntries[currentIndex].el.classList.add("selected");
+		currentIndex = 0
+		autoCompleteEntries[currentIndex].el.classList.add("selected")
 
-		_this.open();
-	};
+		_this.open()
+	}
 
 	/**
 	 * Focus on a specific entry by index
 	 * 
 	 * @param {int} newIndex Index to focus on
 	 */
-	var focusByIndex = function(newIndex) {
-		autoCompleteEntries[currentIndex].el.classList.remove("selected");
-		autoCompleteEntries[newIndex].el.classList.add("selected");
+	let focusByIndex = function(newIndex) {
+		autoCompleteEntries[currentIndex].el.classList.remove("selected")
+		autoCompleteEntries[newIndex].el.classList.add("selected")
 
-		hackBrowserWindow.getAddressBar().updateURL(autoCompleteEntries[newIndex].url);
+		hackBrowserWindow.getAddressBar().updateURL(autoCompleteEntries[newIndex].url)
 
-		currentIndex = newIndex;
-	};
+		currentIndex = newIndex
+	}
 
 
 
@@ -122,15 +122,15 @@ function AutoCompleteBox(hackBrowserWindow) {
 	  * Open autocomplete box
 	  */
 	_this.open = function() {
-		autoCompleteBoxEl.style.display = "block";
-	};
+		autoCompleteBoxEl.style.display = "block"
+	}
 
 	/**
 	 * Close autocomplete box
 	 */
 	_this.close = function() {
-		autoCompleteBoxEl.style.display = "none";
-	};
+		autoCompleteBoxEl.style.display = "none"
+	}
 
 	/**
 	 * Move focus downward
@@ -140,11 +140,11 @@ function AutoCompleteBox(hackBrowserWindow) {
 		// do nothing
 		if (currentIndex === autoCompleteEntries.length - 1) {
 			// do nothing
-			return;
+			return
 		}
 
-		focusByIndex(currentIndex + 1);
-	};
+		focusByIndex(currentIndex + 1)
+	}
 
 	/**
 	 * Move focus upward
@@ -154,21 +154,21 @@ function AutoCompleteBox(hackBrowserWindow) {
 		// do nothing
 		if (currentIndex === 0) {
 			// do nothing
-			return;
+			return
 		}
 
-		focusByIndex(currentIndex - 1);
-	};
+		focusByIndex(currentIndex - 1)
+	}
 
 	/**
 	 * Update autocomplete entries with a new search term
 	 */
 	_this.update = function(searchTerm) {
 		hackBrowserWindow.getIPCHandler().requestAutoCompleteEntries(searchTerm, function(newAutoCompleteEntries) {
-			autoCompleteEntries = newAutoCompleteEntries;
-			render();
-		});
-	};
+			autoCompleteEntries = newAutoCompleteEntries
+			render()
+		})
+	}
 
-	init();
+	init()
 }

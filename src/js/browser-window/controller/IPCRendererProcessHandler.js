@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * handles all IPC communication with the main process
  *
@@ -7,9 +5,9 @@
  * @constructor
  */
 function IPCRendererProcessHandler(hackBrowserWindow) {
-	const ipcRenderer = require("electron").ipcRenderer;
+	const ipcRenderer = require("electron").ipcRenderer
 
-	var _this = this;
+	let _this = this
 
 	/* ====================================
 	 public methods
@@ -20,24 +18,24 @@ function IPCRendererProcessHandler(hackBrowserWindow) {
 	 * @param url {string} url to open with new window
 	 */
 	_this.requestNewWindowOpen = function(url) {
-		ipcRenderer.send("newWindowOpenRequest", url);
-	};
+		ipcRenderer.send("newWindowOpenRequest", url)
+	}
 
 
 	_this.requestAddNavigationHistory = function(navigationInfo, callback) {
-		ipcRenderer.send("addNavigationHistoryRequest", JSON.stringify(navigationInfo));
+		ipcRenderer.send("addNavigationHistoryRequest", JSON.stringify(navigationInfo))
 		ipcRenderer.once("addNavigationHistoryResponse", function(e, result) {
-			callback(result);
-		});
-	};
+			callback(result)
+		})
+	}
 
 	_this.requestAutoCompleteEntries = function(keyword, callback) {
-		ipcRenderer.send("autoCompleteEntriesRequest", keyword);
+		ipcRenderer.send("autoCompleteEntriesRequest", keyword)
 		ipcRenderer.once("autoCompleteEntriesResponse", function(e, autoCompleteEntries) {
-			autoCompleteEntries = JSON.parse(autoCompleteEntries);
+			autoCompleteEntries = JSON.parse(autoCompleteEntries)
 			
 
-			callback(autoCompleteEntries);
-		});
-	};
+			callback(autoCompleteEntries)
+		})
+	}
 }
