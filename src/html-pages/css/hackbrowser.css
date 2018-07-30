@@ -8,25 +8,31 @@ body {
 	height: 100%;
 }
 
-nav#navtabs {
-	background: #e5e5e5;
-	font-size: 12px;
-	line-height: 12px;
-	position: absolute;
-	width: 100%;
-	height: 28px;
-	top: 0;
-	left: 0;
-	z-index: 20;
-	padding-right: 200px;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
+
+#controls-wrapper {
+	-webkit-app-region: drag;
+	background-color: #ccc;
+}
+
+#no-drag-region {
+	height: 4px;
+	-webkit-app-region: no-drag;
 }
 
 /*
-	animation should be handled in a separate CSS class
-	to enable/disable the animation temporarily as required
-*/
+	Navigation tab bar and tabs
+ */
+nav#navtabs {
+	background-color: #ccc;
+	font-size: 12px;
+	line-height: 12px;
+	height: 28px;
+	padding-right: 200px;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-app-region: drag;
+}
+
 nav#navtabs.animate > .tab,
 nav#navtabs.animate > #add-tab {
 	transition: all 120ms ease-in-out;
@@ -45,6 +51,7 @@ nav#navtabs.animate > #add-tab {
 	cursor: pointer;
 	position: relative; 
 	overflow: hidden;
+	-webkit-app-region: no-drag;
 }
 
 	.nav-tab.gu-transit, 
@@ -118,6 +125,7 @@ nav#navtabs > #add-tab {
 	-webkit-box-sizing: border-box;
 	cursor: pointer;
 	overflow: hidden;
+	-webkit-app-region: no-drag;
 }
 
 	nav#navtabs > #add-tab:hover {
@@ -139,11 +147,6 @@ nav#navtabs:after {
 #menubar {
 	background-color: #f5f5f5;
 	border-bottom: 1px solid #ddd;
-	position: absolute;
-	width: 100%;
-	height: 35px;
-	top: 28px;
-	left: 0;
 	overflow: visible;
 	z-index: 15;
 }
@@ -259,19 +262,19 @@ input#address-bar {
 
 /* Tabview */
 #webview-container {
-	position: relative;
-	height: 100%;
-	padding-top: 64px;
-	padding-bottom: 48px;
+	position: absolute;
+	width: 100%;
+	height: calc(100% - 70px);
+	top: 70px;
 	box-sizing: border-box;
 	border-bottom: 1px solid #aaa;
 }
 
 .webview-wrapper {
 	width: 100%;
-	height: calc(100% - 64px);
+	height: 100%;
 	position: absolute;
-	top: 64px;
+	top: 0;
 	left: 0;
 }
 

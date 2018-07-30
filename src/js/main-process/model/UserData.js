@@ -1,6 +1,6 @@
 const DataStore = require('nedb')
 const db = new DataStore({ filename: global.__app.dataPath + '/user-data.db', autoload: true })
 
-var UserData = {}
+let UserData = {}
 
 module.exports = UserData

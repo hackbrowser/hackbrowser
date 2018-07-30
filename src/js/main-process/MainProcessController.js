@@ -14,12 +14,12 @@ const GlobalShortcutHandler = require(path.join(global.__app.srcPath, 'js', 'mai
 const IPCMainProcessHandler = require(path.join(global.__app.srcPath, 'js', 'main-process', 'IPCMainProcessHandler'))
 
 function MainProcessController() {
-	var _this = this
+	let _this = this
 
-	var ipcHandler
-	var mainProcessEventEmitter
+	let ipcHandler
+	let mainProcessEventEmitter
 
-	var init = function() {
+	let init = function() {
 		// attempt to enable Pepper Flash Player plugin
 		// binary for pepper flash file is saved in {src-directory}/binaries/
 		enablePepperFlashPlayer()
@@ -27,7 +27,7 @@ function MainProcessController() {
 		attachEventHandlers()
 	}
 
-	var attachEventHandlers = function() {
+	let attachEventHandlers = function() {
 		app.on('window-all-closed', function() {
 			console.log('window-all-closed, quitting')
 
@@ -75,7 +75,7 @@ function MainProcessController() {
 	 * supported OS versions
 	 * Windows 7 64-bit, Mac OS 64-bit
 	 */
-	var enablePepperFlashPlayer = function() {
+	let enablePepperFlashPlayer = function() {
 		var ppapi_flash_path = null
 
 		// specify flash path based on OS
@@ -96,12 +96,12 @@ function MainProcessController() {
 	/**
 	 * Start the browser and open a new window
 	 */
-	var startBrowser = function() {
+	let startBrowser = function() {
 		// create a shared EventEmitter for windowManager to communicate with ipcHandler
 		mainProcessEventEmitter = new EventEmitter()
 		ipcHandler = new IPCMainProcessHandler(_this)
 
-		var shortcutHandler = new GlobalShortcutHandler(hackBrowserWindowManager)
+		let shortcutHandler = new GlobalShortcutHandler(hackBrowserWindowManager)
 
 		// register all global shortcuts
 		shortcutHandler.registerAll()
@@ -109,10 +109,10 @@ function MainProcessController() {
 		hackBrowserWindowManager.openNewWindow()
 	}
 
-	var handleWillDownload = function(event, item, webContents) {
+	let handleWillDownload = function(event, item, webContents) {
 		item.on("done", function(e, state) {
 			if (state === 'completed') {
-				var itemInfoObj = {
+				let itemInfoObj = {
 					type: 'file-download',
 					fileSize: item.getTotalBytes(),
 					fileURL: item.getURL(),
