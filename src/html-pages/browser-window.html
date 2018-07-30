@@ -30,56 +30,62 @@
 	<script src="../js/browser-window/init.js"></script>
 </head>
 <body>
-	<div id="controls-wrapper">
-		<!-- This region is to allow the user to increase/decrease window size from the top
-		border of the browser window -->
-		<div id="no-drag-region"></div>
+	<div id="browser-window">
+		<div id="controls-wrapper">
+			<!-- This region is to allow the user to increase/decrease window size from the top
+			border of the browser window -->
+			<div id="no-drag-region"></div>
 
-		<nav id="navtabs" class="unselectable">
-			<div id="add-tab">
-				<div class="icon-wrapper">
-					<i class="icon ion-plus"></i>
-				</div><!-- // .icon-wrapper -->
-			</div><!-- // #add-tab -->
-		</nav><!-- // nav#navbar -->
-	</div><!-- // #controls-wrapper -->
+			<nav id="navtabs" class="unselectable">
+				<div id="add-tab">
+					<div class="icon-wrapper">
+						<i class="icon ion-plus"></i>
+					</div><!-- // .icon-wrapper -->
+				</div><!-- // #add-tab -->
+			</nav><!-- // nav#navbar -->
+		</div><!-- // #controls-wrapper -->
 
-	<div id="menubar" class="unselectable">
-		<div id="menu-left" class="controls left">
-			<div id="button-back" class="icon-button disabled">
-				<i class="icon ion-ios-arrow-back"></i>
-			</div><!-- // #button-back -->
+		<div id="menubar" class="unselectable">
+			<div id="menu-left" class="controls left">
+				<div id="button-back" class="icon-button disabled">
+					<i class="icon ion-ios-arrow-back"></i>
+				</div><!-- // #button-back -->
 
-			<div id="button-forward" class="icon-button disabled">
-				<i class="icon ion-ios-arrow-forward"></i>
-			</div><!-- // #button-forward -->
+				<div id="button-forward" class="icon-button disabled">
+					<i class="icon ion-ios-arrow-forward"></i>
+				</div><!-- // #button-forward -->
 
-			<div id="button-reload" class="icon-button">
-				<i class="icon ion-android-refresh"></i>
-			</div><!-- // #button-reload -->
+				<div id="button-reload" class="icon-button">
+					<i class="icon ion-android-refresh"></i>
+				</div><!-- // #button-reload -->
 
-			<div id="button-stop-loading" class="icon-button">
-				<i class="icon ion-android-close"></i>
-			</div><!-- // #button-stop-loading -->
-		</div><!-- // controls.left -->
+				<div id="button-stop-loading" class="icon-button">
+					<i class="icon ion-android-close"></i>
+				</div><!-- // #button-stop-loading -->
+			</div><!-- // controls.left -->
 
-		<div id="address-bar-wrapper">
-			<input type="text" id="address-bar" />
-		</div><!-- // #address-bar-wrapper -->
+			<div id="address-bar-wrapper">
+				<input type="text" id="address-bar" />
+			</div><!-- // #address-bar-wrapper -->
 
-		<div id="menu-right" class="controls right">
-			<div id="button-menu" class="icon-button"><i class="icon ion-navicon-round"></i></div>
-		</div><!-- // .controls.right -->
+			<div id="menu-right" class="controls right">
+				<div id="button-menu" class="icon-button"><i class="icon ion-navicon-round"></i></div>
+			</div><!-- // .controls.right -->
 
-		<div class="clear"></div>
+			<div class="clear"></div>
 
-		<div id="auto-complete-box">
-		</div><!-- // #auto-complete-box -->
-	</div><!-- // #menubar -->
+			<div id="auto-complete-box">
+			</div><!-- // #auto-complete-box -->
+		</div><!-- // #menubar -->
 
-	<!-- Wrapper for WebView elements -->
-	<div id="webview-container">
-	</div><!-- // section#webview-container -->
+		<!-- Wrapper for WebView elements -->
+		<div id="webview-container">
+		</div><!-- // #webview-container -->
+
+		<div id="bottom-bar" style="color: white; background-color: #3c8d00; " >
+			Hello World
+		</div><!-- // #bottom-bar -->
+	</div><!-- // #browser-window -->
 
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js'></script>
 
